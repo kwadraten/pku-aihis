@@ -1,0 +1,36 @@
+# Local settings and credentials
+.DS_Store
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Reproducible dependencies and build outputs
+node_modules/
+.pnpm-store/
+.stencil/
+dist/
+www/
+coverage/
+playwright-report/
+test-results/
+/site/
+*.log
+__pycache__/
+*.pyc
+.venv/
+
+# Private preparation materials and large local inputs
+/private/
+/local-only/
+/inputs/
+/data/raw/
+/models/
+*.onnx
+*.safetensors
+*.zip
+*.tar.gz
+
+# Lockfiles, source code and reviewed small teaching data are tracked.
+# Generated classroom archives belong in release artifacts, not Git history.

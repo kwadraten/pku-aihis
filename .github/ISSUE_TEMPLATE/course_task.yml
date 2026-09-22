@@ -1,0 +1,50 @@
+name: 课程任务
+description: 记录教案对应、来源核验、演示制作或维护任务
+title: "[任务] "
+body:
+  - type: dropdown
+    id: task_type
+    attributes:
+      label: 任务类型
+      options:
+        - 方案与规范
+        - 来源核验
+        - 课件内容
+        - 交互或算法
+        - 构建与部署
+        - 问题修复
+    validations:
+      required: true
+  - type: input
+    id: teaching_id
+    attributes:
+      label: 周次与教学编号
+      description: 如第三周 N03；尚未确定时填“待定”
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 要解决的问题和完成结果
+      description: 描述当前问题、拟修改范围、负责人和明确不包含的后续事项
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: 依据、输入和当前状态
+      description: 仅提供可公开链接或资料编号；注明已核、待核、未运行，私人材料保存在仓库外
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 怎样判断完成
+      description: 给出可检查的行为、输出或定位；涉及演示时写明执行模式、失败例和备用路径
+    validations:
+      required: true
+  - type: textarea
+    id: decisions
+    attributes:
+      label: 依赖与需要作出的决定
+      description: 写清依赖任务、内容或技术审阅角色，以及是否涉及公开发布
