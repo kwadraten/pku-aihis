@@ -1,29 +1,40 @@
 # pku-aihis
 
-《人工智能赋能历史研究与写作》网页版演示材料的设计、源码与发布仓库。
+《人工智能赋能历史研究与写作》的网页演示源码与协作仓库。第三周包含33页可操作的“检索与证据”演示，教案、完整OCR与私人原件保留在课程文件夹。
 
-**当前阶段：工作流程准备，2026-09-21。** 本轮新增协作规范和模板，尚未导入课件工程、制作第三周演示或启用部署。以下规范目前只保存在本地，尚未提交或推送。
+课堂入口部署到 **[第三周](https://lyzhackjp.github.io/pku-aihis/week03/)**；实际发布提交和检查范围见 [交接与运行状态](docs/week03/handoff.md)。
 
-## 从这里开始
+## 本地使用
 
-| 使用者或任务 | 阅读入口 |
-|---|---|
-| 教师、助教了解整体分工 | [GitHub 协作流程](docs/github-workflow.md) |
-| 开始或接续一次修改 | [贡献指南](CONTRIBUTING.md) |
-| AI 助手进入仓库 | [项目工作规则](AGENTS.md) |
-| 了解现有仓库与输入工程 | [基线核查](docs/repository-baseline.md) |
-| 使用助教准备的 skill | [Skill 装载与兼容说明](docs/skill-integration.md) |
-| 准备测试、上线或恢复旧版 | [检查与发布设计](docs/ci-and-release.md) |
-| 填写发布记录 | [发布记录模板](docs/templates/release-record.md) |
+使用 `.node-version` 中的 Node 24.19.0 和 pnpm 11.19.0：
 
-建议流程：任务说明 → 短期分支 → 修改与自检 → PR 审阅 → 合入 main → 课堂检查 → 手动发布 → 记录版本。
+```sh
+cd apps/week03
+pnpm install --frozen-lockfile --ignore-scripts
+pnpm test
+pnpm run check
+pnpm build
+cd ../..
+node scripts/build-site.mjs
+python3 local/runtime.py
+```
 
-GitHub Flow 使用分支和 Pull Request（PR，合并请求）组织修改，也适用于文档协作。本仓库在此基础上增加史料核验和课堂检查。[GitHub 官方说明](https://docs.github.com/en/get-started/using-github/github-flow)
+打开 http://127.0.0.1:8767/week03/ 。Python标准库即可提供静态预览；数据库重跑需要 Python 3.12 安装 `local/requirements.txt`。生成模型及服务配置见 [本地课堂说明](apps/week03/src/assets/guides/local-runtime.md)。
 
-## 内容边界
+方向键翻页，课程地图选择页面，P打开演讲者窗口，B关闭动效。文字框内方向键正常编辑；按钮空格保持激活操作。D01可在本机导入带records的JSON或JSONL，完整OCR包可按卷导入。自由查询的浏览器嵌入会首次下载约118MB模型；已存查询与向量排序无需下载模型。
 
-仓库用于可公开的网页源码、说明、来源索引和小型教学数据。完整备课母稿、交接包、受限原件、未刊稿与私人反馈保存在仓库外的课程文件夹。公开仓库中的文件即使没有加入网页，也可被访问。
+## 实际功能与边界
 
-准备采用“单仓库、按周独立工程”的组织方式，详情见协作流程。目录建议中的 `apps/`、发布产物和共享组件尚未创建。
+- 浏览器真实执行：OpenCC、正则Worker、教学BM25、精确余弦、RRF、人工判断指标、Lucivy全文、EdgeVec近邻。
+- 已在本机计算：27条史料片段与9条文本查询的384维嵌入；7张原页和4条CLIP查询；48张崩字图的768维特征。模型、数据与预计算程序见 [local/PRECOMPUTE.md](local/PRECOMPUTE.md)。
+- 已在本机运行并保存结果：Tantivy、Chroma、Qdrant、Milvus Lite。网页可通过本地桥接重跑。
+- 已实现但需另接模型：RAG生成、模型选工具循环。未配置模型时显示明确失败，不返回预设答案。
+- 单独提供部署指南：AnythingLLM、Elasticsearch、OpenSearch、PaSa、PaperQA2、deep-research及研究评测框架；不把步骤切换当作后台执行。
 
-正式站点地址以成功部署的记录为准。现阶段没有可以据此仓库交付的第三周在线课件。
+公开的27条节录含已核片段和明确标为待核的OCR；它们不是全库，也不是独立评测集。模型分数不是史实置信度。教师论文只保存两条有页码的书目引用关系。
+
+## 助教接续
+
+[逐页设计](docs/week03/page-map.json) · [开发方案](docs/week03/design.md) · [课程制作skill](.agents/skills/history-demo-courseware/SKILL.md) · [贡献流程](CONTRIBUTING.md) · [发布流程](docs/ci-and-release.md) · [来源许可](docs/third-party-notices.md)
+
+短期分支 → PR → `build-week03`检查 → Squash合并 → 主线手动发布。发布周次由published-weeks.json维护，组装全站，不能覆盖掉旧周次。助教加入后再根据实际账号配置审阅职责，不预填虚构CODEOWNERS。

@@ -1,0 +1,61 @@
+[
+  {
+    "repo": "Xenova/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "2c4055b12046f11709e9df2c122e59ffbdc2f900",
+    "directory": "paraphrase-multilingual-MiniLM-L12-v2",
+    "files": [
+      "config.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "special_tokens_map.json",
+      "onnx/model_quantized.onnx"
+    ],
+    "sha256": {
+      "config.json": "05b570bff786faa5c4604152aa16f19f77ed6dfc31e47dd0f3dd987078693ac7",
+      "tokenizer.json": "b60b6b43406a48bf3638526314f3d232d97058bc93472ff2de930d43686fa441",
+      "tokenizer_config.json": "3f5961b9ac86288cccdb97f32fb848d6187c78e1603958c53f3ea1f296b7d8a2",
+      "special_tokens_map.json": "06e405a36dfe4b9604f484f6a1e619af1a7f7d09e34a8555eb0b77b66318067f",
+      "onnx/model_quantized.onnx": "66fc00f5f29afcaff34092e1bdd20008ca3918265a82fb9695a551e510cc4ebc"
+    }
+  },
+  {
+    "repo": "Xenova/clip-vit-base-patch32",
+    "revision": "d15189d7028b43f1d3e65039190477f6af591c2a",
+    "directory": "clip-vit-base-patch32",
+    "files": [
+      "config.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "special_tokens_map.json",
+      "preprocessor_config.json",
+      "onnx/text_model_quantized.onnx",
+      "onnx/vision_model_quantized.onnx"
+    ],
+    "sha256": {
+      "config.json": "493ef57ff783e42d1530c91b53469b7fdf8db8a9c1408e86998fcb7899a4f495",
+      "tokenizer.json": "f7f3b7af117d467b58374797691a6438d3e6b9e9cef800dfd5dced7f697a90cd",
+      "tokenizer_config.json": "60ba2912bc6344c94bc16bbdec27fa1209409167b6f2fdf3cfe9e65462ea3967",
+      "special_tokens_map.json": "c4864a9376a8401918425bed71fc14fc0e81f9b59ec45c1cf96cccb2df508eac",
+      "preprocessor_config.json": "6f638fb9401a6d6296feff533ee7efe657b787c49f954f82f5906b36ef2a1b1f",
+      "onnx/text_model_quantized.onnx": "73baab855d406190da9faa498cfedf65f15cf309f4cc7385b7b032e6d08e5c3a",
+      "onnx/vision_model_quantized.onnx": "583fd1110a514667812fee7d684952aaf82a99b959760c8d7dca7e0ab9839299"
+    }
+  },
+  {
+    "repo": "kwadraten/shikiji",
+    "revision": "84cc2fbec1603cd72daaf1c2814a65b977636b5c",
+    "directory": "shikiji",
+    "files": [
+      "supervised_pretrain_checkpoint.embedding.onnx",
+      "supervised_pretrain_checkpoint.embedding.metadata.json",
+      "cache_manifest.json",
+      "README.md"
+    ],
+    "sha256": {
+      "supervised_pretrain_checkpoint.embedding.onnx": "2da4a160ddcf723cf437fb296a27124f5f97aad791e38216a8912a3303106d62",
+      "supervised_pretrain_checkpoint.embedding.metadata.json": "53c3068d8c021197ff19af2b7a874b509d0aa98ba54dfdb88c3895436cacf9dd",
+      "cache_manifest.json": "f31e75fd16f868c7577428426affd1e3a44aa39e14629d71a4d18307d31f28da",
+      "README.md": "4e2974c1c5da993d371c3adbfdf4c17de280327b879add2f1dbbb22fbedb63ec"
+    }
+  }
+]

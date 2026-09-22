@@ -1,0 +1,5 @@
+chromadb==1.5.9
+qdrant-client==1.19.1
+pymilvus==3.0.2
+milvus-lite==3.2.1
+tantivy==0.25.1

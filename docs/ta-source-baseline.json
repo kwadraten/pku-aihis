@@ -1,0 +1,58 @@
+{
+  "source": "助教提供 slides-src，2026-09-22 导入",
+  "scope": "仅导航、页面、演讲者和布局基础组件；没有导入示例史料和模型输出",
+  "files": [
+    {
+      "file": "package.json",
+      "sha256": "20f872b634f06ed09e52ff9ea7adb17fd188e1395d8c1eff0e0325fac10d0faa"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "sha256": "a3b0776d6ef5fe1200425a6a5665f96ca62ee57276a77b5f018f75d463d7f937"
+    },
+    {
+      "file": "tsconfig.json",
+      "sha256": "a71630c72cb05473a890fc5a3a098167f852bcc48ecdaa52b56bf940a7de320d"
+    },
+    {
+      "file": "stencil.config.ts",
+      "sha256": "7d48df9d7aaf1d946500f0a0bb606c4bc5041c88ad967a0afdd280fcd176bf75"
+    },
+    {
+      "file": "src/global/app.css",
+      "sha256": "8277b28103234ae9bfe07fffd18442a33bc80a9ec3a2e9802df2854f41a09475"
+    },
+    {
+      "file": "src/components/deck-container/deck-container.tsx",
+      "sha256": "3c9e5cfcf850adfb9156e8b75a318d75e7f3ee645fadaeaf96e11280d3898c86"
+    },
+    {
+      "file": "src/components/deck-container/deck-container.css",
+      "sha256": "446fbad84edbdd3b86cea019135ddb465a50cc89c7352c602dcdff3f380cfa03"
+    },
+    {
+      "file": "src/components/deck-slide/deck-slide.css",
+      "sha256": "373776b2862b4b000dd912d2a28df717a02130ab23c678a06599fd1c7d5b297c"
+    },
+    {
+      "file": "src/components/deck-slide/deck-slide.tsx",
+      "sha256": "4faedb1bb9401581160cd63e0e4427a1655ef0064f9e8ca3af734cc39b2d5ee8"
+    },
+    {
+      "file": "src/components/deck-presenter/deck-presenter.css",
+      "sha256": "7399131f30601881c587750093d55008ac87e5022bc3f6fc1e9f1b6d12920c2d"
+    },
+    {
+      "file": "src/components/deck-presenter/deck-presenter.tsx",
+      "sha256": "b3ae63cca5629b3717f9c1e4fb713d53cf5d3abcdc313f6f46cb0318e41627da"
+    },
+    {
+      "file": "src/components/layout-split/layout-split.css",
+      "sha256": "ab922ad2160ab1f548bdc5fe972a3d301d38ed6e025ecaad0b2ee71df3b82a65"
+    },
+    {
+      "file": "src/components/layout-split/layout-split.tsx",
+      "sha256": "0c8b3386ce8fd09a1da64135739b4147ba5e2edafc8ef23490dd1b6c968fb395"
+    }
+  ]
+}

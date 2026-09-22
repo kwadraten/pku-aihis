@@ -1,0 +1,494 @@
+{
+  "D14": {
+    "slug": "anythingllm",
+    "name": "AnythingLLM",
+    "url": "https://github.com/Mintplex-Labs/anything-llm",
+    "role": "桌面客户端把文档导入、嵌入器、检索器和生成器组织为工作区。",
+    "mode": "本地部署方案 · 网页逐步讲解",
+    "steps": [
+      {
+        "title": "建立工作区",
+        "explanation": "先安装官方桌面客户端，选择本地模型/已授权服务和嵌入器。",
+        "code": "官网入口：https://anythingllm.com/desktop\n工作区：week03\n先记录应用版本、嵌入模型与生成模型。",
+        "observe": "界面、模型和数据服务不是同一层。"
+      },
+      {
+        "title": "导入与处理",
+        "explanation": "导入准备好的小型带出处文本，观察切分和向量写入；完整PDF可在本机导入。",
+        "code": "记录：source_id / PDF页序 / 文章标题\n设置：chunk size / overlap / embedding provider",
+        "observe": "切块有没有丢掉页码或主体？模型改变后是否重建？"
+      },
+      {
+        "title": "问答与引用",
+        "explanation": "对同一问题查看检索到的上下文，再逐条回查回答引用。",
+        "code": "问题：哪些段落讨论宗教与道德的关系？\n对照：删除关键文档后重新提问。",
+        "observe": "回答是否随着可用证据改变？引用是否真支持论断？"
+      }
+    ],
+    "limit": "桌面软件在本机运行；本页不伪装成AnythingLLM的嵌入界面。",
+    "runnable": false
+  },
+  "D15": {
+    "slug": "elasticsearch",
+    "name": "Elasticsearch",
+    "url": "https://github.com/elastic/elasticsearch",
+    "role": "常驻服务负责字段分析、倒排索引和查询；网页可以查看请求与结果。",
+    "mode": "本地部署方案 · 网页逐步讲解",
+    "steps": [
+      {
+        "title": "本机服务",
+        "explanation": "使用仅绑定回环地址的教学单节点；生产部署另行配置认证和资源。",
+        "code": "docker run --rm -p 127.0.0.1:9200:9200 -e discovery.type=single-node -e xpack.security.enabled=false -e \"ES_JAVA_OPTS=-Xms1g -Xmx1g\" docker.elastic.co/elasticsearch/elasticsearch:8.19.0",
+        "observe": "容器版本与端口；服务未启动时不显示成功。"
+      },
+      {
+        "title": "分析词项",
+        "explanation": "先查看选定分析器怎样切分正文；旧字转换另建检索字段。",
+        "code": "POST /_analyze\n{\"analyzer\":\"standard\",\"text\":\"宗教と國民道德\"}",
+        "observe": "返回词项与位置；对中日文应据需要配置分析器。"
+      },
+      {
+        "title": "写入与查询",
+        "explanation": "创建字段模式、写入带页码文档，再刷新可见索引。",
+        "code": "PUT /week03\n{\"mappings\":{\"properties\":{\"body\":{\"type\":\"text\"},\"source_id\":{\"type\":\"keyword\"},\"pdf_page\":{\"type\":\"integer\"}}}}\nPUT /week03/_doc/1?refresh=true\n{\"body\":\"此处写入已核对片段\",\"source_id\":\"JP16\",\"pdf_page\":12}\nGET /week03/_search\n{\"query\":{\"match\":{\"body\":\"宗教\"}},\"explain\":true}",
+        "observe": "占位请求需由实际片段替换。explain解释计分，不证明史料可信。"
+      }
+    ],
+    "limit": "需Docker或官方服务安装；两个产品配置分别核验。本次不把请求示例当已运行响应。",
+    "runnable": false
+  },
+  "D16": {
+    "slug": "opensearch",
+    "name": "OpenSearch",
+    "url": "https://github.com/opensearch-project/OpenSearch",
+    "role": "常驻服务负责字段分析、倒排索引和查询；网页可以查看请求与结果。",
+    "mode": "本地部署方案 · 网页逐步讲解",
+    "steps": [
+      {
+        "title": "本机服务",
+        "explanation": "使用仅绑定回环地址的教学单节点；生产部署另行配置认证和资源。",
+        "code": "docker run --rm -p 127.0.0.1:9201:9200 -e discovery.type=single-node -e DISABLE_SECURITY_PLUGIN=true -e DISABLE_INSTALL_DEMO_CONFIG=true -e \"OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g\" opensearchproject/opensearch:3.0.0",
+        "observe": "容器版本与端口；服务未启动时不显示成功。"
+      },
+      {
+        "title": "分析词项",
+        "explanation": "先查看选定分析器怎样切分正文；旧字转换另建检索字段。",
+        "code": "POST /_analyze\n{\"analyzer\":\"standard\",\"text\":\"宗教と國民道德\"}",
+        "observe": "返回词项与位置；对中日文应据需要配置分析器。"
+      },
+      {
+        "title": "写入与查询",
+        "explanation": "创建字段模式、写入带页码文档，再刷新可见索引。",
+        "code": "PUT /week03\n{\"mappings\":{\"properties\":{\"body\":{\"type\":\"text\"},\"source_id\":{\"type\":\"keyword\"},\"pdf_page\":{\"type\":\"integer\"}}}}\nPUT /week03/_doc/1?refresh=true\n{\"body\":\"此处写入已核对片段\",\"source_id\":\"JP16\",\"pdf_page\":12}\nGET /week03/_search\n{\"query\":{\"match\":{\"body\":\"宗教\"}},\"explain\":true}",
+        "observe": "占位请求需由实际片段替换。explain解释计分，不证明史料可信。"
+      }
+    ],
+    "limit": "需Docker或官方服务安装；两个产品配置分别核验。本次不把请求示例当已运行响应。",
+    "runnable": false
+  },
+  "D17": {
+    "slug": "tantivy",
+    "name": "Tantivy",
+    "url": "https://github.com/quickwit-oss/tantivy",
+    "role": "应用内全文索引库，不自带完整聊天客户端。",
+    "mode": "本机实际运行结果＋分步讲解；可通过本地桥接重跑",
+    "steps": [
+      {
+        "title": "模式与写入",
+        "explanation": "定义存储字段，写入检索文本和source_id。",
+        "code": "schema = SchemaBuilder().add_text_field(\"body\", stored=True)\nindex = Index(schema)\nwriter.add_document(...)",
+        "observe": "字段如何切词？原文与检索字段怎样分开？"
+      },
+      {
+        "title": "提交与读取",
+        "explanation": "提交后取得已刷新reader的searcher，再查询。",
+        "code": "writer.commit()\nindex.reload()\nsearcher = index.searcher()\nquery = index.parse_query(\"宗教\", [\"body\"])\nhits = searcher.search(query, 5)",
+        "observe": "searcher是快照，空结果可能来自未刷新。"
+      },
+      {
+        "title": "本课重跑",
+        "explanation": "使用随仓库提供的实际Python适配器与同一语料。",
+        "code": "python local/runtime.py --tool tantivy",
+        "observe": "查看库版本、查询、文档ID和原页。"
+      }
+    ],
+    "limit": "网页展示库处理步骤；真实索引在本机Python/Rust运行。",
+    "runnable": true,
+    "result": {
+      "tool": "tantivy",
+      "version": "0.25.1",
+      "corpus": "week03-classroom-20260922",
+      "records": 27,
+      "query": "宗教",
+      "metric": "Tantivy BM25 over character bigrams; larger is nearer",
+      "results": [
+        {
+          "id": "ZT14-p0165-01",
+          "score": 2.578852891921997
+        },
+        {
+          "id": "ZT14-p0166-01",
+          "score": 2.1694278717041016
+        },
+        {
+          "id": "ZT14-p0165-02",
+          "score": 2.0656774044036865
+        },
+        {
+          "id": "ZT8-p0436-01",
+          "score": 2.0201470851898193
+        },
+        {
+          "id": "ZT8-p0213-01",
+          "score": 1.7335708141326904
+        }
+      ],
+      "embedding": null,
+      "seconds": 0.0054,
+      "run_at": "2026-09-22T20:34:18+0800",
+      "status": "actual local run",
+      "scope": "single-process local teaching mode; not a distributed server benchmark"
+    }
+  },
+  "D18": {
+    "slug": "chroma",
+    "name": "Chroma",
+    "url": "https://github.com/chroma-core/chroma",
+    "role": "用集合组织向量、文档ID与来源元数据；向量由兼容编码器产生。",
+    "mode": "本机实际运行结果＋分步讲解；可通过本地桥接重跑",
+    "steps": [
+      {
+        "title": "记录与向量",
+        "explanation": "将真实段落向量和来源字段一并写入。",
+        "code": "id / text / vector[384] / source_id / pdf_page\n模型与revision、池化及归一化另存manifest。",
+        "observe": "不把补零或哈希向量当兼容模型向量。"
+      },
+      {
+        "title": "集合与搜索",
+        "explanation": "执行该库的写入、近邻及过滤接口。",
+        "code": "collection.add(ids=ids, documents=texts, embeddings=vectors, metadatas=metadata)\ncollection.query(query_embeddings=[query_vector], n_results=5)",
+        "observe": "Cosine越大越近；L2距离越小越近，依本库返回约定标识。"
+      },
+      {
+        "title": "过滤与回查",
+        "explanation": "在同一模型与同一候选范围下比较结果，再读原文。",
+        "code": "python local/runtime.py --tool chroma",
+        "observe": "本地轻量模式不代表分布式性能；记录数据规模与依赖版本。"
+      }
+    ],
+    "limit": "本课使用本地轻量运行；公开网页保留运行记录与重跑入口。",
+    "runnable": true,
+    "result": {
+      "tool": "chroma",
+      "version": "1.5.9",
+      "corpus": "week03-classroom-20260922",
+      "records": 27,
+      "query": "宗教",
+      "metric": "cosine distance; smaller is nearer",
+      "results": [
+        {
+          "id": "ZT8-p0436-01",
+          "score": 0.3806504011154175
+        },
+        {
+          "id": "JP16-p0012-02",
+          "score": 0.4015989303588867
+        },
+        {
+          "id": "JP12-p0017-01",
+          "score": 0.4164693355560303
+        },
+        {
+          "id": "ZT14-p0166-01",
+          "score": 0.4238605499267578
+        },
+        {
+          "id": "ZT8-p0213-01",
+          "score": 0.43139952421188354
+        }
+      ],
+      "embedding": {
+        "model": "Xenova/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "2c4055b12046f11709e9df2c122e59ffbdc2f900",
+        "dtype": "q8",
+        "pooling": "mean",
+        "normalize": true,
+        "dimensions": 384,
+        "runtime": "Transformers.js 3.8.1",
+        "max_tokens": 512,
+        "actual_dimension": 384,
+        "computed_at": "2026-09-22T12:28:45.191Z"
+      },
+      "seconds": 0.2776,
+      "run_at": "2026-09-22T20:34:18+0800",
+      "status": "actual local run",
+      "scope": "single-process local teaching mode; not a distributed server benchmark"
+    }
+  },
+  "D19": {
+    "slug": "qdrant",
+    "name": "Qdrant",
+    "url": "https://github.com/qdrant/qdrant",
+    "role": "用集合组织向量、文档ID与来源元数据；向量由兼容编码器产生。",
+    "mode": "本机实际运行结果＋分步讲解；可通过本地桥接重跑",
+    "steps": [
+      {
+        "title": "记录与向量",
+        "explanation": "将真实段落向量和来源字段一并写入。",
+        "code": "id / text / vector[384] / source_id / pdf_page\n模型与revision、池化及归一化另存manifest。",
+        "observe": "不把补零或哈希向量当兼容模型向量。"
+      },
+      {
+        "title": "集合与搜索",
+        "explanation": "执行该库的写入、近邻及过滤接口。",
+        "code": "client.create_collection(\"week03\", vectors_config=VectorParams(size=384, distance=Distance.COSINE))\nclient.upsert(\"week03\", points=points)\nclient.query_points(\"week03\", query=query_vector, limit=5)",
+        "observe": "Cosine越大越近；L2距离越小越近，依本库返回约定标识。"
+      },
+      {
+        "title": "过滤与回查",
+        "explanation": "在同一模型与同一候选范围下比较结果，再读原文。",
+        "code": "python local/runtime.py --tool qdrant",
+        "observe": "本地轻量模式不代表分布式性能；记录数据规模与依赖版本。"
+      }
+    ],
+    "limit": "本课使用本地轻量运行；公开网页保留运行记录与重跑入口。",
+    "runnable": true,
+    "result": {
+      "tool": "qdrant",
+      "version": "1.19.1",
+      "corpus": "week03-classroom-20260922",
+      "records": 27,
+      "query": "宗教",
+      "metric": "cosine similarity; larger is nearer",
+      "results": [
+        {
+          "id": "ZT8-p0436-01",
+          "score": 0.6193494163782345
+        },
+        {
+          "id": "JP16-p0012-02",
+          "score": 0.5984007723133493
+        },
+        {
+          "id": "JP12-p0017-01",
+          "score": 0.583530625482203
+        },
+        {
+          "id": "ZT14-p0166-01",
+          "score": 0.5761392287599855
+        },
+        {
+          "id": "ZT8-p0213-01",
+          "score": 0.5686003146638932
+        }
+      ],
+      "embedding": {
+        "model": "Xenova/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "2c4055b12046f11709e9df2c122e59ffbdc2f900",
+        "dtype": "q8",
+        "pooling": "mean",
+        "normalize": true,
+        "dimensions": 384,
+        "runtime": "Transformers.js 3.8.1",
+        "max_tokens": 512,
+        "actual_dimension": 384,
+        "computed_at": "2026-09-22T12:28:45.191Z"
+      },
+      "seconds": 0.2595,
+      "run_at": "2026-09-22T20:34:18+0800",
+      "status": "actual local run",
+      "scope": "single-process local teaching mode; not a distributed server benchmark"
+    }
+  },
+  "D20": {
+    "slug": "milvus",
+    "name": "Milvus Lite",
+    "url": "https://github.com/milvus-io/milvus-lite",
+    "role": "用集合组织向量、文档ID与来源元数据；向量由兼容编码器产生。",
+    "mode": "本机实际运行结果＋分步讲解；可通过本地桥接重跑",
+    "steps": [
+      {
+        "title": "记录与向量",
+        "explanation": "将真实段落向量和来源字段一并写入。",
+        "code": "id / text / vector[384] / source_id / pdf_page\n模型与revision、池化及归一化另存manifest。",
+        "observe": "不把补零或哈希向量当兼容模型向量。"
+      },
+      {
+        "title": "集合与搜索",
+        "explanation": "执行该库的写入、近邻及过滤接口。",
+        "code": "client = MilvusClient(\"./week03.db\")\nclient.create_collection(\"week03\", dimension=384, metric_type=\"L2\")\nclient.insert(\"week03\", data=records)\nclient.search(\"week03\", data=[query_vector], limit=5)",
+        "observe": "Cosine越大越近；L2距离越小越近，依本库返回约定标识。"
+      },
+      {
+        "title": "过滤与回查",
+        "explanation": "在同一模型与同一候选范围下比较结果，再读原文。",
+        "code": "python local/runtime.py --tool milvus",
+        "observe": "本地轻量模式不代表分布式性能；记录数据规模与依赖版本。"
+      }
+    ],
+    "limit": "本课使用本地轻量运行；公开网页保留运行记录与重跑入口。",
+    "runnable": true,
+    "result": {
+      "tool": "milvus",
+      "version": "3.0.2",
+      "corpus": "week03-classroom-20260922",
+      "records": 27,
+      "query": "宗教",
+      "metric": "cosine similarity (response field distance); larger is nearer",
+      "results": [
+        {
+          "id": "ZT8-p0436-01",
+          "score": 0.619349479675293
+        },
+        {
+          "id": "JP16-p0012-02",
+          "score": 0.5984007120132446
+        },
+        {
+          "id": "JP12-p0017-01",
+          "score": 0.5835306644439697
+        },
+        {
+          "id": "ZT14-p0166-01",
+          "score": 0.5761393308639526
+        },
+        {
+          "id": "ZT8-p0213-01",
+          "score": 0.5686002969741821
+        }
+      ],
+      "embedding": {
+        "model": "Xenova/paraphrase-multilingual-MiniLM-L12-v2",
+        "revision": "2c4055b12046f11709e9df2c122e59ffbdc2f900",
+        "dtype": "q8",
+        "pooling": "mean",
+        "normalize": true,
+        "dimensions": 384,
+        "runtime": "Transformers.js 3.8.1",
+        "max_tokens": 512,
+        "actual_dimension": 384,
+        "computed_at": "2026-09-22T12:28:45.191Z"
+      },
+      "seconds": 0.7911,
+      "run_at": "2026-09-22T20:34:19+0800",
+      "status": "actual local run",
+      "scope": "single-process local teaching mode; not a distributed server benchmark"
+    }
+  },
+  "D23": {
+    "slug": "deep-research",
+    "name": "deep-research",
+    "url": "https://github.com/dzhng/deep-research",
+    "role": "多轮搜索、阅读和问题分解的一个开源实现；不是独立的史学裁判。",
+    "mode": "本地部署方案 · 网页逐步讲解",
+    "steps": [
+      {
+        "title": "部署与服务",
+        "explanation": "克隆原库并遵循其README安装；检索和模型API在本机环境变量配置。",
+        "code": "git clone https://github.com/dzhng/deep-research.git\ncd deep-research\nnpm install\n# 按仓库 .env.example 配置模型和搜索服务；不提交 .env",
+        "observe": "记录实际commit、模型、搜索服务与费用预算。"
+      },
+      {
+        "title": "多轮研究",
+        "explanation": "观察 breadth/depth 设置与本轮搜索、发现、下一轮问题。",
+        "code": "输入问题 → search → learnings → follow-up questions\n后续轮次不得丢掉原问题和资料限制。",
+        "observe": "更多轮次不自动增加证据；应比较新增材料。"
+      },
+      {
+        "title": "接入本课材料",
+        "explanation": "原库侧重在线搜索；要限定本地语料，需要明确替换搜索适配器。",
+        "code": "原search接口 → 本课source_id / text / locator结果\n完成适配前标记：本地史料接入尚未运行。",
+        "observe": "不能把本课固定步骤动画当原库正在运行。"
+      }
+    ],
+    "limit": "依赖外部搜索与模型服务；网页展示框架和本地部署方案，不宣称已完成原库实跑。",
+    "runnable": false
+  },
+  "D25": {
+    "slug": "pasa",
+    "name": "PaSa",
+    "url": "https://github.com/bytedance/pasa",
+    "role": "论文研究工具链。先核对材料可访问性，再观察检索、选择和证据问答。",
+    "mode": "本地部署方案 · 网页逐步讲解",
+    "steps": [
+      {
+        "title": "安装与配置",
+        "explanation": "在独立环境中按原仓库说明固定commit与依赖；配置本机模型及搜索权限。",
+        "code": "git clone https://github.com/bytedance/pasa.git\n# 进入目录，保存 git rev-parse HEAD\n# 按锁定版本README创建虚拟环境并安装依赖",
+        "observe": "原库可能下载模型或要求服务凭据；未执行的步骤保持未执行。"
+      },
+      {
+        "title": "工具顺序",
+        "explanation": "查看该系统可调用的工具及停止条件。",
+        "code": "search / crawl / select",
+        "observe": "工具名称、参数、返回、成功或失败需各自可见。"
+      },
+      {
+        "title": "历史语料适配",
+        "explanation": "用本地材料时先准备清晰的文本与来源，再按原库文档接入。",
+        "code": "query → candidate papers → full text → evidence\n记录未取得全文、OCR待核、年份/文体缺失。",
+        "observe": "PaSa论文搜索、PaperQA2证据问答职责不同；原论文评测不能外推历史准确率。"
+      }
+    ],
+    "limit": "本地代码库运行方案；网页不提供伪造的论文发现或预设智能体成果。",
+    "runnable": false
+  },
+  "D26": {
+    "slug": "paperqa2",
+    "name": "PaperQA2",
+    "url": "https://github.com/Future-House/paper-qa",
+    "role": "论文研究工具链。先核对材料可访问性，再观察检索、选择和证据问答。",
+    "mode": "本地部署方案 · 网页逐步讲解",
+    "steps": [
+      {
+        "title": "安装与配置",
+        "explanation": "在独立环境中按原仓库说明固定commit与依赖；配置本机模型及搜索权限。",
+        "code": "git clone https://github.com/Future-House/paper-qa.git\n# 进入目录，保存 git rev-parse HEAD\n# 按锁定版本README创建虚拟环境并安装依赖",
+        "observe": "原库可能下载模型或要求服务凭据；未执行的步骤保持未执行。"
+      },
+      {
+        "title": "工具顺序",
+        "explanation": "查看该系统可调用的工具及停止条件。",
+        "code": "PaperSearch / GatherEvidence / GenerateAnswer / CitationTraversal",
+        "observe": "工具名称、参数、返回、成功或失败需各自可见。"
+      },
+      {
+        "title": "历史语料适配",
+        "explanation": "用本地材料时先准备清晰的文本与来源，再按原库文档接入。",
+        "code": "query → candidate papers → full text → evidence\n记录未取得全文、OCR待核、年份/文体缺失。",
+        "observe": "PaSa论文搜索、PaperQA2证据问答职责不同；原论文评测不能外推历史准确率。"
+      }
+    ],
+    "limit": "本地代码库运行方案；网页不提供伪造的论文发现或预设智能体成果。",
+    "runnable": false
+  },
+  "D27": {
+    "slug": "evaluation",
+    "name": "RAGChecker / DeepResearch Bench",
+    "url": "https://github.com/amazon-science/RAGChecker",
+    "role": "前者细分RAG的检索与生成错误；后者评测深度研究系统，不是另一个检索客户端。",
+    "mode": "本地部署方案 · 网页逐步讲解",
+    "steps": [
+      {
+        "title": "固定输入",
+        "explanation": "保存问题、参照答案、上下文、生成结果与来源。",
+        "code": "query / ground_truth / retrieved_context / response\n每个主张单独回到支持片段。",
+        "observe": "参照答案也需核验，不以教师论文结论自动充当金标准。"
+      },
+      {
+        "title": "主张与证据",
+        "explanation": "人工先标支持、反对、不足，再看模型评判。",
+        "code": "主张：……\n证据ID：……\n支持范围：……\n人工判定：支持 / 限制 / 反对 / 待核",
+        "observe": "不要将评判模型的一致意见当成史实认证。"
+      },
+      {
+        "title": "框架重跑",
+        "explanation": "按原库固定版本运行，保留模型与预算。",
+        "code": "RAGChecker: https://github.com/amazon-science/RAGChecker\nDeepResearch Bench: https://github.com/Ayanami0730/deep_research_bench",
+        "observe": "开发集与测试集分开；缺失全文和接口失败纳入记录。"
+      }
+    ],
+    "limit": "模型评测需本地配置和评判服务；当前页提供可审计的输入结构和部署入口。",
+    "runnable": false
+  }
+}

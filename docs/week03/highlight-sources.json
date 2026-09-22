@@ -1,0 +1,442 @@
+[
+  {
+    "ids": [
+      1,
+      2
+    ],
+    "title": "取回、选入上下文、生成：RAG 的三个不同动作",
+    "body": "检索器先给候选材料排队，随后程序还可能去重、重排并受输入长度限制，只把部分候选交给生成器。因此“搜到”不等于“模型读到”，回答中出现引用也不证明引用真的支持那句话。Lewis 等人的原论文把可训练的稠密检索器与序列生成器接合：问题被编码，近邻索引帮助寻找段落，再由生成器利用段落。RAG-Sequence 对整段输出使用同一个检索文档的潜在选择，RAG-Token 允许不同输出词元依赖不同文档。课堂中常见的“先检索、再拼提示词”属于更宽泛的工程做法，不宜把它全部说成原论文那套联合训练模型。",
+    "sources": [
+      {
+        "title": "Lewis et al. (2020), Retrieval-Augmented Generation，§2、图1",
+        "url": "https://arxiv.org/abs/2005.11401"
+      }
+    ]
+  },
+  {
+    "ids": [
+      4,
+      13
+    ],
+    "title": "神经稀疏表示与稠密表示：不只是向量长短不同",
+    "body": "稀疏表示的大多数位置为零，位置通常仍能对应词表中的词；稠密表示的位置多数非零，单独一维通常没有稳定的字面词义。SPLADE 用语言模型估计词表各项的权重，并施加稀疏化约束；它可以给原文没有写出的关联词分配非零权重，再利用倒排索引检索。Sentence-BERT 则把句子压成长度固定的稠密向量，使用向量距离寻找相近段落。两者都是神经模型，不应把“神经”等同于“稠密”，也不能把 SPLADE 直接叫作 BM25。",
+    "sources": [
+      {
+        "title": "Formal et al. (2021), SPLADE，§2",
+        "url": "https://arxiv.org/abs/2107.05720"
+      },
+      {
+        "title": "Reimers & Gurevych (2019), Sentence-BERT，§3",
+        "url": "https://arxiv.org/abs/1908.10084"
+      }
+    ]
+  },
+  {
+    "ids": [
+      3,
+      5
+    ],
+    "title": "索引：把重复查找的准备工作提前做",
+    "body": "逐篇扫描是在每次查询时检查所有文本；倒排索引预先记录“某个词出现在哪些文档和位置”。“稠密近邻索引”面向稠密向量：稠密说的是向量多数坐标非零，近邻说的是按指定度量寻找接近的向量，索引说的是提前组织数据以加快查询。近邻搜索可以精确，也可以近似；HNSW通过邻接图减少比较，但近似近邻索引并非都采用图结构。向量最近仍不等于最能回答历史问题。全文扫描、倒排和向量索引没有简单的取代关系；混合检索组合不同候选或排序，不是直接相加不同量纲的分数。",
+    "sources": [
+      {
+        "title": "Manning, Raghavan & Schütze, Introduction to Information Retrieval，倒排索引",
+        "url": "https://nlp.stanford.edu/IR-book/html/htmledition/a-first-take-at-building-an-inverted-index-1.html"
+      },
+      {
+        "title": "hnswlib，原代码库",
+        "url": "https://github.com/nmslib/hnswlib"
+      }
+    ]
+  },
+  {
+    "ids": [
+      6
+    ],
+    "title": "停用词：删除的是一种检索线索",
+    "body": "停用词是某项任务中决定不进入索引的高频词，并不是“没有意思的词”。删除它们可以缩小索引，却可能破坏短语、否定关系和固定表达。历史材料中的否定词、身份称谓或文体虚词是否保留，要由检索任务决定。现代系统常保留更多词项；先列出要回答的问题，再比较保留与删除的结果，比照抄通用停用词表更稳妥。",
+    "sources": [
+      {
+        "title": "Introduction to Information Retrieval，Dropping common terms: stop words",
+        "url": "https://nlp.stanford.edu/IR-book/html/htmledition/dropping-common-terms-stop-words-1.html"
+      }
+    ]
+  },
+  {
+    "ids": [
+      7,
+      8
+    ],
+    "title": "NFC 与 NFKC：统一编码形式会不会抹去差别",
+    "body": "Unicode 允许同一个视觉字符存在不同的编码组合。NFC 先作规范分解再组合，处理规范等价；NFKC 还处理兼容等价，因而可能把全角字母变成普通字母，把圈号等特殊形式归并。NFKC 不是繁简转换，更不是可靠的日文旧字体转换。它会减少表面差别，也可能丢掉版本学上有意义的形式。教学中应保留原文，并把转换后的文本作为可重建的检索字段。",
+    "sources": [
+      {
+        "title": "Unicode Standard Annex #15，Normalization Forms，§1.2",
+        "url": "https://www.unicode.org/reports/tr15/"
+      }
+    ]
+  },
+  {
+    "ids": [
+      9,
+      10,
+      11
+    ],
+    "title": "OpenCC 与位置映射：转换后命中，怎样回到原页",
+    "body": "OpenCC 依配置选择转换链，s2t、t2s、jp2t 等配置目标不同，不能把一个方向的配置当作全部中日文字规范化。词组转换可能依上下文改变用字；“转换后包含查询词”只说明所选配置下发生了字符串命中，不等于同义判断。若转换、删空白、OCR 修正改变了字符数量，处理文本第几个字符就不再等于原文第几个字符。系统至少应保存原文、处理文本、处理规则版本及页码；需要逐字高亮时还要保留跨度映射。映射不确定就回到段落或页面定位，不能假装精确。",
+    "sources": [
+      {
+        "title": "OpenCC README 与配置目录",
+        "url": "https://github.com/BYVoid/OpenCC"
+      },
+      {
+        "title": "OpenCC s2t.json，转换链的实际定义",
+        "url": "https://github.com/BYVoid/OpenCC/blob/master/data/config/s2t.json"
+      }
+    ]
+  },
+  {
+    "ids": [
+      12
+    ],
+    "title": "TF-IDF：公式约定是算法的一部分",
+    "body": "词频 TF 表示一个词在当前文档中的出现程度；逆文档频率 IDF 降低到处可见的词的区分作用。以 scikit-learn 为例，平滑后的 IDF 是 log((1+N)/(1+df))+1；启用 sublinear_tf 后，正词频使用 1+log(tf)。这是该实现的约定，不是所有系统共用的唯一公式。是否平滑、是否取对数、是否最后归一化都会改变结果。比较两个系统时应连这些约定一起记录。",
+    "sources": [
+      {
+        "title": "scikit-learn，TfidfTransformer 参数和公式",
+        "url": "https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfTransformer.html"
+      }
+    ]
+  },
+  {
+    "ids": [
+      14,
+      28,
+      29,
+      33
+    ],
+    "title": "BM25、Okapi 与 Lucene：重复出现不会无限加分",
+    "body": "BM25 综合词的区分作用、词频饱和和文档长度校正。一个词从一次增加到两次可能帮助很大，从一百次增加到一百零一次通常帮助很小，这就是饱和。长度校正则避免长文本仅因包含更多词就占便宜。k1 调整词频饱和程度，b 调整长度校正程度；它们不是“准确率旋钮”。Okapi 是早期实现这类模型的检索系统名称。Lucene 的常用 IDF 写作 log(1+(N-df+0.5)/(df+0.5))；其他教材的公式可能不同。课堂手算须分别写明IDF、词频项、词项划分和长度口径。若仅采用Lucene的IDF而保留教材的(k1+1)词频因子，应标为所选教学公式；不能声称复现Lucene原始分值；得分既不是概率，也不能在不同查询间直接比较。",
+    "sources": [
+      {
+        "title": "Introduction to Information Retrieval，Okapi BM25",
+        "url": "https://nlp.stanford.edu/IR-book/html/htmledition/okapi-bm25-a-non-binary-model-1.html"
+      },
+      {
+        "title": "Lucene BM25Similarity，idf 与参数定义",
+        "url": "https://lucene.apache.org/core/10_3_1/core/org/apache/lucene/search/similarities/BM25Similarity.html"
+      }
+    ]
+  },
+  {
+    "ids": [
+      15,
+      16
+    ],
+    "title": "分布式词表示与负采样：从邻近用法中学习",
+    "body": "词的使用环境包含线索：常在相似上下文出现的词，可能具有相似功能。CBOW 根据周围词预测中心词，Skip-gram 根据中心词预测周围词。负采样把昂贵的全词表预测改成若干二分类训练：提高真实搭配的分数，降低按噪声分布抽取、在本轮当作负例的词对分数。负例可能在别处真实共现，不代表绝不共同出现。这里的“负”表示训练中构造的对照，不是反义词，更不是历史判断的反证。这些方法学到的是语料中的分布关系；同义、关联、反义有时都会靠近，必须回到实际用例判断。",
+    "sources": [
+      {
+        "title": "Mikolov et al. (2013), Distributed Representations of Words and Phrases，§2.2",
+        "url": "https://arxiv.org/abs/1310.4546"
+      }
+    ]
+  },
+  {
+    "ids": [
+      17,
+      18,
+      21
+    ],
+    "title": "双塔、孪生与三元组：结构和训练目标要分开",
+    "body": "双塔分别编码问题与文档，可以预先计算全部文档向量；查询时只计算问题向量，再做近邻比较。孪生网络通常强调两个分支共享参数；双塔也可能不共享，因此不能完全互换。三元组训练使用锚点、相关项和不相关项，希望相关距离加上间隔仍小于不相关距离。它是一种训练损失，不是第三座编码塔。查询与文档必须使用相互兼容的模型、版本、提示前缀、池化和归一化约定；换模型只重算查询会使距离失去意义。",
+    "sources": [
+      {
+        "title": "Sentence-BERT，§3 与图1—2",
+        "url": "https://arxiv.org/abs/1908.10084"
+      },
+      {
+        "title": "Sentence Transformers，TripletLoss 原代码",
+        "url": "https://github.com/huggingface/sentence-transformers/blob/main/sentence_transformers/losses/TripletLoss.py"
+      }
+    ]
+  },
+  {
+    "ids": [
+      19,
+      20
+    ],
+    "title": "LLM 嵌入与重排：同一模型家族可以承担不同工作",
+    "body": "Qwen3-Embedding 以大语言模型为基础，将特殊结束位置的最后层隐藏状态用作文本表示，并针对嵌入任务训练；它不是把模型生成的解释句当作向量。Qwen3-Reranker 则分别联合读取问题与每条候选，根据匹配判断的输出计算分数。前者便于建立可预计算的索引，后者通常只处理少量候选。原论文覆盖多语言评测，但不能据此说任意旧日文、古汉语都能准确跨语言检索；历史语体、OCR 错字和词义变化仍须单独测试。",
+    "sources": [
+      {
+        "title": "Zhang et al. (2025), Qwen3 Embedding，§2 Architecture",
+        "url": "https://arxiv.org/html/2506.05176v1"
+      }
+    ]
+  },
+  {
+    "ids": [
+      22
+    ],
+    "title": "L2 归一化：保留方向，统一长度",
+    "body": "向量的 L2 长度是各坐标平方和的平方根；用每个坐标除以这个长度，就把非零向量放到单位球面上。此时点积等于余弦相似度，而平方欧氏距离等于 2 减 2 倍余弦。因此在同一批单位向量上，这些度量给出的排序可对应转换。零向量不能直接除以零；有些数据库返回距离、有些返回相似度，排序方向也不同。归一化并不赋予坐标可解释的历史意义。",
+    "sources": [
+      {
+        "title": "Sentence Transformers，Similarity Calculation",
+        "url": "https://sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html"
+      }
+    ]
+  },
+  {
+    "ids": [
+      23,
+      24
+    ],
+    "title": "HNSW：沿着邻居寻找近邻",
+    "body": "HNSW 把向量连成多层邻接图，先从稀疏的上层大步接近目标，再在下层细找。它省下比较次数，代价是结果可能漏掉真正最近的点。M 控制连接数量，ef_construction 控制建图时探索规模，查询时的 ef（常称 efSearch）控制搜索候选规模。提高这些值通常增加内存、构建时间或查询时间，效果仍取决于数据。不要把数据库请求中的 top_k 与 ef 混为一谈：前者是最后返回多少条，后者控制搜索时保留的候选列表规模，不等于实际访问点数或距离计算次数；库未提供访问量时不能从ef反推。",
+    "sources": [
+      {
+        "title": "hnswlib ALGO_PARAMS.md，参数说明",
+        "url": "https://github.com/nmslib/hnswlib/blob/master/ALGO_PARAMS.md"
+      },
+      {
+        "title": "Malkov & Yashunin, HNSW 原论文",
+        "url": "https://arxiv.org/abs/1603.09320"
+      }
+    ]
+  },
+  {
+    "ids": [
+      25,
+      26,
+      27
+    ],
+    "title": "正则表达式：匹配、捕获和替换分别做什么",
+    "body": "匹配判断字符序列是否满足模式；捕获把命中中的某一部分单独记下；替换利用整个命中或捕获组生成新文本。括号、字符类、重复次数和锚点各有不同职责。同一个模式能否运行，要看正则引擎和选项：JavaScript、Python 与 Rust regex 的语法并不相同。Rust regex 为可预测的运行复杂度放弃了反向引用和环视等功能；网页上通过的 JavaScript 表达式不能直接作为 Rust 后端测试通过的证据。处理史料时先查看命中列表，再应用替换，保留原文与变更记录。",
+    "sources": [
+      {
+        "title": "MDN，Groups and backreferences",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Groups_and_backreferences"
+      },
+      {
+        "title": "Rust regex crate，Syntax 与 Performance",
+        "url": "https://docs.rs/regex/latest/regex/"
+      }
+    ]
+  },
+  {
+    "ids": [
+      30
+    ],
+    "title": "RRF：融合的是名次，不是假装相同的分数",
+    "body": "倒数名次融合为每份排序中出现的文档加上 1/(c+名次)，再按总和排序。这样不需要把 BM25 分数与余弦相似度强行放到同一量纲。c 越大，靠前几名之间的差距越温和。原论文的实验采用 c=60；教学中改用小数值便于观察时须明确标为构造算例。缺席某一路结果的文档在该路不贡献分数。RRF 依赖各路实际取回的候选，无法补救两路都漏掉的史料。",
+    "sources": [
+      {
+        "title": "Cormack, Clarke & Buettcher (2009), Reciprocal Rank Fusion，公式与实验",
+        "url": "https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf"
+      }
+    ]
+  },
+  {
+    "ids": [
+      31,
+      32
+    ],
+    "title": "引文追踪：关系数据与全文检索不是一回事",
+    "body": "Semantic Scholar 的学术图谱 API 可提供参考文献和被引信息；利用这些边从一篇文章向前、向后扩展，就是滚雪球检索。边的缺失可能来自收录范围或解析失败，不能据此断言两项研究没有联系。Web of Science、知网中的引证入口也取决于产品、权限与实际收录，演示前应以账户中可见字段为准。作者提到某人、主题相似、向量接近都不能直接画成引用边；引用也不自动表示赞同或思想影响。",
+    "sources": [
+      {
+        "title": "Semantic Scholar，Academic Graph API 文档",
+        "url": "https://api.semanticscholar.org/api-docs/graph"
+      },
+      {
+        "title": "Clarivate，Web of Science Core Collection",
+        "url": "https://clarivate.com/academia-government/scientific-and-academic-research/research-discovery-and-referencing/web-of-science/web-of-science-core-collection/"
+      }
+    ]
+  },
+  {
+    "ids": [
+      34
+    ],
+    "title": "RAGChecker：把错误拆开看，仍需人工核验",
+    "body": "RAGChecker 将回答拆为较细的主张，并考察取回上下文是否包含必要信息、生成内容是否得到支持等方面。这样可区分“材料没取到”和“取到了却说错了”，比只给答案一个总分更有诊断价值。它依赖参照答案、上下文以及评判模型，评判模型本身也可能误读否定、时间和历史语境；输出是待核验的评估结果，不是史实认证。课堂应把一个主张、对应材料和人工判断并列显示。",
+    "sources": [
+      {
+        "title": "Amazon Science，RAGChecker 原代码库与论文入口",
+        "url": "https://github.com/amazon-science/RAGChecker"
+      }
+    ]
+  },
+  {
+    "ids": [
+      35,
+      36,
+      37,
+      38
+    ],
+    "title": "qrels、P@k、R@k、nDCG 与调参集",
+    "body": "qrels 是按查询记录文档相关性判断的表：问题、文档、相关等级及判断依据应当可回查。前 k 条中相关条数除以 k 是 P@k；除以该查询在固定评测范围内的相关文档总数是 R@k。未判断不等于不相关，相关总集不完整时不能宣称测到了真实召回率。nDCG 允许分级相关：DCG@k 为各名次的增益除以 log2(名次+1) 后求和，常用增益为 2 的相关等级次方减一；再除以该查询固定评测范围内全部已判断文档所能形成的理想前k名的 DCG；理想排序不能只重排这次取回的候选，得到 nDCG。理想增益为零时需说明实现约定。调参集用于选择模型与参数，最终测试集应留到方案确定后；反复看同一小样本再报告漂亮成绩，只能叫开发观察。",
+    "sources": [
+      {
+        "title": "NIST TREC，Relevance Judgements 数据说明",
+        "url": "https://trec.nist.gov/data/qrels_eng/"
+      },
+      {
+        "title": "Järvelin & Kekäläinen (2002), Cumulated gain-based evaluation",
+        "url": "https://doi.org/10.1145/582415.582418"
+      },
+      {
+        "title": "scikit-learn，Tuning the hyper-parameters of an estimator",
+        "url": "https://scikit-learn.org/stable/modules/grid_search.html"
+      },
+      {
+        "title": "IR教材，排序评估",
+        "url": "https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-ranked-retrieval-results-1.html"
+      }
+    ]
+  },
+  {
+    "ids": [
+      39,
+      40
+    ],
+    "title": "Elasticsearch 与 Lucene：分析、建索引、查询各在哪里",
+    "body": "Elasticsearch 在服务进程中接收 JSON 文档，按字段映射决定索引方式，文本分析器把文本变成词项，底层 Lucene 建立并查询索引。分片让数据可以分布到多个节点，但教学用例不必先搭集群。用 analyze 接口看切分结果，再用 search 查询，比把它当黑箱更能解释为什么某词没有命中。它可以在个人电脑上以单节点方式学习，资源需求和运维复杂度需评估；GitHub Pages 只能托管前端和保存的请求结果，不能执行 Elasticsearch 服务。",
+    "sources": [
+      {
+        "title": "Elasticsearch 官方代码库",
+        "url": "https://github.com/elastic/elasticsearch"
+      },
+      {
+        "title": "Elasticsearch，Similarity module",
+        "url": "https://www.elastic.co/docs/reference/elasticsearch/index-settings/similarity"
+      }
+    ]
+  },
+  {
+    "ids": [
+      41
+    ],
+    "title": "OpenSearch：相似接口不表示配置可直接互换",
+    "body": "OpenSearch 同样提供文档索引、文本分析、搜索和插件扩展，适合对照观察服务型检索引擎的数据流程。它与 Elasticsearch 有历史渊源，但版本、插件、认证和向量检索接口已经各自演进。教学范例应分别给出明确版本下的请求，不用一个地址替换就声称兼容。网页可展示真实运行保存的响应，并提供本地重跑入口；没有连接服务时，必须标明正在回放。",
+    "sources": [
+      {
+        "title": "OpenSearch 官方代码库与启动说明",
+        "url": "https://github.com/opensearch-project/OpenSearch"
+      }
+    ]
+  },
+  {
+    "ids": [
+      42
+    ],
+    "title": "Tantivy：嵌入程序的全文检索库",
+    "body": "Tantivy 是 Rust 全文检索库，负责词项索引、查询和相关性排序；应用程序决定文件怎样读入、页面怎样展示以及结果怎样引用。它不自动提供完整知识库聊天界面，也不自动完成语义嵌入。最小实践按“字段模式—写入文档—提交—构建查询—取得文档”展开。把它与 Elasticsearch 比较时，主要观察应用内库与常驻服务的边界，不应简单宣布哪一个检索效果更好。",
+    "sources": [
+      {
+        "title": "Tantivy 官方 README 与 examples",
+        "url": "https://github.com/quickwit-oss/tantivy"
+      }
+    ]
+  },
+  {
+    "ids": [
+      43
+    ],
+    "title": "Chroma：集合、记录与向量",
+    "body": "Chroma 用集合组织带 ID 的文档、元数据和向量，可以本地使用，也可以连接服务。若添加文本时使用嵌入函数，查询也须遵循兼容的编码约定；有些模型要求查询与文档使用不同前缀或编码入口，不能只凭维数相同混用；显式提供向量有助于课堂看清哪个环节由谁完成。元数据过滤限制候选范围，向量搜索再在相应范围内寻找相近项。它不会凭向量判断史料真伪，也不会自动知道 PDF 原页；页码和版本须随记录一起写入。",
+    "sources": [
+      {
+        "title": "Chroma 官方 README，API 示例",
+        "url": "https://github.com/chroma-core/chroma"
+      }
+    ]
+  },
+  {
+    "ids": [
+      44
+    ],
+    "title": "Qdrant：向量检索加上可过滤的附加信息",
+    "body": "Qdrant 中每条 point 可带向量及 payload；payload 可记录年份、材料类型与原页，过滤器据此约束检索范围。Python 客户端的本地模式便于小规模验证；独立服务适合更完整的运行部署，两者能力和性能不能直接等同。课堂先用同一批真实向量比较有无日期过滤的结果，再看返回的score、度量与原文：Cosine和Dot通常越大越相近，Euclid和Manhattan通常越小越相近，才能解释过滤和相似度分别改变了什么。",
+    "sources": [
+      {
+        "title": "Qdrant 官方代码库",
+        "url": "https://github.com/qdrant/qdrant"
+      },
+      {
+        "title": "Qdrant Python Client，Local Mode",
+        "url": "https://github.com/qdrant/qdrant-client"
+      },
+      {
+        "title": "Qdrant，Metrics及搜索得分",
+        "url": "https://qdrant.tech/documentation/search/search/"
+      }
+    ]
+  },
+  {
+    "ids": [
+      45
+    ],
+    "title": "Milvus：集合模式、索引与检索请求",
+    "body": "Milvus 以集合模式约束主键、向量维数和附加字段，先写入数据，再按部署形态配置索引并检索。Milvus Lite 提供便于本机运行的入口；大型独立或分布式部署承担不同的容量与并发要求。比较 Milvus、Qdrant、Chroma 时应固定同一模型、分块、查询与相关性判断；更换底层库并不自动修复差的嵌入或错的史料元数据。维数不一致应当报错，而不是补零掩盖模型不兼容。",
+    "sources": [
+      {
+        "title": "Milvus 官方代码库",
+        "url": "https://github.com/milvus-io/milvus"
+      },
+      {
+        "title": "Milvus Lite 官方代码库",
+        "url": "https://github.com/milvus-io/milvus-lite"
+      }
+    ]
+  },
+  {
+    "ids": [
+      46
+    ],
+    "title": "Lucivy 的 SFX 与 FST：后缀如何帮助定位子串",
+    "body": "Lucivy 的架构说明把索引词的后缀组织进有限状态转换器（FST），让共享前缀的路径得以压缩，并用不同字节分区区分词首、词内等位置语义。这里的 SFX 是该项目的后缀结构，不能当作所有全文引擎共同采用的算法。正则检索可先从模式中提取必须出现的字面片段，利用索引缩小候选，再由正则引擎验证。若模式没有可用于筛选的片段，仍可能退回较大范围扫描。课堂应同时显示候选阶段与最后验证阶段，不把候选命中当最终命中。",
+    "sources": [
+      {
+        "title": "Lucivy ARCHITECTURE.md，SFX / FST / Regex search",
+        "url": "https://github.com/L-Defraiteur/lucivy/blob/main/ARCHITECTURE.md"
+      }
+    ]
+  },
+  {
+    "ids": [
+      47
+    ],
+    "title": "Rocchio：相关反馈改变的是查询表示",
+    "body": "Rocchio 把原查询向量、已判相关文档的平均向量、已判不相关文档的平均向量组合起来：保留原方向，向相关组靠近，离不相关组远一些。其前提是这些向量位于同一个空间，而且已有人工相关判断。它是经典相关反馈方法，不是把用户一句“继续查”交给大模型的统称。若“相关”只表示某种措辞相似，反馈也可能把查询带离原来的研究问题，因此每轮应保留判断依据。",
+    "sources": [
+      {
+        "title": "Introduction to Information Retrieval，The Rocchio algorithm for relevance feedback",
+        "url": "https://nlp.stanford.edu/IR-book/html/htmledition/the-rocchio-algorithm-for-relevance-feedback-1.html"
+      }
+    ]
+  },
+  {
+    "ids": [
+      48
+    ],
+    "title": "PaSa、PaperQA2 与 DeepResearch Bench：系统和评测不能混列",
+    "body": "PaSa 以论文搜索为任务，组合搜索与选择过程；PaperQA2 用论文搜索、证据整理、答案生成、引文扩展等工具开展多步问答。这些实现有助于观察系统何时决定继续找、读哪些全文、怎样停止，但原论文的评测范围不能直接外推为历史研究质量保证。DeepResearch Bench 则是深度研究系统的评测框架和数据，并不是与前两者同类的检索客户端。比较时应固定问题、可访问资料与预算，保存可观察的工具调用和证据，不把系统编造的“思考过程”当成实际轨迹。",
+    "sources": [
+      {
+        "title": "PaSa 官方代码库",
+        "url": "https://github.com/bytedance/pasa"
+      },
+      {
+        "title": "PaperQA2 原论文，§2、§8.1.1",
+        "url": "https://arxiv.org/html/2409.13740v1"
+      },
+      {
+        "title": "DeepResearch Bench 官方代码库",
+        "url": "https://github.com/Ayanami0730/deep_research_bench"
+      }
+    ]
+  }
+]

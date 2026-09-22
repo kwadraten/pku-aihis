@@ -34,3 +34,6 @@ __pycache__/
 
 # Lockfiles, source code and reviewed small teaching data are tracked.
 # Generated classroom archives belong in release artifacts, not Git history.
+
+# Generated browser vendor bundle; rebuilt from locked dependencies
+/apps/week03/src/assets/vendor/
