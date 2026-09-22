@@ -18,4 +18,5 @@ jobs:
         working-directory: apps/week03
       - run: pnpm test && pnpm run check && pnpm build
         working-directory: apps/week03
+      - run: python3 -m unittest discover -s local/tests
       - run: node scripts/build-site.mjs && node scripts/check-public.mjs

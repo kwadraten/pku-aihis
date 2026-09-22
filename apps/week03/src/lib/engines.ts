@@ -1,3 +1,4 @@
+import { getModelConfig, bridgeEndpoint } from "./model-client";
 import { state } from "./store";
 let lucivy: any,
   index: any,
@@ -135,7 +136,20 @@ export async function embed(text: string, onProgress?: (s: string) => void) {
           document.baseURI,
         ).href,
       );
-      env.allowLocalModels = false;
+      let localAssets = false;
+      const bridge = getModelConfig().bridge;
+      try {
+        const r = await fetch(bridgeEndpoint(bridge, "/api/model-assets"), {
+          signal: AbortSignal.timeout(2500),
+        });
+        localAssets = r.ok && (await r.json()).available;
+      } catch {}
+      env.allowLocalModels = localAssets;
+      env.allowRemoteModels = !localAssets;
+      if (localAssets) {
+        env.localModelPath = bridgeEndpoint(bridge, "/models/");
+        onProgress?.("使用本机已下载的MiniLM编码器");
+      } else onProgress?.("本机编码器未连接；首次下载到浏览器后执行");
       env.backends.onnx.wasm.numThreads = 1;
       env.backends.onnx.wasm.wasmPaths = new URL(
         "assets/vendor/transformers/",

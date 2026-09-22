@@ -68,6 +68,7 @@ export class DeckContainer {
         )
     )
       return;
+    if (document.querySelector(".model-overlay")) return;
     if (this.overview && e.key !== "Escape") return;
     const map = {
       ArrowRight: 1,
@@ -102,8 +103,16 @@ export class DeckContainer {
           <button onClick={() => (this.overview = !this.overview)}>
             课程地图
           </button>
+          <button
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("open-model-settings"))
+            }
+          >
+            模型接入
+          </button>
           <button onClick={() => this.presenter()}>演讲者视图 ↗</button>
         </div>
+        <model-connection />
         <main>
           <slot />
         </main>

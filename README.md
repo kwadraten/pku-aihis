@@ -16,19 +16,20 @@ pnpm run check
 pnpm build
 cd ../..
 node scripts/build-site.mjs
-python3 local/runtime.py
+python3 local/start-classroom.py
 ```
 
-打开 http://127.0.0.1:8767/week03/ 。Python标准库即可提供静态预览；数据库重跑需要 Python 3.12 安装 `local/requirements.txt`。生成模型及服务配置见 [本地课堂说明](apps/week03/src/assets/guides/local-runtime.md)。
+打开 http://127.0.0.1:8767/week03/ 。Python标准库即可启动网页与本地桥接；启动器连接独立课堂Ollama实例。数据库重跑需要 Python 3.12 安装 `local/requirements.txt`。生成模型及服务配置见 [本地课堂说明](apps/week03/src/assets/guides/local-runtime.md)。
 
-方向键翻页，课程地图选择页面，P打开演讲者窗口，B关闭动效。文字框内方向键正常编辑；按钮空格保持激活操作。D01可在本机导入带records的JSON或JSONL，完整OCR包可按卷导入。自由查询的浏览器嵌入会首次下载约118MB模型；已存查询与向量排序无需下载模型。
+方向键翻页，课程地图选择页面，P打开演讲者窗口，B关闭动效。文字框内方向键正常编辑；按钮空格保持激活操作。D01可在本机导入带records的JSON或JSONL，完整OCR包可按卷导入。自由查询优先读取本机已下载的MiniLM；未连接本机编码器时，浏览器首次下载约118MB模型。已存查询与向量排序无需下载模型。
 
 ## 实际功能与边界
 
 - 浏览器真实执行：OpenCC、正则Worker、教学BM25、精确余弦、RRF、人工判断指标、Lucivy全文、EdgeVec近邻。
 - 已在本机计算：27条史料片段与9条文本查询的384维嵌入；7张原页和4条CLIP查询；48张崩字图的768维特征。模型、数据与预计算程序见 [local/PRECOMPUTE.md](local/PRECOMPUTE.md)。
 - 已在本机运行并保存结果：Tantivy、Chroma、Qdrant、Milvus Lite。网页可通过本地桥接重跑。
-- 已实现但需另接模型：RAG生成、模型选工具循环。未配置模型时显示明确失败，不返回预设答案。
+- 本机模型：Qwen3 4B、DeepSeek-R1-0528-Qwen3 8B蒸馏版、Gemma3 4B、Qwen3-VL 4B；支持真实RAG、模型工具循环、研究环节与图片描述。保存示例显示精确模型散列与实际输入输出，和现场新运行分开。
+- API：右上角“模型接入”输入DeepSeek等兼容API的地址、模型和Key。默认浏览器直连，跨域受限时可经本机桥接；Key只保留在当前页面内存，刷新即清除。
 - 单独提供部署指南：AnythingLLM、Elasticsearch、OpenSearch、PaSa、PaperQA2、deep-research及研究评测框架；不把步骤切换当作后台执行。
 
 公开的27条节录含已核片段和明确标为待核的OCR；它们不是全库，也不是独立评测集。模型分数不是史实置信度。教师论文只保存两条有页码的书目引用关系。

@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Listen } from "@stencil/core";
+import { Fragment, Component, h, Prop, State, Listen } from "@stencil/core";
 import {
   state,
   loadCorpus,
@@ -19,9 +19,29 @@ import {
   rocchio,
 } from "../../lib/math";
 import { fulltext, vectorSearch, embed } from "../../lib/engines";
+import { evidenceMessages } from "../../lib/model-tasks";
+import {
+  generate,
+  modelLabel,
+  openModelSettings,
+  agentMessages,
+  parseAction,
+  citationCheck,
+} from "../../lib/model-client";
 @Component({ tag: "lesson-lab", shadow: false })
 export class LessonLab {
   private epoch = 0;
+  private modelAbort: AbortController;
+  @State() modelView = false;
+  @State() modelName = modelLabel();
+  @State() responseMeta: any = null;
+  @Listen("model-config-change", { target: "window" }) modelChanged() {
+    this.modelName = modelLabel();
+    if (["D13", "D24"].includes(this.demoId)) this.invalidateFlow();
+  }
+  disconnectedCallback() {
+    this.modelAbort?.abort();
+  }
   @State() lastSearch: any = null;
   @Prop() demoId: string;
   @State() ready = false;
@@ -52,6 +72,8 @@ export class LessonLab {
   @State() author = "all";
   @State() feedback: string[] = [];
   @State() images: any = null;
+  @State() captionMode = "ocr";
+  @State() visionExamples: any[] = [];
   @State() imageIndex = 0;
   @State() presetIndex = 0;
   @State() stages: any[] = [];
@@ -79,6 +101,10 @@ export class LessonLab {
       }
       if (["D30", "D31", "D32"].includes(this.demoId))
         this.images = await (await fetch("assets/data/multimodal.json")).json();
+      if (this.demoId === "D30")
+        this.visionExamples = (
+          await (await fetch("assets/data/model-examples.json")).json()
+        ).examples.filter((x) => x.demo_id === "D30");
       if (this.demoId === "D22")
         this.output = await (await fetch("assets/data/citations.json")).json();
       this.ready = true;
@@ -87,6 +113,8 @@ export class LessonLab {
     }
   }
   @Listen("corpus-change", { target: "window" }) reset() {
+    this.modelAbort?.abort();
+    this.responseMeta = null;
     this.epoch++;
     this.busy = false;
     this.selected = 0;
@@ -101,7 +129,7 @@ export class LessonLab {
     this.phase = 0;
     this.answer = "";
     this.normalized = "";
-    this.message = `已切换语料：${state.docs.length}条。本机导入内容不上传。`;
+    this.message = `已切换语料：${state.docs.length}条。导入时不上传；选择API运行时会发送选中的片段。`;
   }
   private doc() {
     return state.docs[this.selected] || state.docs[0];
@@ -112,6 +140,8 @@ export class LessonLab {
     this.normalized = "";
   }
   private invalidateFlow() {
+    this.modelAbort?.abort();
+    this.responseMeta = null;
     this.results = [];
     this.output = null;
     this.qrels = {};
@@ -404,43 +434,30 @@ export class LessonLab {
         this.phase = 2;
       } else if (this.phase === 2) {
         this.output = {
-          messages: [
-            {
-              role: "system",
-              content:
-                "只根据给定材料回答。逐项引用片段ID。材料不足时说明缺口，不根据常识补写史实。",
-            },
-            {
-              role: "user",
-              content:
-                this.query +
-                "\n\n" +
-                this.contextIds
-                  .map((id) => {
-                    const d = state.docs.find((d) => d.id === id);
-                    return `[${id}] ${sourceLabel(d)}\n${d.text}`;
-                  })
-                  .join("\n\n"),
-            },
-          ],
+          messages: evidenceMessages(
+            this.query,
+            this.contextIds.map((id) => state.docs.find((d) => d.id === id)),
+          ),
         };
         this.phase = 3;
       } else {
         if (!this.output?.messages) throw Error("请先构建本轮生成请求");
-        const r = await fetch(this.bridge + "/api/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(this.output),
-          signal: AbortSignal.timeout(120000),
+        this.modelAbort = new AbortController();
+        const d = await generate(this.output.messages, {
+          signal: this.modelAbort.signal,
         });
-        if (!r.ok) throw Error(await r.text());
-        const d = await r.json();
         if (epoch !== this.epoch || version !== state.version) return;
         this.answer = d.text;
+        this.responseMeta = {
+          ...d,
+          text: undefined,
+          citation_check: citationCheck(d.text, this.contextIds),
+        };
         this.logs = [
           ...this.logs,
           {
             event: "generated",
+            ...this.responseMeta,
             model: d.model,
             request_id: d.request_id,
             text: d.text,
@@ -460,8 +477,10 @@ export class LessonLab {
       let observations = [];
       this.logs = [];
       this.answer = "";
+      this.modelAbort = new AbortController();
       this.output = { query: query, maximum_turns: 4 };
       for (let turn = 0; turn < 4; turn++) {
+        this.phase = 0;
         const payload = {
           query: query,
           observations,
@@ -469,18 +488,17 @@ export class LessonLab {
           instruction:
             "选择下一步工具。search需要query；read需要id；finish需要answer并引用已经读到的ID。",
         };
-        const r = await fetch(this.bridge + "/api/agent-step", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          signal: AbortSignal.timeout(120000),
+        const response = await generate(agentMessages(payload), {
+          json: true,
+          signal: this.modelAbort.signal,
         });
-        if (!r.ok) throw Error(await r.text());
-        const { action, model } = await r.json();
+        this.phase = 1;
+        const action = parseAction(response.text),
+          model = response.model;
         if (epoch !== this.epoch || version !== state.version) return;
         this.logs = [
           ...this.logs,
-          { runId, turn, event: "model_proposal", model, action },
+          { runId, turn, event: "model_proposal", model, action, response },
         ];
         if (!["search", "read", "finish"].includes(action.tool))
           throw Error("模型给出未获准工具，执行器已拒绝。");
@@ -489,10 +507,18 @@ export class LessonLab {
             .filter((o) => o.action.tool === "read")
             .map((o) => o.result.id);
           if (!readIds.length) throw Error("模型尚未读取证据，不能完成回答");
+          const cited = [
+            ...String(action.answer).matchAll(/\[((?:JP|ZT)[\w-]+)\]/g),
+          ].map((x) => x[1]);
+          if (!cited.length || cited.some((id) => !readIds.includes(id)))
+            throw Error("回答缺少已读ID引用或引用了未读材料；请检查模型输出。");
           this.answer = String(action.answer || "");
+          this.responseMeta = { ...response, text: undefined };
           this.logs = [...this.logs, { runId, turn, event: "stopped" }];
+          this.phase = 4;
           return;
         }
+        this.phase = 2;
         let result;
         if (action.tool === "search") {
           if (typeof action.query !== "string") throw Error("缺少query");
@@ -516,6 +542,7 @@ export class LessonLab {
             throw Error("read的ID尚未被检索发现");
           result = { id: d.id, text: d.text, source: sourceLabel(d) };
         }
+        this.phase = 3;
         observations.push({ action, result });
         this.logs = [
           ...this.logs,
@@ -1155,22 +1182,17 @@ export class LessonLab {
           <section class="lab-column">
             <span class="mode">
               检索：实时教学BM25 · 生成：
-              {this.answer ? "真实本地桥接响应" : "尚未运行"}
+              {this.answer
+                ? `${this.responseMeta?.provider === "api" ? "API" : "本地"}实际响应 · ${this.responseMeta?.model}`
+                : "尚未运行"}
             </span>
             <div class="panel">
-              <label>
-                本地桥接{" "}
-                <input
-                  aria-label="本地桥接地址"
-                  value={this.bridge}
-                  onInput={(e: any) => (this.bridge = e.target.value)}
-                />
-              </label>
+              <span class="mode">{this.modelName}</span>
+              <button onClick={() => openModelSettings()}>
+                设置本地模型／API Key
+              </button>
               <p class="lab-note">
-                公开页面不保存密钥。本机服务未启动、浏览器拒绝连接或模型不可用时显示错误；可用同源本地课堂入口。
-                <a href="assets/guides/local-runtime.md" target="_blank">
-                  运行说明 ↗
-                </a>
+                本地模型不需Key；API接入可选DeepSeek等兼容服务。保存示例见本页顶部“模型实跑与示例”。
               </p>
             </div>
             {!agent &&
@@ -1196,7 +1218,7 @@ export class LessonLab {
                   </label>
                 );
               })}
-            <p class="paper-text">
+            <p class="model-answer">
               {this.answer ||
                 "尚无生成答案。可以先查看检索和实际选入的上下文。"}
             </p>
@@ -1207,6 +1229,7 @@ export class LessonLab {
                   contextIds: this.contextIds,
                   logs: this.logs,
                   answer: this.answer,
+                  model: this.responseMeta,
                 })
               }
             >
@@ -1215,6 +1238,9 @@ export class LessonLab {
           </section>
           <section class="lab-column">
             <h2>可观察记录</h2>
+            {this.responseMeta && (
+              <pre>{JSON.stringify(this.responseMeta, null, 2)}</pre>
+            )}
             {this.output && (
               <details open>
                 <summary>实际请求</summary>
@@ -1508,6 +1534,15 @@ export class LessonLab {
           </a>
         </div>
       );
+    const derivedText = (x: any) =>
+      this.captionMode === "ocr"
+        ? x.ocr || ""
+        : this.captionMode === "manual"
+          ? x.caption || ""
+          : this.visionExamples.find(
+              (e) =>
+                e.image_id === x.id && e.response.model === this.captionMode,
+            )?.response.text || "";
     const q =
       mode === "D31"
         ? data.text_queries?.[this.presetIndex]?.vector
@@ -1517,7 +1552,7 @@ export class LessonLab {
         ? set.items.map((x, i) => ({
             item: x,
             score: tokenize(this.query, "word").filter((t) =>
-              (x.caption || x.ocr || "").includes(t),
+              derivedText(x).includes(t),
             ).length,
           }))
         : set.items
@@ -1536,7 +1571,14 @@ export class LessonLab {
             : mode === "D31"
               ? "共同图文空间 · 预计算查询"
               : "图像特征 · 实时近邻排序"}{" "}
-          · {set.model || set.status}
+          ·{" "}
+          {mode === "D30"
+            ? this.captionMode === "ocr"
+              ? "OCR工作转录"
+              : this.captionMode === "manual"
+                ? "人工描述"
+                : this.captionMode + " · 预先实际生成"
+            : set.model || set.status}
         </span>
         <div class="lab-grid">
           <section class="lab-column">
@@ -1558,7 +1600,7 @@ export class LessonLab {
                   onClick={() =>
                     (this.output = {
                       query: this.query,
-                      mode: "对已存OCR/描述作字面检索",
+                      mode: `对${this.captionMode}派生文本作字面检索`,
                     })
                   }
                 >
@@ -1567,6 +1609,22 @@ export class LessonLab {
               )
             ) : (
               <h2>选择查询图块</h2>
+            )}
+            {mode === "D30" && (
+              <label>
+                派生文本来源{" "}
+                <select
+                  aria-label="派生文本类型"
+                  onChange={(e: any) => (this.captionMode = e.target.value)}
+                >
+                  <option value="ocr">原OCR转录</option>
+                  <option value="manual">人工描述</option>
+                  <option value="qwen3-vl:4b-instruct-q4_K_M">
+                    Qwen3-VL本机模型描述
+                  </option>
+                  <option value="gemma3:4b">Gemma3本机模型描述</option>
+                </select>
+              </label>
             )}
             <div class="image-grid">
               {set.items.map((x, i) => (
@@ -1583,7 +1641,32 @@ export class LessonLab {
               <div class="panel">
                 <h3>{selected.title || selected.label}</h3>
                 <p class="source-line">{selected.source}</p>
-                <p>{selected.caption || selected.ocr}</p>
+                <p class="model-answer">
+                  {mode === "D30"
+                    ? derivedText(selected) || "尚无该类型的派生文本"
+                    : selected.caption || selected.ocr}
+                </p>
+                {mode === "D30" &&
+                  !["ocr", "manual"].includes(this.captionMode) && (
+                    <p class="lab-note">
+                      {
+                        this.visionExamples.find(
+                          (e) =>
+                            e.image_id === selected.id &&
+                            e.response.model === this.captionMode,
+                        )?.response.model
+                      }{" "}
+                      · 预先实际生成。
+                      {
+                        this.visionExamples.find(
+                          (e) =>
+                            e.image_id === selected.id &&
+                            e.response.model === this.captionMode,
+                        )?.review_note
+                      }{" "}
+                      选择本页“模型实跑与示例”可重新生成。
+                    </p>
+                  )}
               </div>
             )}
             <p class="lab-note">
@@ -1684,7 +1767,46 @@ export class LessonLab {
             {this.message}
           </div>
         )}
-        {body}
+        {[
+          "D13",
+          "D14",
+          "D21",
+          "D23",
+          "D24",
+          "D25",
+          "D26",
+          "D27",
+          "D28",
+          "D29",
+          "D30",
+        ].includes(this.demoId) ? (
+          <>
+            <div class="lab-toolbar">
+              <button
+                class={!this.modelView ? "selected" : ""}
+                onClick={() => (this.modelView = false)}
+              >
+                步骤与原材料
+              </button>
+              <button
+                class={this.modelView ? "selected" : ""}
+                onClick={() => (this.modelView = true)}
+              >
+                模型实跑与示例
+              </button>
+            </div>
+            {this.modelView ? (
+              <model-experiment
+                demoId={this.demoId}
+                examplesOnly={["D13", "D24"].includes(this.demoId)}
+              />
+            ) : (
+              body
+            )}
+          </>
+        ) : (
+          body
+        )}
       </div>
     );
   }

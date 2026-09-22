@@ -54,6 +54,15 @@ export namespace Components {
     interface LessonLab {
         "demoId": string;
     }
+    interface ModelConnection {
+    }
+    interface ModelExperiment {
+        "demoId": string;
+        /**
+          * @default false
+         */
+        "examplesOnly": boolean;
+    }
 }
 declare global {
     interface HTMLDeckContainerElement extends Components.DeckContainer, HTMLStencilElement {
@@ -86,12 +95,26 @@ declare global {
         prototype: HTMLLessonLabElement;
         new (): HTMLLessonLabElement;
     };
+    interface HTMLModelConnectionElement extends Components.ModelConnection, HTMLStencilElement {
+    }
+    var HTMLModelConnectionElement: {
+        prototype: HTMLModelConnectionElement;
+        new (): HTMLModelConnectionElement;
+    };
+    interface HTMLModelExperimentElement extends Components.ModelExperiment, HTMLStencilElement {
+    }
+    var HTMLModelExperimentElement: {
+        prototype: HTMLModelExperimentElement;
+        new (): HTMLModelExperimentElement;
+    };
     interface HTMLElementTagNameMap {
         "deck-container": HTMLDeckContainerElement;
         "deck-presenter": HTMLDeckPresenterElement;
         "deck-slide": HTMLDeckSlideElement;
         "layout-split": HTMLLayoutSplitElement;
         "lesson-lab": HTMLLessonLabElement;
+        "model-connection": HTMLModelConnectionElement;
+        "model-experiment": HTMLModelExperimentElement;
     }
 }
 declare namespace LocalJSX {
@@ -143,6 +166,15 @@ declare namespace LocalJSX {
     interface LessonLab {
         "demoId"?: string;
     }
+    interface ModelConnection {
+    }
+    interface ModelExperiment {
+        "demoId"?: string;
+        /**
+          * @default false
+         */
+        "examplesOnly"?: boolean;
+    }
 
     interface DeckSlideAttributes {
         "slideId": string;
@@ -164,6 +196,10 @@ declare namespace LocalJSX {
     interface LessonLabAttributes {
         "demoId": string;
     }
+    interface ModelExperimentAttributes {
+        "demoId": string;
+        "examplesOnly": boolean;
+    }
 
     interface IntrinsicElements {
         "deck-container": DeckContainer;
@@ -171,6 +207,8 @@ declare namespace LocalJSX {
         "deck-slide": Omit<DeckSlide, keyof DeckSlideAttributes> & { [K in keyof DeckSlide & keyof DeckSlideAttributes]?: DeckSlide[K] } & { [K in keyof DeckSlide & keyof DeckSlideAttributes as `attr:${K}`]?: DeckSlideAttributes[K] } & { [K in keyof DeckSlide & keyof DeckSlideAttributes as `prop:${K}`]?: DeckSlide[K] };
         "layout-split": Omit<LayoutSplit, keyof LayoutSplitAttributes> & { [K in keyof LayoutSplit & keyof LayoutSplitAttributes]?: LayoutSplit[K] } & { [K in keyof LayoutSplit & keyof LayoutSplitAttributes as `attr:${K}`]?: LayoutSplitAttributes[K] } & { [K in keyof LayoutSplit & keyof LayoutSplitAttributes as `prop:${K}`]?: LayoutSplit[K] };
         "lesson-lab": Omit<LessonLab, keyof LessonLabAttributes> & { [K in keyof LessonLab & keyof LessonLabAttributes]?: LessonLab[K] } & { [K in keyof LessonLab & keyof LessonLabAttributes as `attr:${K}`]?: LessonLabAttributes[K] } & { [K in keyof LessonLab & keyof LessonLabAttributes as `prop:${K}`]?: LessonLab[K] };
+        "model-connection": ModelConnection;
+        "model-experiment": Omit<ModelExperiment, keyof ModelExperimentAttributes> & { [K in keyof ModelExperiment & keyof ModelExperimentAttributes]?: ModelExperiment[K] } & { [K in keyof ModelExperiment & keyof ModelExperimentAttributes as `attr:${K}`]?: ModelExperimentAttributes[K] } & { [K in keyof ModelExperiment & keyof ModelExperimentAttributes as `prop:${K}`]?: ModelExperiment[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -182,6 +220,8 @@ declare module "@stencil/core" {
             "deck-slide": LocalJSX.IntrinsicElements["deck-slide"] & JSXBase.HTMLAttributes<HTMLDeckSlideElement>;
             "layout-split": LocalJSX.IntrinsicElements["layout-split"] & JSXBase.HTMLAttributes<HTMLLayoutSplitElement>;
             "lesson-lab": LocalJSX.IntrinsicElements["lesson-lab"] & JSXBase.HTMLAttributes<HTMLLessonLabElement>;
+            "model-connection": LocalJSX.IntrinsicElements["model-connection"] & JSXBase.HTMLAttributes<HTMLModelConnectionElement>;
+            "model-experiment": LocalJSX.IntrinsicElements["model-experiment"] & JSXBase.HTMLAttributes<HTMLModelExperimentElement>;
         }
     }
 }
