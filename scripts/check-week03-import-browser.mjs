@@ -23,11 +23,13 @@ async function importFile(file){
  const text=await fs.readFile(file,'utf8');let parsed;
  try{parsed=JSON.parse(text);}catch{parsed={records:text.split(/\r?\n/).filter(Boolean).map(JSON.parse)};}
  docs=new Map((parsed.records||parsed).map(d=>[d.id,d]));
- const s=await go('D01');await s.locator('input[type=file]').setInputFiles(file);
- await page.waitForFunction(count=>document.querySelector('deck-slide[slide-id="D01"] select[aria-label="选择史料片段"]').options.length===count,docs.size);
- assert((await s.innerText()).includes('本机导入'));
- assert.equal(await s.getByLabel('选择史料片段').locator('option').count(),docs.size);
- return s;
+ await page.getByRole('button',{name:'语料库管理',exact:true}).click();
+ const overlay=page.locator('.corpus-overlay');
+ await overlay.locator('input[aria-label="导入整卷语料"]').setInputFiles(file);
+ await page.waitForFunction(count=>document.querySelector('.corpus-dialog-toolbar [role="status"]')?.textContent?.includes(`当前 ${count} 条`),docs.size);
+ assert((await overlay.innerText()).includes('本机导入'));
+ await overlay.getByRole('button',{name:'关闭 ×',exact:true}).click();
+ await overlay.waitFor({state:'hidden'});
 }
 async function search(id,query,button){
  const s=await go(id);await s.getByLabel('检索问题').fill(query);
@@ -71,7 +73,7 @@ try{
  check('11 text imports: original bytes, character offsets, page/chapter locators and result identities');
  currentFile=path.join(corpus,'imports/B03.jsonl');await importFile(currentFile);
  let s=await go('D08');await s.getByLabel('检索问题').fill('Alice');await s.getByRole('button',{name:'精确余弦',exact:true}).click();
- await page.waitForFunction(()=>document.querySelector('deck-slide[slide-id="D08"]').textContent.includes('请在D01导入配套向量JSON'));
+ await page.waitForFunction(()=>document.querySelector('deck-slide[slide-id="D08"]').textContent.includes('请在语料库管理中导入配套向量JSON'));
  check('Text-only import explains missing vectors instead of claiming semantic retrieval');
  for(const name of Object.keys(queries)){
   currentFile=path.join(v.vectors,name+'.vectors.json');await importFile(currentFile);
@@ -82,7 +84,7 @@ try{
  await search('D08','a rabbit carrying a watch','精确余弦');
  await search('D09','Rabbit watch','混合检索');await search('D12','a rabbit carrying a watch','运行EdgeVec');
  await page.screenshot({path:path.join(v.output,'all-public-EdgeVec.png'),fullPage:true});
- s=await go('D17');assert((await s.innerText()).includes('D01 导入不会自动重建'));
+ s=await go('D17');assert((await s.innerText()).includes('语料库管理导入不会自动重建'));
  check('External application corpus scope is explicit');
  if(v['forum-text']){
   for(const [name,q] of [['推荐帖','刘翔'],['已筛选回复','助跑']]){
@@ -108,7 +110,7 @@ try{
  if(v.generation){
   await s.getByRole('button',{name:'4 调用生成',exact:true}).click();
   await page.waitForFunction(()=>{const s=document.querySelector('deck-slide[slide-id="D13"]');return s.textContent.includes('citation_check')||s.textContent.includes('Error:');},null,{timeout:180000});
-  const meta=JSON.parse(await s.locator('.lab-column').nth(1).locator(':scope > pre').first().textContent());
+  const meta=JSON.parse(await s.locator('.model-meta').textContent());
   report.generation={model:meta.model,citation_check:meta.citation_check,answer:await s.locator('.model-answer').textContent()};
   assert(meta.citation_check && !meta.citation_check.missing_ids);assert.deepEqual(meta.citation_check.unknown_ids,[]);
   assert((await s.locator('.citation-status').textContent()).includes('引用编号与本轮材料匹配'));

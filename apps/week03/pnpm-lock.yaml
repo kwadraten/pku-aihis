@@ -20,6 +20,9 @@ importers:
       opencc-js:
         specifier: 1.0.5
         version: 1.0.5
+      regulex:
+        specifier: 0.0.5
+        version: 0.0.5
     devDependencies:
       '@stencil/core':
         specifier: 4.45.0
@@ -279,6 +282,10 @@ packages:
   '@types/node@26.6.2':
     resolution: {integrity: sha512-X1P21scMv4zGKLYqjdGjaKa7COa0RKVYYZZN/NfvLQ1JegxFhdhpZG/Lyn8AXx6CDUavKAd11v6BvfpkDByK8g==}
 
+  amdefine@1.0.1:
+    resolution: {integrity: sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg==}
+    engines: {node: '>=0.4.2'}
+
   boolean@3.2.0:
     resolution: {integrity: sha512-d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
@@ -393,6 +400,9 @@ packages:
   protobufjs@7.6.6:
     resolution: {integrity: sha512-dYDWdjSl5RNb7SgPxGQcRU+GtvP7s2fpkrY0r432PcOIaZ0/rBcxEZnQN67iJhFuQiVw754JDoPruPCNdGsbjg==}
     engines: {node: '>=12.0.0'}
+
+  regulex@0.0.5:
+    resolution: {integrity: sha512-Q9DBpVUU6Nq+mM7GE9ApXDeRImAugxOKpDjR21G9/TiPRKRYc9legbj94ZdFmsjTbJSbwZIZmoCUgeUFtEU3pA==}
 
   roarr@2.15.4:
     resolution: {integrity: sha512-CHhPh+UNHD2GTXNYhPWLnU8ONHdI+5DI+4EYIAOaiD63rHeYlZvyh8P+in5999TTSFgUYuKUAjzRI4mdh/p+2A==}
@@ -615,6 +625,8 @@ snapshots:
     dependencies:
       undici-types: 8.9.0
 
+  amdefine@1.0.1: {}
+
   boolean@3.2.0: {}
 
   chownr@3.0.0: {}
@@ -725,6 +737,10 @@ snapshots:
       '@protobufjs/utf8': 1.1.2
       '@types/node': 26.6.2
       long: 5.3.2
+
+  regulex@0.0.5:
+    dependencies:
+      amdefine: 1.0.1
 
   roarr@2.15.4:
     dependencies:

@@ -1,8 +1,8 @@
-import { Fragment, Component, h, Prop, State, Listen } from "@stencil/core";
+import { Fragment, Component, h, Prop, State, Listen, Element } from "@stencil/core";
 import {
   state,
   loadCorpus,
-  replaceCorpus,
+  importCorpusFile,
   sourceLabel,
   saveFile,
   Doc,
@@ -14,6 +14,7 @@ import {
   cosine,
   rankVectors,
   rrf,
+  tfidfForTerm,
   metrics,
   chunks,
   rocchio,
@@ -35,6 +36,8 @@ import {
 } from "../../lib/model-client";
 @Component({ tag: "lesson-lab", shadow: false })
 export class LessonLab {
+  @Element() host: HTMLElement;
+  private regexDiagramPattern: string | null = null;
   private epoch = 0;
   private modelAbort: AbortController;
   @State() modelView = false;
@@ -46,6 +49,27 @@ export class LessonLab {
   }
   disconnectedCallback() {
     this.modelAbort?.abort();
+  }
+  componentDidRender() {
+    if (this.demoId === "D06") {
+      this.updateRegexDiagram();
+      this.syncRegexInputScroll();
+    }
+  }
+  private updateRegexDiagram(force = false) {
+    if (!force && this.regexDiagramPattern === this.query) return;
+    const frame = this.host.querySelector<HTMLIFrameElement>(".regex-diagram");
+    if (!frame?.contentWindow) return;
+    this.regexDiagramPattern = this.query;
+    frame.contentWindow.postMessage({ type: "regex-diagram", pattern: this.query, flags: "gu" }, location.origin);
+  }
+  private syncRegexInputScroll() {
+    const input = this.host.querySelector<HTMLTextAreaElement>(".regex-input textarea");
+    const mirror = this.host.querySelector<HTMLElement>(".regex-input-mirror");
+    if (!input || !mirror) return;
+    mirror.style.width = `${input.clientWidth}px`;
+    mirror.scrollTop = input.scrollTop;
+    mirror.scrollLeft = input.scrollLeft;
   }
   @State() lastSearch: any = null;
   @Prop() demoId: string;
@@ -68,6 +92,9 @@ export class LessonLab {
   @State() c = 60;
   @State() qrels: any = {};
   @State() normalized = "";
+  @State() sourceView: "form" | "json" = "form";
+  @State() chunkView: "chart" | "cards" = "chart";
+  @State() tfidfShowAll = false;
   @State() config = "NFKC";
   @State() replacement = "$1";
   @State() savedQuery = 0;
@@ -96,6 +123,8 @@ export class LessonLab {
   @State() hnswM = 16;
   @State() hnswBuild = 100;
   @State() hnswSearch = 50;
+  private d04BagVersion = -1;
+  private d04Bags: Record<string, number>[] = [];
   async componentWillLoad() {
     try {
       await loadCorpus();
@@ -154,7 +183,9 @@ export class LessonLab {
     this.phase = 0;
     this.answer = "";
     this.normalized = "";
-    this.message = `已切换语料：${state.docs.length}条。导入时不上传；选择API运行时会发送选中的片段。`;
+    this.d04BagVersion = -1;
+    this.tfidfShowAll = false;
+    this.message = `语料已更新：${state.docs.length}条。修改只在当前页面内存中生效；选择API运行时会发送选中的片段。`;
   }
   private doc() {
     return state.docs[this.selected] || state.docs[0];
@@ -266,6 +297,55 @@ export class LessonLab {
       )
     );
   }
+  private sourceRecord(d = this.doc()) {
+    if (!d) return <p class="lab-note">当前没有可显示的来源记录。</p>;
+    const fields = [
+      { label: "片段编号", value: d.id },
+      { label: "篇名", value: d.title },
+      { label: "作者", value: d.author || "作者待核" },
+      { label: "来源编号", value: d.source_id },
+      { label: "页码／可靠定位", value: sourceLocation(d) },
+      { label: "年份（原记录字段）", value: d.year },
+      { label: "日期与版本说明", value: d.date_note, multiline: true },
+      { label: "文本角色", value: d.text_role || d.role },
+      { label: "核对状态", value: d.status, multiline: true },
+      { label: "原始文件", value: d.source_file || d.raw_file },
+      { label: "转录文件", value: d.text_file },
+      { label: "转录字符区间", value: d.start_char != null && d.end_char != null ? `${d.start_char}–${d.end_char}（右端不含）` : "" },
+      { label: "OCR方式", value: d.ocr_engine },
+      { label: "节录范围", value: d.selection, multiline: true },
+      { label: "来源网址说明", value: d.source_url_note, multiline: true },
+      { label: "向量状态", value: d.vector?.length ? `${d.vector.length}维，详见向量页` : "未附向量" },
+    ].filter((f) => f.value !== undefined && f.value !== null && f.value !== "");
+    const raw = { ...d, text: undefined, vector: d.vector ? `${d.vector.length}维，详见向量页` : undefined };
+    return (
+      <div class="source-record" data-source-id={d.id}>
+        <div class="lab-toolbar source-view-switch" role="group" aria-label="来源记录显示方式">
+          <button aria-pressed={this.sourceView === "form"} onClick={() => (this.sourceView = "form")}>表单</button>
+          <button aria-pressed={this.sourceView === "json"} onClick={() => (this.sourceView = "json")}>JSON</button>
+        </div>
+        {this.sourceView === "form" ? (
+          <div class="flow-field" role="group" aria-label="出处与处理记录表单">
+            {fields.map((f) => (
+              <label class="flow-field-row">
+                <span>{f.label}</span>
+                {f.multiline ? <textarea readOnly rows={3} value={String(f.value)} /> : <input readOnly value={String(f.value)} />}
+              </label>
+            ))}
+            {sourceWebURL(d) && <a href={sourceWebURL(d)} target="_blank" rel="noreferrer">打开来源页面 ↗</a>}
+            {localOriginalURL(d, location.hostname) && <a href={localOriginalURL(d, location.hostname)} target="_blank" rel="noreferrer">打开本地核验原件 ↗</a>}
+          </div>
+        ) : <pre class="source-json">{JSON.stringify(raw, null, 2)}</pre>}
+      </div>
+    );
+  }
+  private wordBags() {
+    if (this.d04BagVersion !== state.version) {
+      this.d04Bags = state.docs.map((doc) => count(tokenize(doc.text, "word")));
+      this.d04BagVersion = state.version;
+    }
+    return this.d04Bags;
+  }
   private list(hits = this.results) {
     return (
       <div>
@@ -301,23 +381,7 @@ export class LessonLab {
   }
   private async importFile(file: File) {
     if (!file) return;
-    await this.run(async () => {
-      if (file.size > 130 * 1024 * 1024)
-        throw Error("当前课堂入口限制130MB；请按卷分包。");
-      const txt = await file.text();
-      let data;
-      try {
-        data = JSON.parse(txt);
-      } catch {
-        data = {
-          records: txt
-            .split(/\r?\n/)
-            .filter(Boolean)
-            .map((s) => JSON.parse(s)),
-        };
-      }
-      replaceCorpus(data);
-    });
+    await this.run(() => importCorpusFile(file));
   }
   private async normalize() {
     await this.run(async () => {
@@ -411,7 +475,7 @@ export class LessonLab {
   }
   private async qvector() {
     if (!state.docs.some(d => d.vector?.length))
-      throw Error("当前导入的是纯文本包；请在D01导入配套向量JSON，再运行向量、混合或近邻检索。");
+      throw Error("当前导入的是纯文本包；请在语料库管理中导入配套向量JSON，再运行向量、混合或近邻检索。");
     const epoch=this.epoch,version=state.version;
     const q = state.queries.find((x) => x.text === this.query);
     const result = q?.vector || await embed(this.query, (s) => (this.message = s));
@@ -666,32 +730,22 @@ export class LessonLab {
     if (id === "D01")
       return this.flowShell([
         {
-          title: "扫描图像 · 原页节录",
-          why: "像素不是可检索的字符。",
+          title: "原页图像 · 当前片段",
+          why: "保留一处原页图像供对照；转录和出处跟随同一片段编号。",
           body: (
             <div>
               {this.chooser()}
+              <p class="source-line">当前片段：{d?.id || "待选择"} · {sourceLocation(d || {})}</p>
               {d?.image ? (
-                <img class="page-image" src={d.image} alt="史料原页节录" />
+                <img class="page-image" src={d.image} alt={`${d.title}原页节录`} />
               ) : (
-                <p class="lab-note">
-                  本条定位：{sourceLocation(d || {})}。可在右侧回查来源与本地核验原件。
-                </p>
+                <p class="lab-note">当前记录未附原页图像，可按来源定位回查原件。</p>
               )}
-              <div class="panel">
-                <h3>导入整卷语料</h3>
-                <input
-                  type="file"
-                  accept=".json,.jsonl"
-                  onChange={(e: any) => this.importFile(e.target.files[0])}
-                />
-                <p class="lab-note">
-                  当前 {state.docs.length} 条 ·{" "}
-                  {state.local ? "本机导入" : "公开课堂节录"}
-                  。导入内容在本浏览器内处理。
-                </p>
-                <p class="lab-note">{state.docs.some(d => d.vector?.length) ? '已含配套向量，可使用关键词、全文、向量及混合检索。' : '当前为纯文本包：可用关键词与全文检索；向量、混合和近邻检索请导入配套向量 JSON。'}</p>
-              </div>
+              <p class="lab-note">
+                当前 {state.docs.length} 条 ·{" "}
+                {state.local ? "本机导入" : "公开课堂节录"}
+                。整卷语料请在顶部“语料库管理”中导入；本页用于对照原页、转录与出处。
+              </p>
             </div>
           ),
         },
@@ -715,13 +769,13 @@ export class LessonLab {
           ),
         },
         {
-          title: "片段编号 · 来源记录",
-          why: "每条片段绑定来源和页码，切块不应丢掉它们。",
-          body: <div>{this.source()}</div>,
+          title: "片段编号 · 出处与处理记录",
+          why: "表单与原始JSON呈现同一条记录，可直接切换核对字段。",
+          body: this.sourceRecord(d),
         },
         {
-          title: "原页回查 · 定位状态链",
-          why: "比较页面图像与转录；工作转录尚不是定本。",
+          title: "出处回查 · 定位状态链",
+          why: "从篇名、定位和片段编号回查文本；工作转录尚不是定本。",
           body: (
             <div>
               <div class="ex-runtime">
@@ -734,7 +788,7 @@ export class LessonLab {
                 <span>{[...(this.text || "")].length}字符</span>
               </div>
               <p class="lab-note">
-                片段编号连回篇名、PDF页与字符数；再对照第1列原页图像核对字形与漏行。
+                片段编号连回篇名、来源定位与字符数；对照第1列图像检查转录，必要时再打开完整原件。
               </p>
             </div>
           ),
@@ -743,6 +797,12 @@ export class LessonLab {
     if (id === "D02") {
       const before = [...(this.text || "")],
         after = [...this.normalized];
+      const ruleExplanation = {
+        NFC: "NFC 把规范等价的字符合成为标准形式，例如可组合的基字与附加符号；不会把全角字母一概折成半角。",
+        NFKC: "NFKC 除规范等价外，还会折叠全角、圈号等兼容形式；检索可能更容易匹配，但版式差异可能丢失。",
+        s2t: "s2t 使用 OpenCC-js 的 cn→tw 规则，把简体字词转换为繁体副本；它不负责日文旧字体通用转换。",
+        t2s: "t2s 使用 OpenCC-js 的 tw→cn 规则，把繁体字词转换为简体副本；原记录仍保持不变。",
+      }[this.config] || "选择规则，查看它如何处理当前文本的副本。";
       return this.flowShell([
         {
           title: "原文 · 待规范化输入",
@@ -761,7 +821,7 @@ export class LessonLab {
         },
         {
           title: "Unicode规范化与字形转换 · 规则配置",
-          why: "NFC处理规范等价；NFKC还合并兼容形式，可能损失版式区别。",
+          why: "选定一种规则，只处理原文副本；下方说明随当前规则改变。",
           body: (
             <div>
               <div class="lab-toolbar">
@@ -776,21 +836,21 @@ export class LessonLab {
                     <option>{x}</option>
                   ))}
                 </select>
-                <button onClick={() => this.normalize()}>处理副本 →</button>
+                <button onClick={() => this.normalize()}>选择副本 →</button>
               </div>
               <p class="lab-note">
-                s2t/t2s分别使用OpenCC-js cn→tw/tw→cn。不是日文旧字体通用转换。OpenCC按字词规则转繁简；它不是Unicode规范化。
+                当前选择：{this.config}。{ruleExplanation} 点击「选择副本」后在右侧查看处理结果。
               </p>
             </div>
           ),
         },
         {
-          title: "字形转换 · 处理后的检索字段",
-          why: "OpenCC按字词规则转繁简；它不是Unicode规范化。",
+          title: "处理结果 · 副本文本",
+          why: "当前规则只写入处理后的副本；原文仍保留在左侧。",
           body: (
             <div>
-              <p class="paper-text">{this.normalized || "选择规则后运行。"}</p>
-              {this.output && <pre>{JSON.stringify(this.output, null, 2)}</pre>}
+              <p class="paper-text">{this.normalized || "请点击「选择副本」生成当前规则的处理结果。"}</p>
+              {this.output && <p class="source-line">已按 {this.output.rule} 生成副本：原文 {this.output.before} 字，副本 {this.output.after} 字。{this.output.offset_mapping}</p>}
               <p class="lab-note">
                 原记录保持不变。没有跨度映射时，只返回片段和页，不能沿用旧字符偏移高亮。
               </p>
@@ -826,7 +886,7 @@ export class LessonLab {
                 </div>
               ) : (
                 <p class="lab-note">
-                  选择规则并点击「处理副本」后，这里按字符位置标出转换前后的差异。
+                  请点击「选择副本」；这里会按字符位置标出处理前后的差异。
                 </p>
               )}
             </div>
@@ -901,7 +961,7 @@ export class LessonLab {
         },
         {
           title: "分词面板与词项效果",
-          why: "单字、双字、词语切分产生不同词表，不等于模型tokenizer。",
+          why: "切分方式改变词项边界，右侧数量和词项随选择实时变化。",
           body: (
             <div>
               <div class="controls">
@@ -920,8 +980,7 @@ export class LessonLab {
                 </label>
               </div>
               <p class="lab-note">
-                这是检索词项划分，不是某个大模型tokenizer。当前 {toks.length}{" "}
-                项，下示前 {Math.min(50, toks.length)} 项。
+                当前 {toks.length} 项，下示前 {Math.min(50, toks.length)} 项。
               </p>
               {toks.slice(0, 50).map((t) => (
                 <span class="chip">{t}</span>
@@ -962,6 +1021,11 @@ export class LessonLab {
                 每次前进 = 块长 − 重叠 = {this.size} − {this.overlap} ={" "}
                 {this.size - this.overlap} 字符；{len}字符 → {pieces.length}块
               </p>
+              <div class="lab-toolbar flow-view-switch" role="group" aria-label="分块结果显示方式">
+                <button aria-pressed={this.chunkView === "chart"} onClick={() => (this.chunkView = "chart")}>区间图</button>
+                <button aria-pressed={this.chunkView === "cards"} onClick={() => (this.chunkView = "cards")}>分块结果</button>
+              </div>
+              {this.chunkView === "chart" ? <div>
               <svg
                 viewBox={`0 0 700 ${Math.min(5, pieces.length) * 25 + 20}`}
                 role="img"
@@ -1001,15 +1065,17 @@ export class LessonLab {
               <small>
                 蓝色为完整块，橙色为与上一块重复的部分；仅画前5块，区间右端不含。
               </small>
+              </div> : <div>
               <h2>{pieces.length} 个块 · 保留同一来源</h2>
               {pieces.map((p) => (
                 <div class="evidence-card">
                   <div class="source-line">
-                    字符 {p.start}—{p.end} · PDF {d.pdf_page}
+                    字符 {p.start}—{p.end} · {sourceLocation(d)}
                   </div>
                   <p>{p.text}</p>
                 </div>
               ))}
+              </div>}
             </div>
           ),
         },
@@ -1017,7 +1083,8 @@ export class LessonLab {
     }
     if (id === "D04") {
       const docs = [d, ...state.docs.filter((x) => x.id !== d.id).slice(0, 2)],
-        bags = docs.map((x) => count(tokenize(x.text, "word"))),
+        allBags = this.wordBags(),
+        bags = docs.map((x) => allBags[state.docs.indexOf(x)]),
         terms = Object.keys(bags[0]).slice(0, 14);
       return this.flowShell([
         {
@@ -1033,17 +1100,17 @@ export class LessonLab {
                 {terms.map((t, i) => (
                   <button
                     class="chip"
-                    onClick={() =>
-                      (this.output = {
+                    onClick={() => {
+                      this.tfidfShowAll = false;
+                      this.output = {
                         word: t,
                         terms,
                         documents: docs.map(d=>d.id),
                         one_hot: terms.map((_, j) => (j === i ? 1 : 0)),
                         counts: bags.map((x) => x[t] || 0),
-                        idf:
-                          Math.log(4 / (1 + bags.filter((x) => x[t]).length)) + 1,
-                      })
-                    }
+                        ...tfidfForTerm(state.docs, allBags, t),
+                      };
+                    }}
                   >
                     {t}
                   </button>
@@ -1096,29 +1163,36 @@ export class LessonLab {
           ),
         },
         {
-          title: "逆文档频率 · TF-IDF代入",
-          why: "到处出现的词区分力弱；IDF取决于当前文档集合。",
+          title: "全库逆文档频率 · TF-IDF",
+          why: "IDF和每条记录的TF-IDF均按当前载入的全部语料计算；删减语料后重新选词会重算。",
           body: (
             <div>
               {this.output ? (
                 <div>
                   <p class="ex-formula">
-                    词“{this.output.word}”：TF-IDF = 次数 × [ln((3+1)/(df+1))+1]；df={this.output.counts.filter((x) => x > 0).length}，IDF={this.output.idf.toFixed(3)}
+                    词“{this.output.word}”：N={this.output.n}，df={this.output.df}；IDF = ln((1+N)/(1+df))+1 = {this.output.idf.toFixed(3)}；每条 TF-IDF = 该条词频 × IDF。
                   </p>
                   {this.flowBars(
-                    this.output.counts.map((tf, i) => ({
-                      label: this.output.documents?.[i] || `D${i + 1}`,
-                      value: tf * this.output.idf,
-                      note: `出现${tf}次 × ${this.output.idf.toFixed(3)} → TF-IDF`,
+                    this.output.rows.slice(0, 8).map((row) => ({
+                      label: row.id,
+                      value: row.value,
+                      note: `${row.tf}次 × ${this.output.idf.toFixed(3)}`,
                     })),
                   )}
+                  <p class="lab-note">当前语料 {this.output.n} 条中，{this.output.df} 条含该词；按 TF-IDF 从高到低显示命中记录，零分记录未列出。这里使用 Intl 词切分后的次数，不做文长归一化。</p>
+                  <table class="flow-table">
+                    <thead><tr><th>记录</th><th>词频</th><th>TF-IDF</th></tr></thead>
+                    <tbody>
+                      {this.output.rows.slice(0, this.tfidfShowAll ? undefined : 12).map((row) => (
+                        <tr><td>{row.id} · {row.title}</td><td>{row.tf}</td><td>{row.value.toFixed(3)}</td></tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {this.output.rows.length > 12 && <button onClick={() => (this.tfidfShowAll = !this.tfidfShowAll)}>{this.tfidfShowAll ? "只看前12条" : `查看全部${this.output.rows.length}条命中`}</button>}
                 </div>
               ) : (
-                <p class="lab-note">点击左列任一词，这里把次数乘上IDF并逐项代入。</p>
+                <p class="lab-note">点击左列任一词，这里按当前载入的全部 {state.docs.length} 条记录计算IDF与每条TF-IDF。</p>
               )}
-              <p class="lab-note">
-                N=3；idf=ln((1+N)/(1+df))+1。仅当前三条组成教学集合，不代表全卷统计。
-              </p>
             </div>
           ),
         },
@@ -1317,35 +1391,25 @@ export class LessonLab {
       ),
     };
   }
-  private regexMatchView() {
-    if (!this.output?.matches)
-      return <p>选择规则后点击“匹配”。原文命中的部分将在这里高亮。</p>;
+  private regexInputNodes() {
+    if (!this.output?.matches) return this.text;
     const nodes = [];
     let at = 0;
     for (const m of this.output.matches) {
       nodes.push(this.text.slice(at, m.index));
-      nodes.push(
-        <mark
-          title={`UTF-16偏移${m.index}；捕获组：${m.captures.join(" / ") || "无"}`}
-        >
-          {m.text || "∅"}
-        </mark>,
-      );
+      if (m.text) nodes.push(<mark>{m.text}</mark>);
       at = m.index + m.text.length;
     }
     nodes.push(this.text.slice(at));
-    return (
-      <div>
-        <p class="ex-preview">{nodes}</p>
-        <p>
-          命中 {this.output.matches.length} 处
-          {this.output.truncated ? "（达到300条显示上限）" : ""}。黄色是整个匹配。
-        </p>
-        {!this.output.matches.length && (
-          <p>命中 0 处：当前表达式没有匹配到原文。检查方括号、转义与全半角写法。</p>
-        )}
-      </div>
-    );
+    return nodes;
+  }
+  private regexMatchView() {
+    if (!this.output?.matches)
+      return <p>点击“运行匹配与替换”后，命中处会直接在输入框内高亮。</p>;
+    return <div>
+      <p>命中 {this.output.matches.length} 处{this.output.truncated ? "（达到300条显示上限）" : ""}。黄色是整个匹配。</p>
+      {!this.output.matches.length && <p>命中 0 处：当前表达式没有匹配到原文。检查方括号、转义与全半角写法。</p>}
+    </div>;
   }
   private regexCaptureView() {
     if (!this.output?.matches)
@@ -1374,7 +1438,7 @@ export class LessonLab {
       return <p>运行匹配后，这里显示替换后的副本预览。</p>;
     return (
       <div>
-        <p class="ex-preview">{this.output.replacement_preview}</p>
+        <p class="ex-preview">{this.output.replacement_spans?.map((part) => part.changed ? <mark>{part.text || "∅"}</mark> : part.text) || this.output.replacement_preview}</p>
         {!this.output.matches.length && <p>命中 0 处，副本与原文一致。</p>}
       </div>
     );
@@ -1382,89 +1446,49 @@ export class LessonLab {
   private retrieval() {
     const id = this.demoId;
     if (id === "D06")
-      return this.flowShell([
-        {
-          title: "选择规则",
-          why: "预设给出表达式与用途；随机按钮只随机抽取可解释的规则。",
-          body: (
-            <div>
-              {this.chooser()}
-              <div class="regex-presets">
-                <label>可复制的表达式范例 <select aria-label="正则预设" ref={el=>{if(el)el.value=String(this.regexIndex)}} onChange={(e:any)=>this.useRegex(+e.target.value)}>
-                  {regexPresets.map((p,i)=><option value={i}>{p.name}</option>)}
-                </select></label>
-                <div class="lab-toolbar"><button onClick={()=>this.useRegex(this.regexIndex)}>应用此范例</button><button onClick={()=>this.useRegex((this.regexIndex+1+Math.floor(Math.random()*(regexPresets.length-1)))%regexPresets.length)}>随机换一个范例</button><button onClick={()=>navigator.clipboard.writeText(this.query).then(()=>this.message='已复制当前表达式').catch(()=>this.message='复制未获浏览器允许；可选中文本框手动复制')}>复制当前表达式</button></div>
-                <p>{regexPresets[this.regexIndex].pattern===this.query?regexPresets[this.regexIndex].why:'当前为自定义规则；范例说明仅在应用对应范例后显示。'}</p>
-              </div>
-              <textarea
-                rows={7}
-                value={this.text}
-                aria-label="正则测试原文"
-                onInput={(e: any) => {this.text = e.target.value; this.output = null; this.normalized = "";}}
-              />
-              <a
-                class="help-link"
-                href="https://lzltool.cn/regex"
-                target="_blank"
-                rel="noreferrer"
-              >
-                助教推荐：表达式结构可视化 ↗
-              </a>
-              <p class="lab-note">
-                布尔与正则分工：AND/OR/NOT组合条件；正则描述字符结构。Rust
-                regex不支持全部JS语法。
-              </p>
+      return <div class="regex-lab">
+        <div class="regex-intro">
+          <h2>字符规则工作台</h2>
+          <p>布尔 AND／OR／NOT 组合检索条件；这里用正则表达式逐处匹配字符结构，并预览替换后的副本。</p>
+        </div>
+        <div class="regex-controls">
+          <label>表达式范例
+            <select aria-label="正则预设" ref={el=>{if(el)el.value=String(this.regexIndex)}} onChange={(e:any)=>this.useRegex(+e.target.value)}>
+              {regexPresets.map((p,i)=><option value={i}>{p.name}</option>)}
+            </select>
+          </label>
+          <label>匹配什么
+            <input aria-label="正则表达式" maxLength={500} value={this.query} onInput={(e:any)=>{this.query=e.target.value;this.output=null;}} />
+          </label>
+          <label>替换什么
+            <input aria-label="替换表达式" value={this.replacement} onInput={(e:any)=>{this.replacement=e.target.value;this.output=null;}} />
+          </label>
+          <button disabled={this.busy} onClick={()=>this.regex()}>运行匹配与替换</button>
+        </div>
+        <p class="regex-rule-note">{regexPresets[this.regexIndex].pattern===this.query?regexPresets[this.regexIndex].why:"当前是自定义表达式；图示随规则变化。"} <span class="mode">JavaScript /gu · 浏览器实时</span></p>
+        <div class="regex-display-grid">
+          <section class="regex-panel">
+            <h3>输入内容 <small>黄色＝匹配处</small></h3>
+            {this.chooser()}
+            <div class="regex-input">
+              <div class="regex-input-mirror" aria-hidden="true">{this.regexInputNodes()}</div>
+              <textarea value={this.text} aria-label="正则测试原文" onInput={(e:any)=>{this.text=e.target.value;this.output=null;}} onScroll={()=>this.syncRegexInputScroll()} />
             </div>
-          ),
-        },
-        {
-          title: "逐处匹配",
-          why: "宗[教敎]允许括号中的一个字；它不理解宗教概念。",
-          body: (
-            <div>
-              <span class="mode">JavaScript /gu 引擎 · 浏览器实时</span>
-              <div class="lab-toolbar">
-                <input
-                  aria-label="正则表达式"
-                  value={this.query}
-                  onInput={(e: any) => {this.query = e.target.value; this.output = null;}}
-                />
-                <button onClick={() => this.regex()}>匹配</button>
-              </div>
-              {this.regexMatchView()}
-              <p class="lab-note">
-                本页是JavaScript
-                /gu引擎。先试“宗[教敎]”，再试“(宗[教敎]).&#123;0,12&#125;”。替换只生成预览。
-              </p>
-              {this.output && <details><summary>原始匹配数据</summary><pre>{JSON.stringify(this.output,null,2)}</pre></details>}
-            </div>
-          ),
-        },
-        {
-          title: "捕获分组",
-          why: "圆括号保存匹配中的一部分；$1引用第一组。",
-          body: <div>{this.regexCaptureView()}</div>,
-        },
-        {
-          title: "替换预览",
-          why: "替换在副本中预览；未设捕获组时不要使用$1。",
-          body: (
-            <div>
-              <div class="lab-toolbar">
-                <label>
-                  替换为{" "}
-                  <input
-                    aria-label="替换表达式"
-                    value={this.replacement}
-                    onInput={(e: any) => {this.replacement = e.target.value; this.output = null;}}
-                  />
-                </label>
-              </div>
-              {this.regexReplaceView()}
-            </div>
-          ),
-        },
-      ]);
+            {this.regexMatchView()}
+          </section>
+          <section class="regex-panel">
+            <h3>匹配示意图 <small>表达式结构</small></h3>
+            <iframe class="regex-diagram" title="正则表达式结构图" src="assets/regex-diagram.html" onLoad={()=>this.updateRegexDiagram(true)} />
+            <p class="lab-note">图示使用 <a href="https://github.com/CJex/regulex" target="_blank" rel="noreferrer">Regulex</a>；参考 <a href="https://lzltool.cn/RegexVisualizer" target="_blank" rel="noreferrer">LZL工具页面</a>。匹配由独立的 JavaScript /gu 引擎执行；旧版图示器不支持的语法会明确提示，不影响匹配。</p>
+            {this.regexCaptureView()}
+          </section>
+          <section class="regex-panel">
+            <h3>输出内容 <small>黄色＝替换处</small></h3>
+            {this.regexReplaceView()}
+            <p class="lab-note">替换只生成副本，不改动左侧原文。未设捕获组时不要使用 $1。</p>
+          </section>
+        </div>
+      </div>;
     if (id === "D07") {
       const fmt = (x: number, digits = 3) =>
           Number.isFinite(x) ? x.toFixed(digits) : "—",
@@ -1930,7 +1954,7 @@ export class LessonLab {
               </div>
               <p class="lab-note">
                 跨源隔离：{String(crossOriginIsolated)}
-                。无结果时不切换其他引擎冒充。导入语料见D01。
+                。无结果时不切换其他引擎冒充。导入语料见“语料库管理”。
               </p>
               {this.busy && <p class="lab-note">正在执行，请稍候…</p>}
               {this.message && <p class="lab-note">最近执行：{this.message}</p>}
@@ -2303,19 +2327,7 @@ export class LessonLab {
             <p class="lab-note">
               前5项未判断：{m.unjudged}。未完成全库判断，不报告全库真实召回率。
             </p>
-            <pre>
-              {JSON.stringify(
-                {
-                  ranking: top.map((x) => x.id),
-                  gain: "2^rel−1",
-                  DCG: m.dcg,
-                  IDCG: m.ideal,
-                  judged: Object.keys(this.qrels).length,
-                },
-                null,
-                2,
-              )}
-            </pre>
+            <p class="source-line">当前排序：{top.length ? top.map((x) => x.id).join(" → ") : "尚未检索"}。已判断 {Object.keys(this.qrels).length} / {state.docs.length} 条；增益按 2^rel−1 计算。</p>
             <button
               onClick={() =>
                 saveFile("qrels-development.json", {
@@ -2695,7 +2707,7 @@ export class LessonLab {
                 {this.source(state.docs.find(d => d.id === (this.contextIds.includes(this.doc()?.id) ? this.doc().id : this.contextIds[0])))}
               </div>}
               {this.responseMeta && (
-                <pre>{JSON.stringify(this.responseMeta, null, 2)}</pre>
+                <pre class="model-meta">{JSON.stringify(this.responseMeta, null, 2)}</pre>
               )}
               {this.logs.length > 0 && (
                 <details>
@@ -2873,7 +2885,7 @@ export class LessonLab {
       why: colWhy(0),
       body: (
         <div>
-          {state.local && <p class="application-caution">本页的保存案例与本机外部应用使用原有课堂语料，D01 导入不会自动重建它们的数据库。检索本次导入的新语料，请使用 D07–D13。</p>}
+          {state.local && <p class="application-caution">本页的保存案例与本机外部应用使用原有课堂语料，语料库管理导入不会自动重建它们的数据库。检索本次导入的新语料，请使用 D07–D13。</p>}
           {links}
           <p class="lab-note">{t.role}</p>
           {stepPanel(0)}

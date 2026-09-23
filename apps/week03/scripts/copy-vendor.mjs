@@ -39,6 +39,10 @@ await copyFile(
   "node_modules/@huggingface/transformers/LICENSE",
   path.join(dest, "LICENSE"),
 );
+const regexDest = path.join(root, "regulex");
+await mkdir(regexDest, { recursive: true });
+await copyFile("node_modules/regulex/dist/regulex.js", path.join(regexDest, "regulex.js"));
+await copyFile("node_modules/regulex/LICENSE", path.join(regexDest, "LICENSE"));
 console.log(
   "Browser dependencies copied; optional Lucivy eval diagnostics disabled",
 );

@@ -31,7 +31,8 @@
     "@huggingface/transformers": "3.8.1",
     "edgevec": "0.9.0",
     "lucivy-wasm": "4.3.0",
-    "opencc-js": "1.0.5"
+    "opencc-js": "1.0.5",
+    "regulex": "0.0.5"
   },
   "engines": {
     "node": ">=22"

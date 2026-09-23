@@ -39,6 +39,31 @@ export function replaceCorpus(data: any) {
   state.version++;
   window.dispatchEvent(new CustomEvent("corpus-change"));
 }
+export async function importCorpusFile(file: File) {
+  if (file.size > 130 * 1024 * 1024)
+    throw Error("当前课堂入口限制130MB；请按卷分包。");
+  const txt = await file.text();
+  let data: any;
+  try {
+    data = JSON.parse(txt);
+  } catch {
+    data = {
+      records: txt
+        .split(/\r?\n/)
+        .filter(Boolean)
+        .map((s) => JSON.parse(s)),
+    };
+  }
+  replaceCorpus(data);
+}
+export function removeCorpusRecord(id: string) {
+  if (!state.docs.some((d) => d.id === id)) return false;
+  if (state.docs.length <= 1) return false;
+  state.docs = state.docs.filter((d) => d.id !== id);
+  state.version++;
+  window.dispatchEvent(new CustomEvent("corpus-change"));
+  return true;
+}
 export { sourceLabel } from "./provenance";
 export function saveFile(name: string, data: any) {
   const b = new Blob([JSON.stringify(data, null, 2)], {

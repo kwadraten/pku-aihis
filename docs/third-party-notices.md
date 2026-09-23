@@ -6,6 +6,8 @@
 
 Lucivy（MIT）、EdgeVec（MIT/Apache，以发行包为准）、OpenCC（Apache-2.0）、Transformers.js（Apache-2.0）等依赖按锁文件及各发行包许可使用。构建时复制到网站的依赖附带许可证。完整史料 PDF 与整卷 OCR 不随公开仓库发布。
 
+D06正则结构图参考[LZL工具的RegexVisualizer](https://lzltool.cn/RegexVisualizer)所用的Regulex/Raphaël方案；实际嵌入的是[Regulex 0.0.5上游发行包](https://github.com/CJex/regulex)而非该网站的整站脚本。Regulex、其捆绑的Raphaël及Almond按发行包中的MIT等许可声明使用，构建时随图示脚本复制Regulex许可证。图示器与本页JavaScript `/gu` 匹配器相互独立，旧图示器不支持的语法会提示，不能把结构图当作匹配实测结果。
+
 ## 本次使用的数据与适配
 
 - Lucivy 4.3.0 的发行包 package.json 声明 MIT，包内未附独立LICENSE；构建保留package.json与README并附原仓库MIT许可文本（docs/licenses/lucivy-MIT.txt），从worker移除可连接调试服务器执行eval的可选子系统。检索核心未替换。

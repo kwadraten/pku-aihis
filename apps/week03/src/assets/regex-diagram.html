@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0;min-height:100%;background:#fff;color:#17335d;font:13px/1.5 system-ui,sans-serif}
+#status{margin:0;padding:8px 10px;background:#f4f7fb;border-bottom:1px solid #d8dde3}
+#diagram{min-height:240px;overflow:auto;padding:8px;display:flex;align-items:center;scrollbar-width:thin}
+#diagram svg{max-width:none;flex:none}
+.error{color:#8b321a;background:#fff4ed!important}
+</style></head><body><p id="status">正在载入正则图示…</p><div id="diagram"></div>
+<script src="vendor/regulex/regulex.js"></script>
+<script>
+const status=document.getElementById('status'),container=document.getElementById('diagram');
+let drawing=null;
+function fitDiagram(){
+  if(!drawing)return;
+  const {svg,width,height}=drawing;
+  const available=container.clientWidth-16;
+  const fitWidth=Math.max(width,available);
+  svg.style.width=fitWidth+'px';
+  svg.style.height=(height*fitWidth/width)+'px';
+  status.textContent=width>available?'图较长：在下方横向滚动查看完整结构；实际命中请看左侧高亮。':'结构图说明字符匹配路径；实际命中请看左侧高亮。';
+}
+new ResizeObserver(fitDiagram).observe(container);
+function chineseLabel(value){
+  const decoded=value.replace(/\\u([0-9a-fA-F]{4})/g,(_,hex)=>String.fromCharCode(parseInt(hex,16)));
+  const labels={'RegExp:':'正则：','One of:':'任选其一：','None of:':'排除：','AnyCharExceptNewLine':'任意非换行字符','AnyChar':'任意字符','Digit':'数字','NonDigit':'非数字','Word':'单词字符','NonWord':'非单词字符','WhiteSpace':'空白字符','NonWhiteSpace':'非空白字符','Begin!':'开头','End!':'结尾','LineBegin!':'行首','LineEnd!':'行尾','WordBoundary!':'单词边界','NonWordBoundary!':'非单词边界','Followed by:':'后接：','Not followed by:':'后面不是：'};
+  if(labels[decoded.trim()])return labels[decoded.trim()];
+  if(/^Group #\d+$/.test(decoded))return decoded.replace('Group #','分组 #');
+  if(/^Backref #\d+$/.test(decoded))return decoded.replace('Backref #','反向引用 #');
+  let match=decoded.match(/^(\d+) or more times$/);
+  if(match)return '至少'+match[1]+'次';
+  match=decoded.match(/^(\d+) (?:to|or) (\d+) times?$/);
+  if(match)return match[1]+'—'+match[2]+'次';
+  match=decoded.match(/^(\d+) times?$/);
+  return match?match[1]+'次':decoded;
+}
+window.addEventListener('message',event=>{
+  if(event.origin!==location.origin||event.source!==parent||event.data?.type!=='regex-diagram')return;
+  const {pattern,flags}=event.data;
+  container.replaceChildren();drawing=null;status.classList.remove('error');
+  if(!pattern){status.textContent='输入表达式后显示结构图。';return;}
+  if(pattern.length>500){status.classList.add('error');status.textContent='表达式过长，图示限500字符；请缩短后重试。';return;}
+  if(pattern.includes('\\p{')||pattern.includes('\\P{')||pattern.includes('(?<')){status.classList.add('error');status.textContent='旧版图示器不支持此现代语法；左侧仍可运行浏览器JavaScript /gu匹配。';return;}
+  try{
+    const regulex=require('regulex');
+    const paper=regulex.Raphael(container,0,0);
+    regulex.visualize(regulex.parse(pattern),flags||'gu',paper);
+    const walker=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
+    while(walker.nextNode())walker.currentNode.nodeValue=chineseLabel(walker.currentNode.nodeValue);
+    const svg=container.querySelector('svg');
+    const width=Number(svg.getAttribute('width')),height=Number(svg.getAttribute('height'));
+    if(width>0&&height>0){svg.setAttribute('viewBox',`0 0 ${width} ${height}`);drawing={svg,width,height};fitDiagram();}
+  }catch(error){
+    container.replaceChildren();status.classList.add('error');
+    status.textContent='此图示器无法解析当前规则：'+String(error.message||error)+'。左侧匹配仍由浏览器执行。';
+  }
+});
+parent.postMessage({type:'regex-diagram-ready'},location.origin);
+</script></body></html>

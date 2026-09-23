@@ -108,6 +108,12 @@ pre {
 }
 .slide-body {
   overflow: auto !important;
+  min-width: 0;
+}
+.slide-inner,
+.slide-body > lesson-lab {
+  min-width: 0;
+  width: 100%;
 }
 .lab {
   height: 100%;
@@ -115,6 +121,7 @@ pre {
   flex-direction: column;
   gap: 12px;
   min-height: 0;
+  min-width: 0;
 }
 .lab-toolbar {
   display: flex;
@@ -149,6 +156,8 @@ pre {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  min-width: 0;
+  width: 100%;
   flex: 1;
   gap: 10px;
 }
@@ -195,6 +204,7 @@ pre {
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 14px;
   min-height: 0;
+  min-width: 0;
   flex: 1;
 }
 .flow-col {
@@ -246,6 +256,77 @@ pre {
   display: block;
   margin: 8px 0;
 }
+/* Flow columns: form controls align to the full column width. */
+.flow-col select,
+.flow-col textarea,
+.flow-col input[type="file"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.flow-col .lab-toolbar select {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+.flow-col .controls input[type="range"] {
+  width: 100%;
+}
+.flow-field {
+  border: 1px solid var(--color-border);
+  background: #fff;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.flow-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+}
+.flow-field-row > span {
+  color: var(--color-ink-muted);
+}
+.flow-field-row input,
+.flow-field-row textarea {
+  width: 100%;
+}
+.flow-view-switch,
+.source-view-switch {
+  margin: 10px 0;
+}
+.flow-view-switch button[aria-pressed="true"],
+.source-view-switch button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.source-json {
+  max-height: 60vh;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.flow-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.flow-table th,
+.flow-table td {
+  border: 1px solid #d8dde3;
+  padding: 6px 9px;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.flow-table th {
+  background: #f4f7fb;
+  color: #40506a;
+  white-space: normal;
+}
 .chip.removed {
   opacity: 0.55;
   text-decoration: line-through;
@@ -277,6 +358,9 @@ pre {
 @media (max-width: 700px) {
   .flow-shell {
     flex: none;
+  }
+  .flow-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
   .flow-col {
     overflow: visible;
@@ -607,6 +691,22 @@ model-experiment {
 .ex-runtime{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:7px 0}.ex-runtime span{padding:8px;border:1px solid #ced3dc;border-radius:4px;max-width:260px;overflow-wrap:anywhere}.ex-runtime .done{background:#e4efdf;border-color:#6c875e}.ex-runtime .running{background:#fff0bd;animation:ex-wait 1.2s ease infinite alternate}.ex-runtime b{color:#164ec7;font-size:20px}
 @keyframes ex-wait{from{opacity:1}to{opacity:.5}}@media(prefers-reduced-motion:reduce){.ex-runtime .running{animation:none}.ex-track i{transition:none}}
 .ex-preview{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;padding:10px;border:1px solid #e0dbcb;max-height:220px;overflow:auto}.ex-changed,mark{background:#ffe0a8;color:#30200d}.ex-chip{display:inline-block;padding:5px;margin:3px;border:1px solid #d4d9e1;border-radius:4px;font-size:12px}.ex-callout{padding:8px;background:#eef3fb;line-height:1.7}.ex-capture{padding:6px;border-bottom:1px solid #ddd;font-size:13px}.ex-network>div{padding:8px;border-bottom:1px solid #ddd}.ex-network small{display:block}.regex-presets{padding:10px;background:#eef3fb;margin-bottom:9px}.regex-presets p{font-size:13px;line-height:1.6}.sparse-live{margin-top:10px}.sparse-live p{font-size:13px;line-height:1.6}
+.regex-lab{display:flex;flex-direction:column;gap:10px;min-width:0;height:100%}
+.regex-intro{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 18px;border-bottom:2px solid #164ec7;padding-bottom:6px}
+.regex-intro h2{font-size:18px;margin:0;color:#17335d}.regex-intro p{font-size:13px;margin:0;line-height:1.5}
+.regex-controls{display:grid;grid-template-columns:minmax(160px,1fr) minmax(220px,2fr) minmax(160px,1.2fr) auto;gap:10px;align-items:end;padding:12px;background:#f4f7fb;border:1px solid #c5cee1}
+.regex-controls label{display:flex;flex-direction:column;gap:5px;font-size:13px;color:#40506a;min-width:0}.regex-controls input,.regex-controls select{width:100%;box-sizing:border-box;min-width:0}
+.regex-controls button{white-space:nowrap}.regex-rule-note{margin:0;line-height:1.55;font-size:13.5px}.regex-rule-note .mode{margin-left:8px}
+.regex-display-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;min-height:0;flex:1}
+.regex-panel{min-width:0;overflow:auto;border:1px solid #d8dde3;padding:10px;background:#fff}.regex-panel h3{font-size:15px;margin:0 0 10px;padding-bottom:7px;border-bottom:1px solid #c5cee1;color:#17335d}.regex-panel h3 small{font-weight:400;color:#5d6b79;margin-left:7px}
+.regex-panel>select{display:block;width:100%;box-sizing:border-box;margin-bottom:8px}
+.regex-input{position:relative;width:100%;height:220px;border:1px solid #abb7bd;background:#fff;overflow:hidden}
+.regex-input-mirror,.regex-input textarea{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:10px;border:0;font:inherit;line-height:1.8;letter-spacing:normal;tab-size:8;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
+.regex-input-mirror{z-index:0;overflow:hidden;pointer-events:none;color:transparent}
+.regex-input-mirror mark{color:transparent;background:#ffe0a8}
+.regex-input textarea{z-index:1;display:block;resize:none;background:transparent;color:var(--color-ink);overflow:auto}
+.regex-panel .ex-preview{margin:8px 0;max-height:250px}.regex-diagram{width:100%;height:300px;box-sizing:border-box;border:1px solid #d8dde3;background:#fff}
+@media(max-width:950px){.regex-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.regex-controls button{justify-self:start}.regex-display-grid{grid-template-columns:minmax(0,1fr)}.regex-panel{overflow:visible}.regex-lab{height:auto}.regex-diagram{height:280px}}
 
 /* TA review: explanations are primary teaching content, not tiny developer labels. */
 .ex-bar-row,.regex-presets p,.sparse-live p,.ex-capture{font-size:14px}

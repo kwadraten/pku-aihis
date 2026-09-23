@@ -3,29 +3,29 @@
 观察：一条论断可以回到材料页
 运行边界：静态导览
 失败时：保留错误提示，回到来源或本地指南，不把构造输出当实跑。"><lesson-lab demo-id="D00"></lesson-lab><div slot="footer">D00 · 每项命中保留出处；模型分数不等于史实置信度。</div></deck-slide><deck-slide slide-id="D01" header-title="原页、转录与来源记录" kicker="D01 / 教案 1.1" theme="light" notes="目的：原页、转录与来源记录
-操作：选择井上或章太炎记录，展开原页和转录状态
-观察：PDF页序、原书页码分开；OCR待核可见
+操作：选择史料片段，对照一处原页图像与OCR转录，再切换出处表单与JSON
+观察：原页图像不重复显示；来源定位、原书页码和OCR核对状态分列
 运行边界：真实资料
 失败时：保留错误提示，回到来源或本地指南，不把构造输出当实跑。"><lesson-lab demo-id="D01"></lesson-lab><div slot="footer">D01 · 每项命中保留出处；模型分数不等于史实置信度。</div></deck-slide><deck-slide slide-id="D02" header-title="规范化与OpenCC" kicker="D02 / 教案 1.2" theme="light" notes="目的：规范化与OpenCC
 操作：切换NFC/NFKC/OpenCC配置并查看差异
 观察：原文保留；改变的跨度可回查
 运行边界：浏览器实时
 失败时：保留错误提示，回到来源或本地指南，不把构造输出当实跑。"><lesson-lab demo-id="D02"></lesson-lab><div slot="footer">D02 · 每项命中保留出处；模型分数不等于史实置信度。</div></deck-slide><deck-slide slide-id="D03" header-title="分词、停用词与分块" kicker="D03 / 教案 1.2" theme="light" notes="目的：分词、停用词与分块
-操作：切换字/词、保留/删除、块长与重叠
+操作：切换字/词、保留/删除、块长与重叠；切换区间图与块卡片
 观察：记录边界、词项和块继承页码
 运行边界：浏览器实时
 失败时：保留错误提示，回到来源或本地指南，不把构造输出当实跑。"><lesson-lab demo-id="D03"></lesson-lab><div slot="footer">D03 · 每项命中保留出处；模型分数不等于史实置信度。</div></deck-slide><deck-slide slide-id="D04" header-title="one-hot、词袋与TF-IDF" kicker="D04 / 教案 1.3" theme="light" notes="目的：one-hot、词袋与TF-IDF
-操作：选词查看词表位置、计数矩阵、IDF分解
-观察：同一段在三种表示下的数值变化
+操作：选词查看词表位置、三条词袋次数与当前全库TF-IDF
+观察：N和df来自全部载入语料；逐条分值可查
 运行边界：浏览器实时教学计算
 失败时：保留错误提示，回到来源或本地指南，不把构造输出当实跑。"><lesson-lab demo-id="D04"></lesson-lab><div slot="footer">D04 · 每项命中保留出处；模型分数不等于史实置信度。</div></deck-slide><deck-slide slide-id="D05" header-title="从上下文学习到句子嵌入" kicker="D05 / 教案 1.3" theme="light" notes="目的：从上下文学习到句子嵌入
 操作：对照CBOW/Skip-gram目标、负采样与真实句向量
 观察：构造训练目标与实算向量分开标识；SPLADE机制单列
 运行边界：构造机制＋真实模型输出
 失败时：保留错误提示，回到来源或本地指南，不把构造输出当实跑。"><lesson-lab demo-id="D05"></lesson-lab><div slot="footer">D05 · 每项命中保留出处；模型分数不等于史实置信度。</div></deck-slide><deck-slide slide-id="D06" header-title="布尔与正则表达式" kicker="D06 / 教案 2.1" theme="light" notes="目的：布尔与正则表达式
-操作：在真实片段中测试模式、捕获、替换预览
-观察：引擎标识、匹配跨度、零命中和错误提示
-运行边界：浏览器实时＋外部可视化入口
+操作：在面板上方设置匹配与替换规则，横向比较输入高亮、结构图和输出高亮
+观察：图示与浏览器匹配引擎分开；命中跨度、零命中和错误可见
+运行边界：浏览器实时匹配＋本地Regulex图示；旧图示器可能不支持新语法
 失败时：保留错误提示，回到来源或本地指南，不把构造输出当实跑。"><lesson-lab demo-id="D06"></lesson-lab><div slot="footer">D06 · 每项命中保留出处；模型分数不等于史实置信度。</div></deck-slide><deck-slide slide-id="D07" header-title="BM25为何改变名次" kicker="D07 / 教案 2.2" theme="light" notes="目的：BM25为何改变名次
 操作：改变k1、b并展开每词得分
 观察：Lucene IDF约定、文档长度、得分明细

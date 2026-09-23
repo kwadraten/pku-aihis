@@ -70,6 +70,94 @@ deck-container {
   border-color: var(--color-accent) !important;
   color: var(--color-accent);
 }
+.corpus-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(28, 40, 53, 0.55);
+}
+.corpus-dialog {
+  width: min(1180px, 100%);
+  max-height: 92dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  background: var(--color-paper);
+  min-width: 0;
+}
+.corpus-dialog-head,
+.corpus-dialog-toolbar,
+.corpus-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.corpus-dialog-head p,
+.corpus-dialog-toolbar span {
+  color: var(--color-ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.corpus-dialog-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.corpus-import {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.corpus-import label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.corpus-import span {
+  color: var(--color-ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.corpus-table-wrap {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  border: 1px solid var(--color-border);
+}
+.corpus-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.corpus-table th,
+.corpus-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.corpus-table th {
+  position: sticky;
+  top: 0;
+  background: #eaf0f7;
+}
+.corpus-table td:first-child {
+  font-family: ui-monospace, monospace;
+}
+.corpus-pagination {
+  justify-content: flex-end;
+}
 @media (max-width: 800px) {
   .deck-top,
   .deck-nav {
@@ -82,5 +170,27 @@ deck-container {
   }
   .overview-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .deck-top {
+    overflow-x: auto;
+  }
+  .deck-top a,
+  .deck-top button {
+    flex: none;
+  }
+  .corpus-overlay {
+    padding: 8px;
+  }
+  .corpus-dialog {
+    padding: 14px;
+  }
+  .corpus-dialog-head,
+  .corpus-dialog-toolbar,
+  .corpus-import {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .corpus-dialog-toolbar input {
+    width: 100%;
   }
 }
