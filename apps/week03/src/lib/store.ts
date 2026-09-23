@@ -39,9 +39,7 @@ export function replaceCorpus(data: any) {
   state.version++;
   window.dispatchEvent(new CustomEvent("corpus-change"));
 }
-export function sourceLabel(d: Doc) {
-  return `${d.title} · PDF ${d.pdf_page ?? "待核"} / 原书 ${d.printed_page ?? "待核"} · ${d.author ?? "作者待核"}`;
-}
+export { sourceLabel } from "./provenance";
 export function saveFile(name: string, data: any) {
   const b = new Blob([JSON.stringify(data, null, 2)], {
       type: "application/json",

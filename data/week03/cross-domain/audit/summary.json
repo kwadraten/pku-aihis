@@ -1,0 +1,54 @@
+{
+  "input_sources": 21,
+  "input_chunks": 5863,
+  "input_replies": 13,
+  "input_records_audited": 5876,
+  "input_decisions": {
+    "exclude": 3191,
+    "superseded": 60,
+    "include": 2625
+  },
+  "exact_official_original_matches": 20,
+  "original_pdfs": 16,
+  "original_books": 4,
+  "selected_forum_records_matched": 2487,
+  "saved_replies_matched": 13,
+  "forum_upstream_count": 2597,
+  "forum_original_access": "12 historical samples only; current successful-thread recheck returned 403",
+  "included_sources": 11,
+  "included_papers": 6,
+  "included_books": 4,
+  "included_pdf_pages": 111,
+  "included_records": 2686,
+  "included_per_source": {
+    "1606.07772v1": 59,
+    "plos_0323185": 42,
+    "1906.11238v1": 93,
+    "1710.05832v1": 74,
+    "P01": 62,
+    "B01-INTRO": 440,
+    "B01": 521,
+    "B02": 754,
+    "B03": 116,
+    "B04": 464,
+    "acm_3497842": 61
+  },
+  "source_review": "AI source audit; not independent human review",
+  "limitations": [
+    "Not a factual correctness review of every claim in the literature",
+    "PDF equations, tables and reading order not manually proofread",
+    "Forum original URLs not exhaustively requested; provenance is to pinned upstream records",
+    "No embeddings, RAG evaluation or live website deployment"
+  ],
+  "forum_content_review": {
+    "input_titles": 2487,
+    "input_replies": 13,
+    "approved_titles": 239,
+    "approved_replies": 3,
+    "excluded_by_rule": 1301,
+    "not_selected_after_semantic_review": 947,
+    "excluded_replies": 10
+  },
+  "forum_public_text_records": 0,
+  "forum_original_links_in_record_audit": 0
+}

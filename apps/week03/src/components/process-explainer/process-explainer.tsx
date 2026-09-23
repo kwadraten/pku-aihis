@@ -1,6 +1,7 @@
 import { Fragment, Component, h, Prop, State, Watch } from '@stencil/core';
 import { explanations } from '../../lib/explanations';
 import { cosine, chunks, metrics } from '../../lib/math';
+import { sourceLocation } from '../../lib/provenance';
 const n = (x:number, digits=3) => Number.isFinite(x) ? x.toFixed(digits) : '—';
 const norm = (v:number[]) => Math.sqrt(v.reduce((s,x)=>s+x*x,0));
 @Component({tag:'process-explainer',shadow:false})
@@ -68,7 +69,7 @@ export class ProcessExplainer {
   if(id==='D13')return <div><div class="ex-runtime" aria-live="polite">{id==='D13'?<><span class={s.phase>=1?'done':''}>候选 {s.results?.length||0}</span><b>→</b><span class={s.phase>=2?'done':''}>选择 {s.contextIds?.length||0}片段</span><b>→</b><span class={s.phase>=3?'done':''}>请求 {s.output?.messages?.length||0}消息</span><b>→</b><span class={s.answer?'done':s.busy?'running':''}>{s.answer?'已返回回答':s.busy?'正在执行':'待生成'}</span></>:<><span>问题</span><b>→</b><span class={s.busy?'running':''}>行动 {s.logs?.length||0}条</span><b>→</b><span>工具返回</span><b>↺</b><span>{s.answer?'最终回答':'等待结束'}</span></>}</div><small>上行是当前页面状态；下方行动日志才记录每次模型动作及实际工具返回。动画只表示等待，不表示模型内部推理路径。</small></div>;
   if(id==='D22'&&s.output?.edges)return <div class="ex-network">{s.output.edges.map(e=><div><span>{e.from}</span><b> ──引用→ </b><span>{e.to}</span><small>{e.note||e.locator||e.evidence||'定位见下方来源记录'}</small></div>)}</div>;
   if(['D30','D31','D32'].includes(id))return <div class="ex-runtime"><span>{id==='D32'?`查询图块 #${s.imageIndex+1}`:id==='D31'?'选择已有文字查询':`原图 #${s.imageIndex+1}`}</span><b>→</b><span>{id==='D30'?`派生文本：${s.captionMode}`:id==='D31'?'CLIP文本塔 ↔ 图像塔':'Shikiji视觉特征'}</span><b>→</b><span>{id==='D30'?`逐词命中：“${s.query}”`:'cos(q,d) = q·d / (|q||d|)'}</span><b>→</b><span>{id==='D30'?'检查描述有无漏写':'按模型相似度排序'}</span></div>;
-  if(id==='D01')return <div class="ex-runtime"><span>{s.doc?.title}</span><b>→</b><span>PDF页 {s.doc?.pdf_page??'待核'}</span><b>→</b><span>片段 {s.doc?.id}</span><b>→</b><span>{[...(s.text||'')].length}字符</span></div>;
+  if(id==='D01')return <div class="ex-runtime"><span>{s.doc?.title}</span><b>→</b><span>{sourceLocation(s.doc || {})}</span><b>→</b><span>片段 {s.doc?.id}</span><b>→</b><span>{[...(s.text||'')].length}字符</span></div>;
   if(id==='D11')return <p class="ex-callout">本次查询“{s.query}” → Lucivy索引 → 当前返回{s.results?.length||0}条。选中 {s.doc?.id}，核对右侧原段。执行状态：{s.busy?'进行中':s.results?.length?'已取得结果':'尚无命中结果'}。</p>;
   if(['D28','D29'].includes(id))return <div class="ex-runtime"><span>问题：{s.query}</span><b>→</b><span>范围：{s.author==='all'?'全部':s.author}</span><b>→</b><span>当前片段：{s.doc?.id}</span><b>→</b><span>已记录{s.logs?.length||0}轮判断</span></div>;
   return null;

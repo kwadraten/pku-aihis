@@ -1,5 +1,12 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {apiEndpoint,bridgeEndpoint,parseAction,generate} from '../src/lib/model-client.ts';
+import {apiEndpoint,bridgeEndpoint,parseAction,generate,citationCheck} from '../src/lib/model-client.ts';
+test('citation validation accepts imported IDs and rejects unprovided evidence',()=>{
+ const ids=['B03-00002','1906.11238v1-p001-00000','LEY-GOOD-00008','片段甲'];
+ const good=citationCheck(ids.map(id=>`[${id}]`).join(' '),ids);
+ assert.deepEqual(good.cited_ids,ids);assert.deepEqual(good.unknown_ids,[]);assert.equal(good.missing_ids,false);
+ assert.deepEqual(citationCheck('[B03-99999]',ids).unknown_ids,['B03-99999']);
+ assert.equal(citationCheck('回答没有引文',ids).missing_ids,true);
+});
 test('endpoint guards and completion path normalization',()=>{
  assert.equal(apiEndpoint('https://api.deepseek.com'),'https://api.deepseek.com/chat/completions');
  assert.equal(apiEndpoint('https://api.example/v1/chat/completions'),'https://api.example/v1/chat/completions');

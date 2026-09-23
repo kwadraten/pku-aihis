@@ -15,3 +15,7 @@
 *.webp binary
 *.pdf binary
 *.docx binary
+
+# Corpus hashes cover upstream bytes, including Gutenberg CRLF and source whitespace.
+# Keep the reviewed originals, licenses and exact extraction offsets stable on checkout.
+data/week03/cross-domain/** -text -whitespace

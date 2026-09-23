@@ -19,6 +19,7 @@ import {
   rocchio,
 } from "../../lib/math";
 import { fulltext, vectorSearch, embed } from "../../lib/engines";
+import { sourceLocation, sourceWebURL, localOriginalURL } from "../../lib/provenance";
 import { evidenceMessages } from "../../lib/model-tasks";
 import { regexPresets } from "../../lib/explanations";
 import {
@@ -210,7 +211,7 @@ export class LessonLab {
       >
         {state.docs.map((d) => (
           <option value={d.id}>
-            {d.id} · {d.title} · PDF{d.pdf_page}
+            {d.id} · {d.title} · {sourceLocation(d)}
           </option>
         ))}
       </select>
@@ -219,10 +220,17 @@ export class LessonLab {
   private source(d = this.doc()) {
     return (
       d && (
-        <div class="panel">
+        <div class="panel source-evidence" data-source-id={d.id}>
           <div class="source-line">{sourceLabel(d)}</div>
+          <p class="source-line">片段编号：{d.id}</p>
           <span class="mode">{d.status || "工作转录待核"}</span>
           {d.date_note && <p class="source-line">{d.date_note}</p>}
+          <div class="lab-toolbar">
+            {sourceWebURL(d) && <a href={sourceWebURL(d)} target="_blank" rel="noreferrer">来源页面 ↗</a>}
+            {localOriginalURL(d, location.hostname) && <a href={localOriginalURL(d, location.hostname)} target="_blank" rel="noreferrer">打开本地核验原件 ↗</a>}
+          </div>
+          {d.source_url_note && <p class="lab-note">{d.source_url_note}</p>}
+          {d.text_file && <p class="source-line">转录定位：{d.text_file} · 字符 {d.start_char}–{d.end_char}（从 0 起，右端不含；Unicode 字符）</p>}
           <p class="paper-text">{d.text}</p>
           {d.image && (
             <details>
@@ -273,7 +281,7 @@ export class LessonLab {
                 </strong>
                 <span class="tag">{r.score?.toFixed(4)}</span>
                 <div class="source-line">
-                  {d.id} · PDF {d.pdf_page} · 原书 {d.printed_page ?? "待核"}
+                  {d.id} · {sourceLocation(d)}
                 </div>
                 <p>{d.text.slice(0, 125)}…</p>
               </button>{this.demoId === "D21" && <label class="feedback-choice">读过这段后标记：<select aria-label={`反馈${r.id}`} ref={el=>{if(el)el.value=this.feedback.includes(r.id)?'positive':this.negative.includes(r.id)?'negative':'';}} onChange={(e:any)=>{
@@ -398,6 +406,8 @@ export class LessonLab {
     });
   }
   private async qvector() {
+    if (!state.docs.some(d => d.vector?.length))
+      throw Error("当前导入的是纯文本包；请在D01导入配套向量JSON，再运行向量、混合或近邻检索。");
     const epoch=this.epoch,version=state.version;
     const q = state.queries.find((x) => x.text === this.query);
     const result = q?.vector || await embed(this.query, (s) => (this.message = s));
@@ -659,7 +669,7 @@ export class LessonLab {
               <img class="page-image" src={d.image} alt="史料原页节录" />
             ) : (
               <p class="lab-note">
-                本条保留PDF页序；完整原页在教师本地文件中。
+                本条定位：{sourceLocation(d)}。可在右侧回查来源与本地核验原件。
               </p>
             )}
             <div class="panel">
@@ -674,6 +684,7 @@ export class LessonLab {
                 {state.local ? "本机导入" : "公开课堂节录"}
                 。导入内容在本浏览器内处理。
               </p>
+              <p class="lab-note">{state.docs.some(d => d.vector?.length) ? '已含配套向量，可使用关键词、全文、向量及混合检索。' : '当前为纯文本包：可用关键词与全文检索；向量、混合和近邻检索请导入配套向量 JSON。'}</p>
             </div>
           </section>
           <section class="lab-column">
@@ -1293,6 +1304,11 @@ export class LessonLab {
                   </label>
                 );
               })}
+            {this.responseMeta?.citation_check && <p class="application-caution citation-status" role="status">
+              {this.responseMeta.citation_check.missing_ids ? '引用核验未通过：回答没有引用本轮材料编号。' :
+                this.responseMeta.citation_check.unknown_ids.length ? `引用核验未通过：${this.responseMeta.citation_check.unknown_ids.join('、')} 不在本轮材料中。` :
+                '引用编号与本轮材料匹配；请继续核对原文是否支持回答，编号匹配不等于结论正确。'}
+            </p>}
             <p class="model-answer">
               {this.answer ||
                 "尚无生成答案。可以先查看检索和实际选入的上下文。"}
@@ -1313,6 +1329,11 @@ export class LessonLab {
           </section>
           <section class="lab-column">
             <h2>可观察记录</h2>
+            {this.contextIds.length > 0 && <div class="panel">
+              <h3>回查本轮引用材料</h3>
+              <div class="lab-toolbar">{this.contextIds.map(key => <button onClick={() => this.select(state.docs.find(d => d.id === key))}>核对 {key}</button>)}</div>
+              {this.source(state.docs.find(d => d.id === (this.contextIds.includes(this.doc()?.id) ? this.doc().id : this.contextIds[0])))}
+            </div>}
             {this.responseMeta && (
               <pre>{JSON.stringify(this.responseMeta, null, 2)}</pre>
             )}
@@ -1339,6 +1360,7 @@ export class LessonLab {
     const ranked=Array.isArray(observed?.results)?observed.results:[];
     return (
       <div class="lab">
+        {state.local && <p class="application-caution">本页的保存案例与本机外部应用使用原有课堂语料，D01 导入不会自动重建它们的数据库。检索本次导入的新语料，请使用 D07–D13。</p>}
         <div class="lab-toolbar">
           <span class="mode">{t.mode}</span>
           {t.application_url && <a href={t.application_url} target="_blank" rel="noreferrer">打开本机应用 ↗</a>}
