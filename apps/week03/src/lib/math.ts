@@ -109,6 +109,21 @@ export function metrics(ids, qrels, k) {
     recall: null,
   };
 }
+export function parseStopwords(raw) {
+  return new Set(
+    (raw || "")
+      .split(/[\s、，,;；]+/)
+      .map((x) => x.normalize("NFKC").toLocaleLowerCase())
+      .filter(Boolean),
+  );
+}
+export function filterStopwords(tokens, stopwords, drop = true) {
+  if (!drop || !stopwords?.size) return { kept: tokens, removed: [] };
+  const kept = [],
+    removed = [];
+  for (const t of tokens) (stopwords.has(t) ? removed : kept).push(t);
+  return { kept, removed };
+}
 export function chunks(text, size = 180, overlap = 30) {
   if (size <= overlap || overlap < 0) throw Error("块长必须大于重叠");
   const a = [...text],
