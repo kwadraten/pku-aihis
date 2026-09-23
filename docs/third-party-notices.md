@@ -15,3 +15,13 @@ Lucivy（MIT）、EdgeVec（MIT/Apache，以发行包为准）、OpenCC（Apache
 
 - D05实际权重来自[OpenSearch多语神经稀疏编码器](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-multilingual-v1)，修订1e0f096c2b51c234f1d20725c793e1b5b6d556db；公开推理结果与复现脚本，不再分发模型权重。原SPLADE代码作为机制来源，未把本模型冒称为NAVER原checkpoint。
 - 本地应用源代码与依赖仅安装于教师第三周目录；公开仓库包含独立适配器、短篇运行结果与AnythingLLM界面截图，不打包上游整库或容器镜像。具体版本见本地deployment-lock.json和网页工具记录。
+
+## 跨领域公开语料（2026-09-23）
+
+[独立语料目录](../data/week03/cross-domain/README.md)收录6篇可再分发论文及4部经典著作的电子版，包含原件和带来源字段的提取文本。这些公开来源与上文教师提供的私人史料分开，不随默认站点资源发布。
+
+- M87及双黑洞引力波论文采用PDF所载CC BY 3.0；GW170817、手稿年代测定及《Can BERT Dig It?》正式发表版采用CC BY 4.0。
+- Reagan等的情感弧线论文采用CC BY-NC-SA 4.0，派生TXT/JSONL及其整理贡献沿用该许可，仅供非商业使用。
+- Project Gutenberg #1497、#1228、#11、#1661保留完整原件及PG许可、美国公版与地域说明；不把该标注扩张为全球公版。Jowett导论单独标示。
+- 完整作者、题名、版本、论文DOI、来源网址、处理方法和每文件许可见[sources.json](../data/week03/cross-domain/sources.json)，三种CC许可原文随包保存。不同材料保留各自许可，仓库未为整包重新指定统一许可。
+- 其余10篇论文未核得第三方全文再分发依据；Leymore推荐帖及补抓回复未核得许可，故公开仓库仅保存出处核验元数据，不上传其正文或原始HTML。

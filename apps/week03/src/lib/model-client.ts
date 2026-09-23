@@ -180,7 +180,7 @@ export function parseAction(text: string): {
 }
 export function citationCheck(text: string, contextIds: string[]) {
   const cited = [
-    ...new Set([...text.matchAll(/\[((?:JP|ZT)[\w-]+)\]/g)].map((x) => x[1])),
+    ...new Set([...text.matchAll(/\[([^\[\]\s]{1,200})\]/g)].map((x) => x[1])),
   ];
   return {
     cited_ids: cited,

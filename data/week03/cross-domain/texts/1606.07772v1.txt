@@ -1,0 +1,2305 @@
+
+
+[PDF page 1]
+
+The emotional arcs of stories are dominated by six basic shapes
+Andrew J. Reagan,1 Lewis Mitchell,2 Dilan Kiley,1 Christopher M. Danforth,1 and Peter Sheridan Dodds1
+1Department of Mathematics & Statistics, Vermont Complex Systems Center,
+Computational Story Lab, & the Vermont Advanced Computing Core,
+The University of Vermont, Burlington, VT 05401
+2School of Mathematical Sciences, The University of Adelaide, SA 5005 Australia
+(Dated: June 27, 2016)
+Advances in computing power, natural language processing, and digitization of text now make it
+possible to study our a culture’s evolution through its texts using a “big data” lens. Our ability to
+communicate relies in part upon a shared emotional experience, with stories often following distinct
+emotional trajectories, forming patterns that are meaningful to us. Here, by classifying the emo-
+tional arcs for a ﬁltered subset of 1,737 stories from Project Gutenberg’s ﬁction collection, we ﬁnd
+a set of six core trajectories which form the building blocks of complex narratives. We strengthen
+our ﬁndings by separately applying optimization, linear decomposition, supervised learning, and
+unsupervised learning. For each of these six core emotional arcs, we examine the closest character-
+istic stories in publication today and ﬁnd that particular emotional arcs enjoy greater success, as
+measured by downloads.
+I.
+INTRODUCTION
+The power of stories to transfer information and deﬁne
+our own existence has been shown time and again [1–
+5]. We are fundamentally driven to ﬁnd and tell stories,
+likened to Pan Narrans or Homo Narrativus. Stories are
+encoded in art, language, and even in the mathematics of
+physics: We use equations to represent both simple and
+complicated functions that describe our observations of
+the real world. In science, we formalize the ideas that
+best ﬁt our experience with principles such as Occam’s
+Razor: The simplest story is the one we should trust. We
+also tend to prefer stories that ﬁt into the molds which
+are familiar, and reject narratives that do not align with
+our experience [6].
+We seek to better understand stories that are cap-
+tured and shared in written form, a medium that since
+inception has radically changed how information ﬂows
+[7]. Without evolved cues from tone, facial expression, or
+body language, written stories are forced to capture the
+entire transfer of experience on a page. A often integral
+part of a written story is the emotional experience that
+is evoked in the reader. Here, we use a simple, robust
+sentiment analysis tool to extract the reader-perceived
+emotional content of written stories as they unfold on
+the page.
+We objectively test the theories of folkloristics [8, 9],
+speciﬁcally the commonality of core stories within soci-
+etal boundaries [4, 10]. A major component of folkloris-
+tics is the study of society and culture through literary
+analysis. This is sometimes referred to as narratology,
+which at its core is “a series of events, real or ﬁction-
+al, presented to the reader or the listener”, who further
+deﬁne narrative and plot [11]. In our present treatment,
+we consider the plot as the “backbone” of events that
+occur in a chronological sequence. We ﬁrst ﬁnd an anal-
+ogous deﬁnition in Aristotle’s theory of the three act
+plot structure: A central conﬂict emerges in act one, fol-
+lowed by two major turning points in acts two and three
+before concluding with a ﬁnal resolution. While the plot
+captures the mechanics of a narrative and the structure
+encodes their delivery, in the present work we examine
+the emotional arc that is invoked through the words used.
+The emotional arc of a story does not give us direct infor-
+mation about the plot or the intended meaning of the
+story, but rather exists as part of the whole narrative.
+Through the identiﬁcation of motifs [12], narrative theo-
+ries [13] allow us to analyze, interpret, describe, and com-
+pare stories across cultures and regions of the world [14].
+We show that automated extraction of emotional arcs
+is not only possibly, but can test previous theories and
+provide new insights with the potential to quantify unob-
+served trends as the ﬁeld transitions from data-scarce to
+data-rich [15, 16].
+There have been various attempts to enumerate and
+classify the core types of stories from their plots, includ-
+ing models that generalize broad categories and detailed
+classiﬁcation systems. We consider a range of these the-
+ories in turn while noting that plot similarities do not
+necessitate a concordance of emotional arcs.
+• Three plots: In his 1959 book, Foster-Harris con-
+tends that there are three basic patterns of plot
+(extending from the one central pattern of conﬂict):
+the happy ending, the unhappy ending, and the
+tragedy [17]. In these three versions, the outcome
+of the story hinges on the nature and fortune of
+a central character: virtuous, selﬁsh, or struck by
+fate, respectively.
+• Seven plots: Often espoused as early as elementary
+school in the United States, we have the notion
+that plots revolve around the conﬂict of an individ-
+ual with either (1) him or herself, (2) nature, (3)
+another individual, (4) the environment, (5) tech-
+nology, (6) the supernatural, or (7) a higher power
+[18].
+• Seven plots:
+Representing over three decades of
+arXiv:1606.07772v1  [cs.CL]  24 Jun 2016
+
+
+[PDF page 2]
+
+2
+work, Christopher Booker’s The Seven Basic Plots:
+Why we tell stories describes in great detail seven
+narrative structures: [19]
+– Overcoming the monster (e.g., Beowulf ).
+– Rags to riches (e.g., Cinderella).
+– The quest (e.g., King Solomons Mines).
+– Voyage and return (e.g., The Time Machine).
+– Comedy (e.g., A Midsummer Night’s Dream).
+– Tragedy (e.g., Anna Karenina).
+– Rebirth (e.g., Beauty and the Beast).
+In addition to these seven, Booker contends that
+the unhappy ending of all but the tragedy are also
+possible.
+• Twenty plots: In 20 Master Plots, Ronald Tobias
+proposes plots that include “quest”, “underdog”,
+“metamorphosis”, “ascension”, and “descension”
+[20].
+• Thirty-six plots: In a translation by Lucille Ray,
+Georges Polti attempts to reconstruct the 36 plots
+that he posits Gozzi originally enumerated [21].
+These are quite speciﬁc and include “rivalry of kins-
+men”, “all sacriﬁced for passion”, both involuntary
+and voluntary “crimes of love” (with many more on
+this theme), “pursuit”, and “falling prey to cruelty
+of misfortune”.
+The rejected master’s thesis of Kurt Vonnegut—which
+he personally considered his greatest contribution—
+deﬁnes the emotional arc of a story on the “Beginning–
+End” and “Ill Fortune–Great Fortune” axes [22]. Von-
+negut ﬁnds a remarkable similarity between Cinderella
+and the origin story of Christianity in the Old Testa-
+ment (see Fig.
+S19), leading us to search for all such
+groupings. In a recorded lecture available on YouTube
+[23], Vonnegut asserted:
+“There is no reason why the simple shapes of
+stories can’t be fed into computers, they are
+beautiful shapes.”
+We proceed as follows. We ﬁrst introduce our methods
+in Section II, we then discuss the combined results of each
+method in Section III, and we present our conclusions in
+Section IV.
+II.
+METHODS
+A.
+Emotional arc construction
+To generate emotional arcs, we analyze the sentiment
+of 10,000 word windows, which we slide through the text
+(see Fig. 1). We rate the emotional content of each win-
+dow using our Hedonometer with the labMT dataset,
+Uniform length seg-
+ments of the text
+Base text from 
+Project Gutenberg
+Hedonometric
+analysis
+Average
+happiness
+% of text
+sliding window across text
+FIG. 1:
+Schematic of how we compute emotional arcs.
+The indicated uniform length segments (gap between sam-
+ples) taken from the text form the sample with ﬁxed window
+size set at Nw = 10, 000 words. The segment length is thus
+Ns = (N −(Nw +1))/n for N the length of the book in words,
+and n the number of points in the time series. Sliding this
+ﬁxed size window through the book, we generate n sentiment
+scores with the Hedonometer, which comprise the emotional
+arc [26].
+chosen for lexical coverage and its ability to generate of
+meaningful word shift graphs [24, 25]. In Fig. 2, we show
+the emotional arc of Harry Potter and the Deathly Hal-
+lows, the ﬁnal book in the popular Harry Potter series
+by J.K. Rowling. While the plot of the book is nested
+and complicated, the emotional arc associated with each
+sub-narrative is clearly visible. We analyze the emotion-
+al arcs corresponding to complete books, and to limit
+the conﬂation of multiple core emotional arcs we restrict
+our analysis to shorter books (by selecting a maximum
+number of words when building our ﬁlter).
+B.
+Project Gutenberg Corpus
+For a suitable corpus we draw on the freely available
+Project Gutenberg data set [28].
+We apply rough ﬁl-
+ters to the entire collection in an attempt to obtain a
+set of 1,737 books that represent English works of ﬁc-
+tion. Two slices of the data are shown in Fig. S1. We
+select for only English books, with total words between
+10,000 and 200,000, with unique words between 1,000
+and 18,000, and with more than 150 downloads from
+the Project Gutenberg website. Beyond these broad ﬁl-
+ters, we also remove dictionaries and transcriptions by
+the Human Genome Project (all three copies of the 24
+books).
+We provide a list of the book ID’s which are
+
+
+[PDF page 3]
+
+3
+FIG. 2:
+Annotated emotional arc of Harry Potter and the Deathly Hallows, by J.K. Rowling, inspired by the illustration
+made by Medaris for The Why Files [27]. The entire seven book series can be classiﬁed as a “Rags to riches” and “Kill the
+monster” story, while the many sub plots and connections between them complicate the emotional arc of each individual book.
+The emotional arc shown here, captures the major highs and lows of the story, and should be familiar to any reader well
+acquainted with Harry Potter. Our method does not pick up emotional moments discussed brieﬂy, perhaps in one paragraph
+or sentence (e.g., the ﬁrst kiss of Harry and Ginny). We provide interactive visualizations of all Project Gutenberg books at
+http://hedonometer.org/books/v3/1/ and a selection of classic and popular books at http://hedonometer.org/books/v1/.
+included for download in the online appendices at http:
+//compstorylab.org/share/papers/reagan2016b/.
+C.
+Principal Component Analysis (SVD)
+We use the standard linear algebra technique Singular
+Value Decomposition (SVD) to ﬁnd a decomposition of
+stories onto an orthogonal basis of emotional arcs. Start-
+ing with the sentiment time series for each book bi as row
+i in the matrix A, we apply the SVD to ﬁnd
+A = UΣV T = WV T ,
+(1)
+where now U contains the projection of each sentiment
+time series onto each of the right singular vectors (rows
+of V T , eigenvectors of AT A), which have singular values
+given along the diagonal of Σ, with W = UΣ. Diﬀerent
+intuitive interpretations of the matrices U, Σ, and V T
+are useful in the various domains in which the SVD is
+applied; here, we focus on right singular vectors as an
+orthonormal basis for the sentiment time series in the
+rows of A, which we will refer to as the modes.
+We
+combine Σ and U into the single coeﬃcient matrix W
+for clarity and convenience, such that W now represents
+the mode coeﬃcients.
+In Fig. 3 we show the leading 12 modes in both the
+weighted (dark) and un-weighted (lighter) representa-
+tion. In total, the ﬁrst 12 modes explain 80% and 94%
+of the variance from the mean centered and raw time
+series, respectively. The modes are from mean-centered
+emotional arcs such that the ﬁrst SVD mode need not
+extract the average from the labMT scores nor the pos-
+itivity bias present in language [24].
+The coeﬃcients
+for each mode within a single emotional arc are both
+positive and negative, so we need to consider both the
+modes and their negation. We can immediately recog-
+nize the familiar shapes of core emotional arcs in the
+ﬁrst four modes, and compositions of these emotional
+arcs in modes 5 and 6.
+We observe “Rags to riches”
+(mode 1, positive), “Tragedy” or “Riches to rags” (mode
+1, negative), Vonnegut’s “Man in a hole” (mode 2, posi-
+tive), “Icarus” (mode 2, negative), “Cinderella” (mode 3,
+positive), “Oedipus” (mode 3, negative). We choose to
+include modes 7–12 only for completeness, as these high
+frequency modes have little contribution to variance and
+do not align with core emotional arc archetypes (more
+below).
+We emphasize that by deﬁnition of the SVD, the mode
+coeﬃcients in W can be either positive and negative, such
+that the modes themselves explain variance with both the
+positive and negative version. In the right panels of each
+mode in Fig. 3 we project the 1,737 stories onto each of
+ﬁrst six modes and show the resulting coeﬃcients. While
+none are far from 0 (as would be expected), mode 1 has
+a mean slightly above 0 and both modes 3 and 4 have
+means slightly below 0. To sort the books by their coeﬃ-
+
+
+[PDF page 4]
+
+4
+−0.1
+0.0
+0.1
+Mode 1
+Mode 2
+Mode 3
+-0.5
+0
+0.5
+−0.1
+0.0
+0.1
+Mode 4
+Mode 5
+Mode 6
+-0.5
+0
+0.5
+−0.1
+0.0
+0.1
+Mode 7
+Mode 8
+Mode 9
+-0.5
+0
+0.5
+0
+20
+40
+60
+80
+100
+−0.1
+0.0
+0.1
+Mode 10
+0
+20
+40
+60
+80
+100
+Mode 11
+0
+20
+40
+60
+80
+100
+Mode 12
+-0.5
+0
+0.5
+Percentage of book
+Right
+singular
+vectors
+(modes)
+Mode
+coeﬃcients
+from W
+FIG. 3:
+Top 12 modes from the Singular Value Decomposition of 1,737 Project Gutenberg books. We show in a lighter color
+modes weighted by their corresponding singular value, where we have scaled the matrix Σ such that the ﬁrst entry is 1 for
+comparison (for reference, the largest singular value is 27.3). The mode coeﬃcients normalized for each book are shown in the
+right panel accompanying each mode, in the range -1 to 1, with the “Tukey” box plot.
+cient for each mode, we normalize the coeﬃcients within
+each book in the rows of W to sum to 1, accounting for
+books with higher total energy, and these are the coef-
+ﬁcients shown in the right panels of each mode in Fig.
+3.
+In the Appendix, we provide supporting, intuitive
+details of the SVD method, as well as example emotional
+arc reconstruction using the modes (see Figs. S3–S5). As
+expected, less than 10 modes are enough to reconstruct
+the emotional arc to a degree of accuracy visible to the
+eye.
+We show labeled examples of the emotional arcs closest
+to the top 6 modes in Figs. 4 and S2. We present both
+the positive and negative modes, and the stories closest to
+each by sorting on the coeﬃcient for that mode. For the
+positive stories, we sort in ascending order, and vice ver-
+sa. Mode 1, which encompasses both the “Rags to riches”
+and “Tragedy” emotional arcs, captures 30% of the vari-
+ance of the entire space. We examine the closest stories
+to both sides of modes 1–3, and direct the reader to Fig.
+S2 for more details on the higher order modes. The two
+stories that have the most support from the “Rags to
+riches” mode are Alice’s Adventures Under Ground and
+Dreams. Among the most categorical tragedies we ﬁnd
+A Primary Reader and The House of the Vampire. The
+top 5 also includes perhaps the most famous tragedy:
+Romeo and Juliet by William Shakespeare. Mode 2 is
+
+
+[PDF page 5]
+
+5
+10
+30
+50
+70
+90
+−0.20
+−0.15
+−0.10
+−0.05
+0.00
+0.05
+0.10
+0.15
+0.20
+0.25
+Mode-
+space
+havg
+% of Book
+SV 1
+Closest 20 Books
+1: Alice’s Adventures Under Ground : Bein... (19002, 333)
+http://hedonometer.org/books/v3/19002/
+2: Dreams (1439, 169)
+http://hedonometer.org/books/v3/1439/
+3: The Human Comedy: Introductions and A... (1968, 175)
+http://hedonometer.org/books/v3/1968/
+4: The Ballad of Reading Gaol (301, 227)
+http://hedonometer.org/books/v3/301/
+5: The History Of The Decline And Fall O... (25717, 1697)
+http://hedonometer.org/books/v3/25717/
+Top Stories:
+10
+30
+50
+70
+90
+−0.20
+−0.15
+−0.10
+−0.05
+0.00
+0.05
+0.10
+0.15
+0.20
+0.25
+Mode-
+space
+havg
+% of Book
+– (SV 1)
+1: A Primary Reader: Old-time Stories, F... (7841, 307)
+http://hedonometer.org/books/v3/7841/
+2: The House of the Vampire (17144, 188)
+http://hedonometer.org/books/v3/17144/
+3: Savrola: A Tale of the Revolution in L... (50906, 682)
+http://hedonometer.org/books/v3/50906/
+4: Romeo and Juliet (1777, 186)
+http://hedonometer.org/books/v3/1777/
+5: The Dance (by An Antiquary): Historic ... (17289, 222)
+http://hedonometer.org/books/v3/17289/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+SV 2
+1: Typhoon (1142, 219)
+http://hedonometer.org/books/v3/1142/
+2: Teddy Bears (51199, 944)
+http://hedonometer.org/books/v3/51199/
+3: The Autobiography of St. Ignatius (24534, 201)
+http://hedonometer.org/books/v3/24534/
+4: The Magic of Oz (419, 186)
+http://hedonometer.org/books/v3/419/
+5: Fundamental Principles of the Metaphy... (5682, 1148)
+http://hedonometer.org/books/v3/5682/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+– (SV 2)
+1: The Yoga Sutras of Patanjali: The Boo... (2526, 338)
+http://hedonometer.org/books/v3/2526/
+2: Stories from Hans Andersen (17860, 262)
+http://hedonometer.org/books/v3/17860/
+3: How to Read Human Nature: Its Inner S... (41501, 278)
+http://hedonometer.org/books/v3/41501/
+4: The Rome Express (11451, 162)
+http://hedonometer.org/books/v3/11451/
+5: Chambers’s Journal of Popular Literat... (51100, 312)
+http://hedonometer.org/books/v3/51100/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+SV 3
+1: The Consolation of Philosophy (14328, 1188)
+http://hedonometer.org/books/v3/14328/
+2: The Scarecrow of Oz (957, 162)
+http://hedonometer.org/books/v3/957/
+3: A Christmas Carol (24022, 188)
+http://hedonometer.org/books/v3/24022/
+4: Sophist (1735, 162)
+http://hedonometer.org/books/v3/1735/
+5: A Christmas Carol in Prose; Being a G... (46, 4602)
+http://hedonometer.org/books/v3/46/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+– (SV 3)
+1: The Wonder Book of Bible Stories (16042, 183)
+http://hedonometer.org/books/v3/16042/
+2: The Serpent River (50923, 306)
+http://hedonometer.org/books/v3/50923/
+3: A Hero of Our Time (913, 337)
+http://hedonometer.org/books/v3/913/
+4: On the Nature of Things (785, 857)
+http://hedonometer.org/books/v3/785/
+5: The Cosmic Computer (20727, 221)
+http://hedonometer.org/books/v3/20727/
+Top Stories:
+FIG. 4:
+First 3 SVD modes and their negation with the closest stories to each. To locate the emotional arcs on the same scale
+as the modes, we show the modes directly from the rows of V T and weight the emotional arcs by the inverse of their coeﬃcient in
+W for the particular mode. The closest stories shown for each mode are those stories with emotional arcs which have the greatest
+coeﬃcient in W. In parenthesis for each story is the Project Gutenberg ID and the number of downloads from the Project
+Gutenberg website, respectively.
+Links below each story point to an interactive visualization on http://hedonometer.org
+which enables detailed exploration of the emotional arc for the story.
+the “Man in a hole” emotional arc, and we ﬁnd the sto-
+ries which most closely follow this path to be Typhoon
+and Teddy Bears. The negation of mode 2 most close-
+ly resembles the emotional arc of the “Icarus” narrative.
+For this emotional arc, the most characteristic stories
+are The Yoga Sutras of Patanjali and Stories from Hans
+Andersen. Mode 3 is the “Cinderella” emotional arc, and
+includes The Consolation of Philosophy and The Scare-
+crow of Oz.
+The negation of Mode 3, which we refer
+to as “Oedipus”, is found most characteristically in The
+Wonder Book of Bible Stories, The Serpent River, and A
+Hero of Our Time. We also note that the spread of the
+stories from their core mode increases strongly for the
+higher modes.
+III.
+RESULTS
+We obtain a collection of 1,737 books that are most-
+ly, but not all, ﬁctional stories by using metadata from
+Project Gutenberg to construct a rough ﬁlter.
+Using
+principal component analysis, we ﬁnd broad support for
+six emotional arcs:
+• “Rags to riches” (rise).
+• “Tragedy”, or “Riches to rags” (fall).
+• “Man in a hole” (fall–rise).
+• “Icarus” (rise–fall).
+
+
+[PDF page 6]
+
+6
+Mode
+Mode Arc
+Nm
+Nm/N
+DL Median ▼
+DL Mean ▽
+DL Variance
+% > Average
+Download Distribution
+SV 1
+267
+15.4%
+289.0
+638.0
+2176764
+20.6%
+-SV 1
+440
+25.4%
+337.5
+633.6
+907943
+25.0%
+SV 2
+219
+12.7%
+327.0
+652.3
+1122421
+21.9%
+-SV 2
+167
+9.7%
+297.0
+540.2
+554142
+16.8%
+SV 3
+104
+6.0%
+298.0
+896.3
+7829052
+22.1%
+-SV 3
+109
+6.3%
+303.0
+803.9
+2839614
+26.6%
+SV 4
+108
+6.2%
+311.5
+823.5
+2728083
+26.9%
+-SV 4
+47
+2.7%
+286.0
+790.6
+1637200
+19.1%
+SV 5
+48
+2.8%
+280.0
+397.1
+146597
+8.3%
+-SV 5
+44
+2.5%
+280.5
+452.0
+188580
+13.6%
+FIG. 5:
+Download statistics for stories whose SVD Modes comprise more than 2.5% of books, for N the total number of books
+and Nm the number corresponding to the particular mode. Modes SV 3 through -SV 4 (both polarities of modes 3 and 4)
+exhibit a higher average number of downloads and more variance than the others. Mode arcs are rows of V T and the download
+distribution is show in log10 space from 150 to 30,000 downloads.
+• “Cinderella” (rise–fall–rise).
+• “Oedipus” (fall–rise–fall).
+Importantly, we also ﬁnd these emotional arcs using two
+other methods: As clusters in a hierarchical clustering
+using Ward’s algorithm and as clusters using unsuper-
+vised machine learning.
+We again ﬁnd the ﬁrst four of these six arcs appearing
+among the eight most diﬀerent clusters from a hierarchi-
+cal clustering (Fig. S9). The clustering method groups
+stories with a “Man in a hole” emotional arc for a range of
+diﬀerent variances, separate from the other arcs, in total
+these clusters (Panels E, F, and G of Fig. S9) account
+for 23% of the Gutenberg corpus. The remainder of the
+stories have emotional arcs that are clustered among the
+“Icarus” arc, “Rags to riches” arc, and the “Tragedy”
+arc. A detailed analysis of the results from hierarchical
+clustering can be found in Appendix C.
+Finally, we apply Kohonen’s Self-Organizing Map
+(SOM) and ﬁnd these core arcs from unsupervised
+machine learning on the emotional arcs (Fig. S11 and
+Appendix D). On the two dimensional component plane,
+the prescribed network topology, we ﬁnd three spatial-
+ly coherent groups. These spatial groups are comprised
+of stories with core emotional arcs of diﬀering variance.
+Grouping together the nine most active nodes, we ﬁnd
+the “Rags to riches” arc accounts for 19% of the corpus,
+the “Tragedy” arc with 6%, the “Icarus” arc with 12%
+across three nodes, and the “Man in a hole” arc with 3%
+on one node.
+There are many possible emotional arcs in the space
+that we consider.
+To demonstrate that these speciﬁc
+arcs are uniquely compelling as stories written by and
+for homo narrativus, we compare the emotional arcs of
+“word salad” versions for each book with randomly per-
+muted word locations. An example of the emotional arc
+for a single book is shown in Fig. S13, along with 10 word
+salad versions. We re-run the SVD, hierarchical cluster-
+ing, and unsupervised machine learning on the Guten-
+berg Corpus with the word salad version of each book
+and verify that the emotional arcs of real stories are not
+simply an artifact.
+The singular value spectrum from
+the SVD is ﬂatter, with higher-frequency modes appear-
+ing more quickly, and in total representing 45% of the
+total variance present in real stories (see Figs. S15 and
+S14). Hierarchical clustering generates less distinct clus-
+ters with lower linkage cost for the emotional arcs from
+word salad books, and the winning node vectors on a self-
+organizing map lack coherent structure (see Figs. S16 and
+S18).
+To examine how the emotional trajectory impacts suc-
+cess, in Fig. 5 we examine the downloads for all of the
+books that are most similar to each SVD mode .
+We
+ﬁnd that the ﬁrst four modes, which contain the greatest
+total number of books, are not the most popular. Both
+polarities of modes 3 and 4 have markedly higher down-
+loads, and somewhat higher variance. The success of the
+stories underlying these emotional arcs shows that the
+emotional experience of readers strongly aﬀects how sto-
+ries are shared. We ﬁnd the “Icarus” (SV 3), “Oedipus”
+(-SV 3), two sequential “Man in a hole” arcs (SV 4), and
+“Cinderella” with a tragic ending (-SV 4) are the most
+successful emotional arcs.
+IV.
+CONCLUSION
+Using three distinct methods, we have demonstrated
+that there is strong support for six core emotional arcs.
+Our methodology brings to bear a cross section of data
+science tools with a knowledge of the potential issues that
+each present. By considering the results of each tool in
+support of each other we are able to conﬁrm our ﬁndings.
+We have also shown that consideration of the emotional
+arc for a given story is important for the success of that
+story.
+Our approach could applied in the opposite direction:
+namely by beginning with the emotional arc and aiding
+in the automatic generation of compelling stories [29].
+The emotional arcs of stories may be useful to aid in
+
+
+[PDF page 7]
+
+7
+constructing arguments [30] and teaching common sense
+to artiﬁcial intelligence systems [31].
+Extensions of our analysis that use a more curated
+selection of full-text ﬁction can answer more detailed
+questions about which stories are the most popular
+throughout time, and across regions [10].
+Automat-
+ic extraction of character networks would allow a more
+detailed analysis of plot structure for the Project Guten-
+berg corpus used here [11, 32, 33].
+Bridging the gap
+between the full text stories [34] and systems that ana-
+lyze plot sequences will allow such systems to undertake
+studies of this scale [35]. Place could also be used to con-
+sider separate character networks through time, and to
+help build an analog to Randall Munroe’s Movie Narra-
+tive Charts [36].
+We are producing data at an ever increasing rate,
+including rich sources of stories written to entertain and
+share knowledge, from books to television series to news.
+Of profound scientiﬁc interest will be the degree to which
+we can eventually understand the full landscape of human
+stories, and data driven approaches will play a crucial
+role.
+[1] T. Pratchett, I. Stewart, and J. Cohen. The Science of
+Discworld II: The Globe. Ebury Press, 2003.
+[2] J. Campbell.
+The Hero with a Thousand Faces.
+New
+World Lbirary, third edition, 2008.
+[3] J. Gottschall.
+The Storytelling Animal:
+How Stories
+Make Us Human. Mariner Books, 2013.
+[4] S.
+Cave.
+The
+4
+stories
+we
+tell
+ourselves
+about
+death. http://www.ted.com/talks/stephen_cave_the_
+4_stories_we_tell_ourselves_about_death, Jul 2013.
+[5] P.
+S.
+Dodds.
+Homo
+Narrativus
+and
+the
+trou-
+ble
+with
+fame.
+Nautilus
+Magazine,
+2013.
+http://nautil.us/issue/5/fame/homo-narrativus-and-
+the-trouble-with-fame.
+[6] R. S. Nickerson. Conﬁrmation Bias; A ubiquitous phe-
+nomenon in many guises. Review of General Psychology,
+2:175–220, 1998.
+[7] J. Gleick.
+The Information: A History, A Theory, A
+Flood. Pantheon, 2011.
+[8] V. Propp. Morphology of the folktale. 1928, 1968.
+[9] M. R. MacDonald. Storytellers Sourcebook: A Subject,
+Title, and Motif Index to Folklore Collections for Chil-
+dren. Gale Group, 1982.
+[10] S. G. da Silva and J. J. Tehrani. Comparative phylogenet-
+ic analyses uncover the ancient roots of Indo-European
+folktales. Royal Society Open Science, 3(1), 2016.
+[11] S. Min and J. Park. Narrative as a complex network: A
+study of Victor Hugo’s les mis´erables. In Proceedings of
+HCI Korea, 2016.
+[12] A. Dundes. The motif-index and the tale type index: A
+critique.
+Journal of Folklore Research, pages 195–202,
+1997.
+[13] S. K. Dolby. Literary Folkloristics and the Personal Nar-
+rative. Trickster Press, 2008.
+[14] H.-J. Uther.
+The Types of International Folktales. A
+Classiﬁcation and Bibliography. Based on the System of
+Antti Aarne and Stith Thompson. Part I. Animal Tales,
+Tales of Magic, Religious Tales, and Realistic Tales, with
+an Introduction (FF Communications, 284).
+Finnish
+Academy of Science and Letters, 2011.
+[15] M. G. Kirschenbaum. The remaking of reading: Data
+mining and the digital humanities.
+In The National
+Science Foundation Symposium on Next Generation of
+Data Mining and Cyber-Enabled Discovery for Innova-
+tion, Baltimore, MD. Citeseer, 2007.
+[16] F. Moretti. Distant Reading. Verso, 2013.
+[17] W. F. Harris. The basic patterns of plot. University of
+Oklahoma Press, 1959.
+[18] H. P. Abbott. The Cambridge introduction to narrative.
+Cambridge University Press, 2008.
+[19] C. Booker. The Seven Basic Plots: Why We Tell Stories.
+loomsbury Academic, 2006.
+[20] R. B. Tobias. 20 Master Plots: And How to Build Them.
+Writer’s Digest Books, 1993.
+[21] G. Polti.
+The Thirty-Six Dramatic Situations.
+James
+Knapp Reeve, Franklin OH, 1921.
+[22] K. Vonnegut. Palm Sunday. RosettaBooks LLC, 1981.
+[23] K.
+Vonnegut.
+Shapes
+of
+stories.
+https://www.youtube.com/watch?v=oP3c1h8v2ZQ,
+1995.
+[24] P. S. Dodds, E. M. Clark, S. Desu, M. R. Frank, A. J.
+Reagan, J. R. Williams, L. Mitchell, K. D. Harris, I. M.
+Kloumann, J. P. Bagrow, K. Megerdoomian, M. T.
+McMahon, B. F. Tivnan, and C. M. Danforth. Human
+language reveals a universal positivity bias.
+PNAS,
+112(8):2389–2394, 2015.
+[25] A. Reagan, B. Tivnan, J. R. Williams, C. M. Danforth,
+and P. S. Dodds. Benchmarking sentiment analysis meth-
+ods for large-scale texts: A case for using continuum-
+scored words and word shift graphs. Preprint available
+at https://arxiv.org/abs/1512.00531, 2015.
+[26] P. S. Dodds, K. D. Harris, I. M. Kloumann, C. A. Bliss,
+and C. M. Danforth. Temporal patterns of happiness and
+information in a global social network: Hedonometrics
+and Twitter. PLoS ONE, 6(12):e26752, 12 2011.
+[27] D.
+J.
+Tenenbaum,
+K.
+Barrett,
+S.
+Medaris,
+and
+T. Devitt.
+In 10 languages, happy words beat sad
+ones.
+http://whyﬁles.org/2015/in-10-languages-happy-
+words-beat-sad-ones/, February 2015.
+[28] Project Gutenberg.
+[29] B. Li, S. Lee-Urban, G. Johnston, and M. Riedl. Sto-
+ry generation with crowdsourced plot graphs. In AAAI,
+2013.
+[30] F. J. Bex and T. J. Bench-Capon. Persuasive stories for
+multi-agent argumentation. In AAAI Fall Symposium:
+Computational Models of Narrative, volume 10, page 04,
+2010.
+[31] M. O. Riedl and B. Harrison.
+Using stories to teach
+human values to artiﬁcial agents. 2015.
+[32] X. Bost, V. Labatut, and G. Linar`es. Narrative smooth-
+ing: dynamic conversational network for the analysis of
+tv series plots, 2016.
+[33] S. D. Prado, S. R. Dahmen, A. L. C. Bazzan, P. M.
+Carron, and R. Kenna.
+Temporal network analysis of
+literary texts, 2016.
+
+
+[PDF page 8]
+
+8
+[34] A. Nenkova and K. McKeown. A survey of text summa-
+rization techniques.
+In Mining text data, pages 43–76.
+Springer, 2012.
+[35] P. H. Winston.
+The strong story hypothesis and the
+directed perception hypothesis. 2011.
+[36] R.
+Munroe.
+Movie
+narrative
+charts.
+http://xkcd.com/657/, 11 2009.
+[37] J. H. Ward Jr.
+Hierarchical grouping to optimize an
+objective function.
+Journal of the American statistical
+association, 58(301):236–244, 1963.
+[38] T. Kohonen. The self-organizing map. Proceedings of the
+IEEE, 78(9):1464–1480, 1990.
+[39] D. P. Kiley, A. J. Reagan, L. Mitchell, C. M. Danforth,
+and P. S. Dodds. Game story space of professional sports:
+Australian rules football. Phys. Rev. E, 93:052314, May
+2016.
+
+
+[PDF page 9]
+
+S1
+Appendix A: Emotional Arc Construction
+To generate emotional arcs, we consider many diﬀerent approaches with the goal of generating time series that
+meaningfully reﬂect the narrative sentiment. In general, we proceed as described in Fig. 1 and consider a method of
+breaking up the text as having three (interdependent) parameter choices for a sliding window:
+1. Length of the desired sample text.
+2. Breakpoint between samples.
+3. Overlap of each sample.
+These methods vary between rating individual words with no overlap to rating the entire text. To make our choice,
+we consider competing two objectives of time series generation: meaningfulness of sentiment scores and increased
+temporal resolution of time series. For the most accurate sentiment scores, we can use the entire book. The highest
+temporal resolution is possible with a sliding window of length 1, generating time series that have potentially as many
+data points as words in the book.
+Since our goal is not only the generation of time series, but the comparison of time series across texts, we consider
+the additional objective of consistency. We seek time series which are consistent both in the accuracy of the time
+series, as well as consistent in the length of the resulting time series. Again these goals are orthogonal, and we note
+that our choice here can be tuned to test the sensitivity.
+We normalize the length of emotional arcs for books of diﬀerent length (while using a ﬁxed window size) by varying
+the amount that the window needs to move. To make a time series of length l from a book with N words, we ﬁx the
+sample length at k and set the overlap of samples to
+(N −k −1)/l
+words. This guarantees that we have temporal resolution l and sample length k for any N > k+l. We do not consider
+books with N ≤k + l words.
+To generate a sentiment score as in Fig. 1, we use a dictionary based approach for transparency and understanding
+of sentiment. We select the LabMT dictionary for robust performance over many corpora and best coverage of word
+usage [25]. In particular, we determine a sample T’s average happiness using the equation:
+havg(T) =
+PN
+i=1 havg(wi) · fi(T)
+PN
+i=1 fi(T)
+=
+N
+X
+i=1
+havg(wi) · pi(T),
+(A1)
+where we denote each of the N words in a given dictionary as wi, word sentiment scores as havg(wi), word frequency
+as fi(T), and normalized frequency of wi in T as pi(T) = fi(T)/ PN
+i=1 fi(T).
+We note here for the general case, and additionally specify with the details of each method, that for each emotional
+arc we subtract the mean before computing the distance or clustering. To compute the distance between two emotional
+arcs, we use the city block distance metric:
+D(bi, bj) = l−1
+l
+X
+t=1
+|bi(t) −bj(t)|.
+(A2)
+Our null set of emotional arc time series is generated by randomly shuﬄing the words of each book that we consider.
+Other variations on generating this null set include sampling from a phrase-level parse of the book with a Markov
+process, using continuous space random walks directly, or shuﬄing on sentences.
+
+
+[PDF page 10]
+
+S2
+0
+1
+2
+3
+4
+5
+log10 (Rank)
+0.0
+0.5
+1.0
+1.5
+2.0
+2.5
+3.0
+3.5
+4.0
+4.5
+log10 (Number of downloads)
+0
+1
+2
+3
+4
+5
+log10 (Rank)
+2.5
+3.0
+3.5
+4.0
+4.5
+5.0
+5.5
+6.0
+6.5
+7.0
+log10 (Length)
+2.0
+2.5
+3.0
+3.5
+4.0
+4.5
+5.0
+log10 (Downloads)
+3.8
+4.0
+4.2
+4.4
+4.6
+4.8
+5.0
+5.2
+5.4
+log10 (Length)
+FIG. S1:
+Rank-frequency distributions of book downloads and length in the Gutenberg corpus: (A) downloads, (B) book
+length in words, and (C) both downloads and length. We ﬁlter by both number of downloads and book length to select for
+ﬁction books, with the ﬁlters shown as grey boxes in Panels A and B. In Panel C, we plot each of the resulting 1,748 books in
+download-length space.
+
+
+[PDF page 11]
+
+S3
+Appendix B: Principal Component Analysis (SVD)
+In this section we provide (1) more results from the SVD analysis and (2) a more in-depth, intuitive explanation of
+the method.
+First we have consider modes 4–6 and their closest stories in Fig. S2.
+10
+30
+50
+70
+90
+−0.4
+−0.3
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+0.4
+0.5
+Mode-
+space
+havg
+% of Book
+SV 4
+Closest 20 Books
+1: The Sheik: A Novel (7031, 152)
+http://hedonometer.org/books/v3/7031/
+2: The Golden Key: A Heart’s Silent Worship (50909, 290)
+http://hedonometer.org/books/v3/50909/
+3: Notes on Nursing: What It Is, and What... (12439, 203)
+http://hedonometer.org/books/v3/12439/
+4: The Adventures of Tom Sawyer (74, 9454)
+http://hedonometer.org/books/v3/74/
+5: Tales of Space and Time (27365, 255)
+http://hedonometer.org/books/v3/27365/
+Top Stories:
+10
+30
+50
+70
+90
+−0.4
+−0.3
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+0.4
+0.5
+Mode-
+space
+havg
+% of Book
+– (SV 4)
+1: The Idle Thoughts of an Idle Fellow (849, 177)
+http://hedonometer.org/books/v3/849/
+2: Dorothy and the Wizard in Oz (420, 385)
+http://hedonometer.org/books/v3/420/
+3: Orthodoxy (130, 613)
+http://hedonometer.org/books/v3/130/
+4: Cavendish on Whist: 18th edition (51039, 422)
+http://hedonometer.org/books/v3/51039/
+5: Orthodoxy (16769, 410)
+http://hedonometer.org/books/v3/16769/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+SV 5
+1: Talks To Teachers On Psychology; And ... (16287, 222)
+http://hedonometer.org/books/v3/16287/
+2: Anticipations : Of the Reaction of Mec... (19229, 166)
+http://hedonometer.org/books/v3/19229/
+3: Composition (45410, 616)
+http://hedonometer.org/books/v3/45410/
+4: Hidden Symbolism of Alchemy and the O... (27755, 169)
+http://hedonometer.org/books/v3/27755/
+5: A History of Art for Beginners and St... (24726, 206)
+http://hedonometer.org/books/v3/24726/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+– (SV 5)
+1: The New Freedom: A Call For the Emanci... (14811, 243)
+http://hedonometer.org/books/v3/14811/
+2: The Economic Consequences of the Peace (15776, 655)
+http://hedonometer.org/books/v3/15776/
+3: Astounding Stories of Super-Science J... (29198, 172)
+http://hedonometer.org/books/v3/29198/
+4: Cookery and Dining in Imperial Rome (29728, 664)
+http://hedonometer.org/books/v3/29728/
+5: Tom Brown’s School Days (1480, 246)
+http://hedonometer.org/books/v3/1480/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+SV 6
+1: The Anatomy of Suicide (50907, 372)
+http://hedonometer.org/books/v3/50907/
+2: The Most Extra Ordinary Trial of Will... (51135, 872)
+http://hedonometer.org/books/v3/51135/
+3: Pictorial Composition and the Critica... (26638, 172)
+http://hedonometer.org/books/v3/26638/
+4: Medieval People (13144, 365)
+http://hedonometer.org/books/v3/13144/
+5: Kant’s Critique of Judgement (48433, 154)
+http://hedonometer.org/books/v3/48433/
+Top Stories:
+10
+30
+50
+70
+90
+% of Book
+– (SV 6)
+1: Astounding Stories, July, 1931 (31168, 180)
+http://hedonometer.org/books/v3/31168/
+2: Rainbow Valley (5343, 257)
+http://hedonometer.org/books/v3/5343/
+3: Tarzan the Terrible (2020, 185)
+http://hedonometer.org/books/v3/2020/
+4: A Sportsman’s Sketches: Works of Ivan ... (8597, 152)
+http://hedonometer.org/books/v3/8597/
+5: Hard Times (786, 1830)
+http://hedonometer.org/books/v3/786/
+Top Stories:
+FIG. S2:
+SVD modes 4–6 (and their negation) with closest stories. First 3 SVD modes and their negation with the closest
+stories to each. Again, to show the emotional arcs on the same scale as the modes, we show the modes directly from the rows
+of V T and weight the emotional arcs by the inverse of their coeﬃcient in W for the particular mode. Shown in parenthesis for
+each story is the Project Gutenberg ID and the number of downloads from the Project Gutenberg website, respectively. Links
+below each story point to an interactive visualization on http://hedonometer.org which enables detailed exploration of the
+emotional arc for the story.
+In an eﬀort to develop a better intuition for the results of the principal component analysis by way of SVD, we plot
+Eq. 1 along with representations of the matrices in Fig. S3.
+Further, we considered in Eq. 1 the mode coeﬃcient in the matrix W, and in Fig S4 we plot the second line of the
+equation with W:
+With A written as W · V T , the coeﬃcients for each mode (row of V T ) for a book i are given as the rows of W. To
+reconstruct the emotional arc of book i, using mode j from V T , we simply multiply W[i, j] · V T [j, :]. Shown below in
+Fig. S5, we built the emotional arc for an example story using only the ﬁrst mode through the ﬁrst 12 modes.
+
+
+[PDF page 12]
+
+S4
+FIG. S3:
+Schematic of the Singular Value Decomposition applied to emotional arcs of Project Gutenberg books. Shown in A
+are 10 randomly chosen emotional arcs, in U a “spy” of the matrix, in Σ the decreasing singular values, and in V T sinusoidal
+modes. We emphasize that this representation is purely for intuition, as only U is a image of the actual matrix, and A has only
+10 of the 1,737 books.
+FIG. S4:
+Schematic of the Singular Value Decomposition applied to emotional arcs of Project Gutenberg books, with W = UΣ
+containing the mode coeﬃcients. Again shown in A are 10 randomly chosen emotional arcs, in W a “spy” of the matrix used
+in the analysis, and in V T representative sinusoidal modes.
+
+
+[PDF page 13]
+
+S5
+−0.15
+−0.10
+−0.05
+0.00
+0.05
+0.10
+0.15
+Mode space havg
+A
+1 Mode Approx.
+B
+2 Mode Approx.
+C
+3 Mode Approx.
+−0.15
+−0.10
+−0.05
+0.00
+0.05
+0.10
+0.15
+Mode space havg
+D
+4 Mode Approx.
+E
+5 Mode Approx.
+F
+6 Mode Approx.
+−0.15
+−0.10
+−0.05
+0.00
+0.05
+0.10
+0.15
+Mode space havg
+G
+7 Mode Approx.
+H
+8 Mode Approx.
+I
+9 Mode Approx.
+0
+20
+40
+60
+80
+100
+Percentage of book
+−0.15
+−0.10
+−0.05
+0.00
+0.05
+0.10
+0.15
+Mode space havg
+J
+10 Mode Approx.
+0
+20
+40
+60
+80
+100
+Percentage of book
+K
+11 Mode Approx.
+0
+20
+40
+60
+80
+100
+Percentage of book
+L
+12 Mode Approx.
+FIG. S5:
+Reconstruction of the emotional arc from Alice’s Adventures Under Ground, by Lewis Carroll. The addition of more
+modes from the SVD more closely reconstructs the detailed emotional arc. This book is well represented by the ﬁrst mode
+alone, with only minor corrections from modes 2-11, as we should expect for a book whose emotional arc so closely resembles
+the “Rags to Riches” arc.
+
+
+[PDF page 14]
+
+S6
+Appendix C: Hierarchical Clustering
+We use Ward’s method to generate a hierarchical clustering of stories, which proceeds by minimizing variance
+between clusters of books [37]. We again use the mean-centered books and the distance function given in Eq. A2 to
+generate the distance matrix.
+We show a dendrogram of the 60 clusters with highest linkage cost in Fig. S6. A characteristic book from each
+cluster is shown on the right by sorting the books within each cluster by the total distance to other books in the
+cluster (e.g., considering each intra-cluster collection as a fully connected weighted network, we take the most central
+node), and in parenthesis the number of books in that cluster. In other words, we label each cluster by considering
+the network centrality of the fully connected cluster with edges weighted by the distance between stories. By cutting
+the dendrogram in Fig. S6 at various costs we are able to extract clusters of the desired granularity. For the cuts
+labeled 0, 1, and 2, we show these clusters in Figs. S7, S8, and S9.
+The ﬁnal linkage in the hierarchical clustering combines the two clusters in Fig. S7 of size 1203 (Panel A, Threshold
+8000 Cluster 1) and size 548 (Panel B, Threshold 800 Cluster 2). Cluster 1 is much larger, and the main diﬀerence
+between these clusters appears to be their variance. Nevertheless, we are able to see from the cluster average emotional
+arc (shown in orange) that Cluster 1 most closely follows a “Tragedy with the happy ending” and Cluster 2 follows
+the “Man in a hole” story. The top stories in Cluster 1 are Piper in the Woods and Butterﬂy 9, in the Figure they
+are shown with their ID in the Project Gutenberg database. The most central stories for Cluster 2 are Asmodeus; or,
+The Devil on Two Sticks and Ghost Stories of an Antiquary.
+Going through the linkage procedure in reverse, we see in Fig. S8 that Threshold 8000 Cluster 1 is the linkage of
+Threshold 3850 Cluster 1 and Threshold 3850 Cluster 3. We see that what was a “Tragedy with the happy ending”
+splits into a tragedy in Cluster 1 (with perhaps a small uptick) and a mostly ﬂat Cluster 3. Threshold 8000 Cluster
+2 is the linkage of Threshold 3850 Cluster 2 and Threshold 3850 Cluster 4, Panels B and D in Fig. S8, respectively.
+Cluster 2 here again shows the most variance, with what mostly closely resembles a “Romance” story shape. Cluster
+4, on average, is the “man in the hole” story type.
+Finally, in Fig. S9 we see the 8 most diﬀerent clusters as a collection of a familiar story types. In Panel A, Threshold
+2050 Cluster 1 we have the “Romance” story. In Panel C, we have the “Rags to riches” (Cinderella) story. Panels E,
+F, and G are all “Man in a hole” stories of varying strength. In Panel H we ﬁnd a large number of stories (360) that
+fall squarely into the “Tragedy” story type.
+
+
+[PDF page 15]
+
+S7
+0
+2000
+4000
+6000
+8000
+(1) The Ladies’ Work-Book: Containing Instructions I...
+(1) A Book of Dartmoor: Second Edition
+(6) Divine Comedy, Longfellow’s Translation, Complete
+(6) The Principles of Masonic Law: A Treatise on the...
+(6) Paradise Lost
+(11) Manners, Customs, and Dress During the Middle A...
+(30) The House of the Vampire
+(13) The Writings of Thomas Paine Volume 4 (1794-1...
+(20) Astounding Stories of Super-Science September 1930
+(15) American Notes
+(8) The Satyricon Complete
+(11) Astounding Stories, August, 1931
+(11) The Financier: A Novel
+(13) A Guide to Health
+(7) Brighter Britain! (Volume 2 of 2): or Settler an...
+(13) Frankenstein; Or, The Modern Prometheus
+(7) Gorgias
+(13) Gargantua and Pantagruel, Illustrated, Book 1
+(15) Legends of Lancashire
+(24) The Liberty Minstrel
+(10) Kwaidan: Stories and Studies of Strange Things
+(3) Astounding Stories of Super-Science, March 1930
+(7) Totem and Taboo: Resemblances Between the Psychi...
+(75) Hamlet
+(97) A Primary Reader: Old-time Stories, Fairy Tales...
+(44) A Midsummer Night’s Dream
+(80) Piper in the Woods
+(69) The Communist Manifesto
+(28) Favorite Fairy Tales
+(36) The Divine Comedy by Dante, Illustrated, Purgat...
+(47) The Idle Thoughts of an Idle Fellow
+(59) Right Ho, Jeeves
+(88) The Essence of Buddhism
+(51) Humour, Wit, & Satire of the Seventeenth Century
+(37) The Little White Bird; Or, Adventures in Kensin...
+(36) Confessions of an English Opium-Eater
+(41) The Garden Party, and Other Stories
+(45) Idylls of the King
+(27) Hamlet, Prince of Denmark
+(43) A Christmas Carol in Prose; Being a Ghost Story...
+(38) Ghosts
+(28) The Dor Bible Gallery, Complete : Containing On...
+(56) An Enemy of the People
+(17) Old-Time Stories
+(34) An Essay on Man; Moral Essays and Satires
+(25) The Railway Children
+(32) Section Cutting and Staining : A practical intro...
+(26) The Essays of Arthur Schopenhauer; On Human Nature
+(41) Grimm’s Fairy Stories
+(27) Plays, written by Sir John Vanbrugh, volume the...
+(36) More About the Squirrels
+(30) The Gilded Age: A Tale of Today
+(26) Around the World in Eighty Days
+(9) On the Nature of Things
+(19) A Hero of Our Time
+(14) Beautiful Stories from Shakespeare
+(44) The Enchanted Castle
+(38) The Siege and Conquest of the North Pole
+(16) Tik-Tok of Oz
+(19) The Secret Garden
+Threshold = 8000
+2 Clusters
+Threshold = 3850
+4 Clusters
+Threshold = 2050
+8 Clusters
+FIG. S6:
+Ward clustering.
+
+
+[PDF page 16]
+
+S8
+−0.3
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+0.4
+A
+Threshold 8000 Cluster 1 (251)
+1. The Literary World Seventh Reader (19721)
+2. Astounding Stories of Super-Science September 1930 (29255)
+3. The Works of Edgar Allan Poe Volume 1 (2147)
+4. The Prisoner of Zenda (95)
+5. The Extermination of the American Bison (17748)
+B
+Threshold 8000 Cluster 2 (1478)
+1. Piper in the Woods (32832)
+2. Appointment In Tomorrow (51152)
+3. Star, Bright (50935)
+4. Butterﬂy 9 (51167)
+5. The Sentimentalists (51102)
+FIG. S7:
+Ward cluster number 1, showing the largest 2 clusters.
+
+
+[PDF page 17]
+
+S9
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+A
+Threshold 3850 Cluster 1 (31)
+1. A General Introduction to Psychoanalysis (38219)
+2. Paradise Lost (20)
+3. Second Treatise of Government (7370)
+4. Paradise Lost (26)
+5. The Divine Comedy by Dante, Illustrated (8800)
+B
+Threshold 3850 Cluster 2 (747)
+1. Piper in the Woods (32832)
+2. Butterﬂy 9 (51167)
+3. Appointment In Tomorrow (51152)
+4. Transfer Point (51115)
+5. Euthyphro (1642)
+C
+Threshold 3850 Cluster 3 (220)
+1. The Literary World Seventh Reader (19721)
+2. Astounding Stories of Super-Science September 1930 (29255)
+3. The Extermination of the American Bison (17748)
+4. The Works of Edgar Allan Poe Volume 1 (2147)
+5. The Prisoner of Zenda (95)
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+D
+Threshold 3850 Cluster 4 (731)
+1. An Enemy of the People (2446)
+2. Ghosts (8121)
+3. Othello (2267)
+4. Pierre and Jean (3804)
+5. All Things Considered (11505)
+FIG. S8:
+Ward cluster number 2, showing the 4 largest clusters.
+
+
+[PDF page 18]
+
+S10
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+A
+Threshold 2050 Cluster 1 (130)
+1. Woodcraft and Camping (34607)
+2. The Inspector-General (3735)
+3. The Governess; Or, The Little Female Academy (1905)
+4. The Essays of Arthur Schopenhauer; On Human Nature (10739)
+5. The Lost Princess of Oz (959)
+B
+Threshold 2050 Cluster 2 (216)
+1. The Lifted Veil (2165)
+2. Shakespeare’s Sonnets (1041)
+3. A Primary Reader: Old-time Stories, Fairy Tales... (7841)
+4. The Adventures of Buster Bear (22816)
+5. The Clouds (2562)
+C
+Threshold 2050 Cluster 3 (161)
+1. The House of the Vampire (17144)
+2. Astounding Stories of Super-Science September 1930 (29255)
+3. The Prisoner of Zenda (95)
+4. The Literary World Seventh Reader (19721)
+5. The Works of Edgar Allan Poe Volume 1 (2147)
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+D
+Threshold 2050 Cluster 4 (59)
+1. The Liberty Minstrel (22089)
+2. The Adventures of Pinocchio (500)
+3. Incidents in the Life of a Slave Girl, Written ... (11030)
+4. Dreams (1439)
+5. Legends of Lancashire (51177)
+E
+Threshold 2050 Cluster 5 (531)
+1. The Light Princess (697)
+2. Euthyphro (1642)
+3. Piper in the Woods (32832)
+4. Appointment In Tomorrow (51152)
+5. Star, Bright (50935)
+F
+Threshold 2050 Cluster 6 (215)
+1. Asmodeus; or, The Devil on Two Sticks (51145)
+2. The Enchanted Castle (3536)
+3. Ghost Stories of an Antiquary (8486)
+4. Among the Burmans: A Record of Fifteen Years of ... (51080)
+5. Bushido, the Soul of Japan (12096)
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+G
+Threshold 2050 Cluster 7 (31)
+1. A General Introduction to Psychoanalysis (38219)
+2. Paradise Lost (20)
+3. Second Treatise of Government (7370)
+4. Paradise Lost (26)
+5. The Divine Comedy by Dante, Illustrated (8800)
+H
+Threshold 2050 Cluster 8 (386)
+1. Othello (2267)
+2. Ghosts (8121)
+3. An Enemy of the People (2446)
+4. Pierre and Jean (3804)
+5. Volpone; Or, The Fox (4039)
+FIG. S9:
+Ward cluster number 3, showing the 8 largest clusters.
+
+
+[PDF page 19]
+
+S11
+Appendix D: Unsupervised Machine Learning
+We implement a Self Organized Map (SOM), an unsupervised machine learning method (also referred to as a type
+of neural network), to cluster emotional arcs [38]. The SOM works by ﬁnding the most similar emotional arc in a
+random collection of arcs. We use a 13x13 SOM (for 169 nodes, roughly 10% of the number of books), connected on
+a square grid, training according to the original procedure (with winner take all, and scaling functions across both
+distance and magnitude). We take the neighborhood inﬂuence function at iteration i as
+Nbdk(i) =
+h
+j ∈N | d(k, j) <
+√
+N · (i + 1)αi
+(D1)
+for a node k in the set of nodes N, with distance function d and total number of nodes N. For result shown here we
+take α = −0.15. We implement the learning adaptation function at training iteration i as
+f(i) = (i + 1)β,
+(D2)
+again with β = −0.15
+In Fig. S10 we see both the B-Matrix to demonstrate the strength of spatial clustering and a heat-map showing
+where we ﬁnd the winning nodes. The A–I labels refer to the individual nodes shown in Fig. S11, and we observe
+three spatial groups in the both panels of S10: (1) A, C, and D, (2) G and H, and (3) I and F. These spatial clusters
+reinforce the visible similarity of the winning node arcs. We show the winning node emotional arcs and the arcs of
+books for which they are the winners in Fig. S11. The legend shows the node ID, numbers the cluster by size, and in
+parenthesis indicates the size of the cluster on that individual node. In Panels A, C, and D we see varying strengths
+of the “Rags to Riches” emotional arc. In Panel B, the second largest individual cluster consists of the “Tragedy”
+stories. In Panels F and I we see the “Boy Meets Girl” story type, with a more pronounced positive start and happier
+ending in Panel F. In Panels G and H we again see the “Boy Meets Girl” with more variation and a deeper “Man in
+the Hole” at the end. Each of these top stories are all readily identiﬁable, yet again demonstrating the universality of
+these story types.
+0
+2
+4
+6
+8
+10
+12
+Ni
+0
+2
+4
+6
+8
+10
+12
+Nj
+A
+B
+C
+D
+E
+F
+G
+H
+I
+0.0
+1.5
+3.0
+4.5
+6.0
+7.5
+9.0
+10.5
+12.0
+13.5
+0
+2
+4
+6
+8
+10
+12
+Ni
+0
+2
+4
+6
+8
+10
+12
+Nj
+A
+B
+C
+D
+E
+F
+G
+H
+I
+0
+20
+40
+60
+80
+100
+120
+140
+FIG. S10:
+Left panel: Nodes on the 2D SOM grid are shaded by the number of stories for which they are the winner. Right
+panel: The B-Matrix shows that there are clear clusters of stories in the 2D space imposed by the SOM network.
+The top 9 SOM stories for our set of null emotional arcs are shown in Fig. S18. We observe that, as hypothesized, the
+shuﬄed versions of stories lack coherent structure and are not emotional experiences that we can attach to meaningful
+stories.
+
+
+[PDF page 20]
+
+S12
+−0.3
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+A
+Node 6 Cluster 1 (154)
+1. Fifty Famous Stories Retold (18442)
+2. The Essence of Buddhism (18223)
+3. The Marching Morons (51233)
+4. Poems by Currer, Ellis, and Acton Bell (1019)
+5. The Rubaiyat of Omar Khayyam (246)
+B
+Node 90 Cluster 2 (103)
+1. Tartuffe; Or, The Hypocrite (2027)
+2. Mother Goose’s Nursery Rhymes : A Collection of ... (39784)
+3. The Man Who Would Be King (8147)
+4. She Stoops to Conquer; Or, The Mistakes of a Ni... (383)
+5. The Tragical History of Doctor Faustus : From th... (779)
+C
+Node 5 Cluster 3 (102)
+1. Arms and the Man (3618)
+2. Carmen (2465)
+3. How to Be a Detective (50902)
+4. More About the Squirrels (51031)
+5. Hindu Tales from the Sanskrit (11310)
+−0.3
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+D
+Node 18 Cluster 4 (85)
+1. The Grand Inquisitor (8578)
+2. Parables of the Cross (22189)
+3. Uncle Vanya: Scenes from Country Life in Four Acts (1756)
+4. The Communist Manifesto (61)
+5. Alice in Wonderland : A Dramatization of Lewis C... (35688)
+E
+Node 47 Cluster 5 (81)
+1. The Princess and the Physicist (51126)
+2. Venus is a Man’s World (51150)
+3. The Madman: His Parables and Poems (5616)
+4. Anthem (1250)
+5. The Chapter Ends (41064)
+F
+Node 168 Cluster 6 (68)
+1. Lyrical Ballads, With a Few Other Poems (1798) (9622)
+2. The Time Machine (35)
+3. The Practice and Theory of Bolshevism (17350)
+4. The Princess (791)
+5. The Girl on the Boat (20717)
+−0.3
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+G
+Node 159 Cluster 7 (49)
+1. Hamlet, Prince of Denmark (1524)
+2. The Lady with the Dog and Other Stories (13415)
+3. Hamlet (1787)
+4. The Return of the Native (122)
+5. East of the Sun and West of the Moon: Old Tales... (30973)
+H
+Node 160 Cluster 8 (47)
+1. Hedda Gabler (4093)
+2. The Aspern Papers (211)
+3. Hamlet, Prince of Denmark (27761)
+4. The Railway Children (1874)
+5. The Man with Two Left Feet, and Other Stories (7471)
+I
+Node 167 Cluster 9 (47)
+1. The Lost World (139)
+2. Section Cutting and Staining : A practical intro... (51169)
+3. The Duchess of Malﬁ(2232)
+4. The Rise of Silas Lapham (154)
+5. Mad Barbara (50995)
+FIG. S11:
+The vector for each of the top 9 SOM nodes, accompanied with those sentiment time series which are closest to
+that node. The core stories which we have found with other methods are readily visible.
+
+
+[PDF page 21]
+
+S13
+0
+500
+1000
+1500
+Book ID
+0
+500
+1000
+1500
+0
+500
+1000
+1500
+Book ID
+0
+500
+1000
+1500
+Book ID
+0
+12
+25
+37
+50
+FIG. S12:
+Example result of the ring sort for 1000 iterations using a ﬁnal scaling exponent of -1 for the cost function. Panel A
+shows a random initial sort, panel B shows the sorted result, and panel C shifts this result to put the story with maximum total
+cost in position 0 (here with no change). We minimize using a “simulated annealing” procedure by starting with a lower scaling
+parameter α (e.g., E1), moving the scaling from 0.25 →1 for later iterations, with similar results. Block diagonal structure is
+present, indicating that there are clusters of stories that have similar shapes.
+Appendix E: Ring Sort
+We ﬁrst compute the pairwise distance between each book in our data set using Eq. A2. We then apply a shuﬄing
+algorithm [39] to order books on a discretized ring so that similar books are as close to each other as possible. We
+minimize the cost
+C =
+X
+i
+X
+j
+1
+|i −j|α D(bi∗, bj∗)
+(E1)
+where D(bi∗, bj∗) is the distance between the emotional arcs of books in position i and j on the ring (with i∗and j∗
+their original index), and α sets the scaling of the cost across the ring.
+For each iteration of the optimization procedure, we take the next book from the collection, book i, and consider
+all possible swaps of books i, making the swap that lowers C the most. We start with α = 0.25 and relax to α = 1
+as the optimization proceeds to increase the chances of achieving a global maximum in the cost function (akin to a
+“simulated annealing” procedure). With an initially random shuﬄe of books onto the ring, we run the optimization
+for 100,000 iterations or until there is no better arrangement (such that on average, each book moves ≥50 times).
+In Figs. S12A and S12B we show a randomly shuﬄed ring and the optimized result. The visual presence of multiple
+coherent block diagonal structures indicates that there are distinct clusters of emotional arcs with the Gutenberg
+Corpus. For lack of a straightforward, analytical determination of the clusters after this optimization, the result we
+present in Fig. S12 is qualitative.
+
+
+[PDF page 22]
+
+S14
+Appendix F: Word salads
+Figs. S13, S14, S15, S16, S17, and S18 showcase the emotional arc analysis applied to word salad books.
+0
+50
+100
+150
+200
+Story time
+5.74
+5.76
+5.78
+5.80
+5.82
+5.84
+5.86
+5.88
+5.90
+5.92
+Happs
+Gutenberg #1
+Shuffled
+FIG. S13: The ﬁrst book in Project Gutenberg, The Declaration of Independence of the United States of America by Thomas
+Jeﬀerson, along with word salad versions.
+
+
+[PDF page 23]
+
+S15
+−0.1
+0.0
+0.1
+Mode 1
+Mode 2
+Mode 3
+-0.5
+0
+0.5
+−0.1
+0.0
+0.1
+Mode 4
+Mode 5
+Mode 6
+-0.5
+0
+0.5
+−0.1
+0.0
+0.1
+Mode 7
+Mode 8
+Mode 9
+-0.5
+0
+0.5
+0
+20
+40
+60
+80
+100
+−0.1
+0.0
+0.1
+Mode 10
+0
+20
+40
+60
+80
+100
+Mode 11
+0
+20
+40
+60
+80
+100
+Mode 12
+-0.5
+0
+0.5
+Percentage of book
+Right
+singular
+vectors
+(modes)
+Mode
+coeﬃcients
+from W
+FIG. S14:
+SVD modes from the emotional arcs of word salad books. We observe higher frequency modes appearing more
+quickly, and a more even spread of mode coeﬃcients.
+
+
+[PDF page 24]
+
+S16
+0
+10
+20
+30
+40
+50
+Mode
+0
+5
+10
+15
+20
+25
+30
+Singular Value
+S
+Control
+FIG. S15:
+Comparison of the singular value spectra from the word salad emotional arcs and the emotional arcs of individual
+Project Gutenberg books. The spectra from the word salad books is muted, indicating both lower total variance explained and
+less important ordering of the singular vectors.
+
+
+[PDF page 25]
+
+S17
+0
+500
+1000
+1500
+(12) Trent’s Last Case
+(16) The Monk: A Romance
+(20) Mr. Standfast
+(23) Proposed Roads to Freedom
+(18) The Enormous Room
+(29) Far from the Madding Crowd
+(24) The Scarlet Letter
+(27) Orthodoxy
+(14) Legends of Lancashire
+(17) A Room with a View
+(19) The Works of Edgar Allan Poe Volume 1
+(40) The First Book of Adam and Eve
+(38) The House of Souls
+(22) Paradise Lost
+(8) The Son of Tarzan
+(9) Anarchism and Other Essays
+(14) A Wodehouse Miscellany: Articles & Stories
+(15) The Book of the Damned
+(8) The Nigger Of The ”Narcissus”: A Tale Of The Fo...
+(11) Deuterocanonical Books of the Bible : Apocrypha
+(4) The Old Man in the Corner
+(4) The Reformation and the Renaissance (1485-1547)...
+(10) Common Sense
+(8) Beowulf : An Anglo-Saxon Epic Poem
+(10) The Waterloo Roll Call: With Biographical Notes ...
+(12) The Duel and Other Stories
+(52) Moral Poison in Modern Fiction
+(28) Alice’s Adventures in Wonderland
+(46) The Communist Manifesto
+(46) Alice’s Adventures Under Ground : Being a facsim...
+(95) Venus is a Man’s World
+(35) The Golden Road
+(31) The Awakening, and Selected Short Stories
+(51) Mother Goose’s Nursery Rhymes : A Collection of ...
+(33) Frankenstein; Or, The Modern Prometheus
+(39) The Princess and the Goblin
+(33) The World Set Free
+(15) Uneasy Money
+(32) The Chimes : A Goblin Story of Some Bells That R...
+(43) American Fairy Tales
+(26) The Tragical History of Doctor Faustus : From th...
+(34) The Scarecrow of Oz
+(43) Nonsense Books
+(21) Alcibiades I
+(20) The Blue Fairy Book
+(41) The Declaration of Independence of the United S...
+(20) The Game of Logic
+(29) Plunkitt of Tammany Hall: a series of very plai...
+(35) A Journey to the Centre of the Earth
+(22) Mysticism and Logic and Other Essays
+(54) My Man Jeeves
+(38) The Jewel of Seven Stars
+(50) Cyrano de Bergerac
+(27) The Works of Edgar Allan Poe Volume 5
+(59) Poems, Volume 2 (of 3)
+(20) The History of Caliph Vathek
+(41) A Sentimental Journey Through France and Italy
+(48) Poems by Currer, Ellis, and Acton Bell
+(39) Dorothy and the Wizard in Oz
+(51) Tremendous Triﬂes
+Threshold = 1500
+2 Clusters
+Threshold = 850
+4 Clusters
+Threshold = 490
+8 Clusters
+FIG. S16:
+Dendrogram of clustering using Ward’s method on the emotional arcs of word salad books. We observe comparatively
+low linkage cost for these emotional arcs, indicating the absence of distinct clusters.
+
+
+[PDF page 26]
+
+S18
+−0.05
+0.00
+0.05
+A
+Threshold 850 Cluster 1 (384)
+1. Piper in the Woods (32832)
+2. Butterﬂy 9 (51167)
+3. The Nakimu Caves: Glacier Dominion Park, B. C. (51042)
+4. The Princess (791)
+5. Mother Goose’s Nursery Rhymes : A Collection of ... (39784)
+B
+Threshold 850 Cluster 2 (339)
+1. Mission Furniture: How to Make It, Part 3 (23666)
+2. Nathan the Wise; a dramatic poem in ﬁve acts (3820)
+3. The Politeness of Princes, and Other School Sto... (8178)
+4. Ozma of Oz (486)
+5. Plays: the Father; Countess Julie; the Outlaw; ... (8499)
+C
+Threshold 850 Cluster 3 (574)
+1. Tremendous Triﬂes (8092)
+2. The Essays of Arthur Schopenhauer; On Human Nature (10739)
+3. Plays by Anton Chekhov, Second Series (7986)
+4. Five Children and It (17314)
+5. The Princess of Cleves (467)
+−0.05
+0.00
+0.05
+D
+Threshold 850 Cluster 4 (432)
+1. Woodwork Joints: How they are Set Out, How Made... (21531)
+2. Idylls of the King (610)
+3. A Rebel’s Recollections (51211)
+4. Further Chronicles of Avonlea (5340)
+5. The White Company (903)
+FIG. S17:
+Four clusters (linkage threshold 850) from the hierarchical clustering of word salad books. We observe that the
+cluster mean emotional arc and the most central emotional arcs have high variance, without a visible signal.
+
+
+[PDF page 27]
+
+S19
+0.3
+0.2
+0.1
+0.0
+0.1
+0.2
+0.3
+A
+Node 107 Cluster 1 (199)
+1. Piper in the Woods (32832)
+2. Butterfly 9 (51167)
+3. Appointment In Tomorrow (51152)
+4. Transfer Point (51115)
+5. How to Live on 24 Hours a Day (2274)
+B
+Node 25 Cluster 2 (97)
+1. Spoon River Anthology (1280)
+2. A Doll’s House (15492)
+3. Mother Goose’s Nursery Rhymes
+: A Collection of ... (39784)
+4. Spirits in Bondage: A Cycle of Lyrics (2003)
+5. The Man Upstairs and Other Stories (6768)
+C
+Node 35 Cluster 3 (71)
+1. A Pair of Blue Eyes (224)
+2. Arms and the Man (3618)
+3. Pierre and Jean (3804)
+4. Reflections; or Sentences and Moral Maxims (9105)
+5. Considerations on Representative Government (5669)
+0.3
+0.2
+0.1
+0.0
+0.1
+0.2
+0.3
+D
+Node 64 Cluster 4 (70)
+1. The Go-Getter: A Story That Tells You How to be... (12257)
+2. Salomé: A Tragedy in One Act (42704)
+3. The Nakimu Caves: Glacier Dominion Park, B. C. (51042)
+4. A Strange Disappearance (1167)
+5. The Riddle of the Sands (2360)
+E
+Node 63 Cluster 5 (69)
+1. Venus is a Man’s World (51150)
+2. A Primary Reader: Old-time Stories, Fairy Tales... (7841)
+3. Euthyphro (1642)
+4. Carmilla (10007)
+5. Henry V (2253)
+F
+Node 2 Cluster 6 (59)
+1. The Awakening of Spring: A Tragedy of Childhood (35242)
+2. Love Among the Chickens (3829)
+3. Carmen (2465)
+4. Poor Folk (2302)
+5. The Rivals: A Comedy (24761)
+0.3
+0.2
+0.1
+0.0
+0.1
+0.2
+0.3
+G
+Node 38 Cluster 7 (50)
+1. She Stoops to Conquer; Or, The Mistakes of a Ni... (383)
+2. The Light Princess (697)
+3. The Problem Makers (50971)
+4. Pygmalion (3825)
+5. Three Dialogues Between Hylas and Philonous in ... (4724)
+H
+Node 30 Cluster 8 (45)
+1. The Sentimentalists (51102)
+2. 1601: Conversation as it was by the Social Fire... (3190)
+3. Emma (158)
+4. De Profundis (921)
+5. Winesburg, Ohio: A Group of Tales of Ohio Small... (416)
+I
+Node 161 Cluster 9 (41)
+1. The Turn of the Screw (209)
+2. The Adventures of Sally (7464)
+3. Main-Travelled Roads (2809)
+4. Indiscretions of Archie (3756)
+5. The Private Memoirs and Confessions of a Justif... (2276)
+FIG. S18:
+The vector for each of the top 9 SOM nodes for null emotional arcs, accompanied with those sentiment time series
+which are closest to that node. We see that the emotional arcs from null arcs show little coherent structure, collapsing heavily
+onto a single node with muted variance.
+
+
+[PDF page 28]
+
+S20
+Appendix G: Extras
+FIG. S19: Kurt Vonnegut writes in his autobiography Palm Sunday on the similarity of certain story shapes [22]. The exposition
+of this particular similarity would place both of these stories in our grouping of “Rags to Riches” emotional arcs.
+Mode
+Mode Arc
+Nm
+Nm/N
+DL Median ▼
+DL Mean ▽
+DL Variance
+% > Average
+Download Distribution
+SV 1
+267
+15.4%
+289.0
+638.0
+2176764
+20.6%
+-SV 1
+440
+25.4%
+337.5
+633.6
+907943
+25.0%
+SV 2
+219
+12.7%
+327.0
+652.3
+1122421
+21.9%
+-SV 2
+167
+9.7%
+297.0
+540.2
+554142
+16.8%
+SV 3
+104
+6.0%
+298.0
+896.3
+7829052
+22.1%
+-SV 3
+109
+6.3%
+303.0
+803.9
+2839614
+26.6%
+SV 4
+108
+6.2%
+311.5
+823.5
+2728083
+26.9%
+-SV 4
+47
+2.7%
+286.0
+790.6
+1637200
+19.1%
+SV 5
+48
+2.8%
+280.0
+397.1
+146597
+8.3%
+-SV 5
+44
+2.5%
+280.5
+452.0
+188580
+13.6%
+SV 6
+15
+0.9%
+336.0
+500.8
+337828
+13.3%
+-SV 6
+43
+2.5%
+267.0
+689.5
+929111
+25.6%
+SV 7
+19
+1.1%
+336.0
+678.7
+643264
+21.1%
+-SV 7
+24
+1.4%
+286.5
+786.5
+1597462
+25.0%
+SV 8
+12
+0.7%
+279.5
+509.0
+479830
+8.3%
+-SV 8
+14
+0.8%
+275.0
+764.9
+1067329
+28.6%
+-SV 9
+10
+0.6%
+215.0
+275.2
+13927
+0.0%
+SV 10
+10
+0.6%
+410.0
+756.4
+666121
+20.0%
+FIG. S20:
+Download statistics for SVD Modes with more than 0.5% of books.

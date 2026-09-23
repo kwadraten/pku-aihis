@@ -19,4 +19,6 @@ jobs:
       - run: pnpm test && pnpm run check && pnpm build
         working-directory: apps/week03
       - run: python3 -m unittest discover -s local/tests
+      - run: python3 scripts/test-forum-content-review.py
+      - run: python3 scripts/package-week03-corpus.py && node scripts/check-week03-corpus.mjs
       - run: node scripts/build-site.mjs && node scripts/check-public.mjs

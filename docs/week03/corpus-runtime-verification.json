@@ -1,0 +1,397 @@
+{
+  "checked_at": "2026-09-23T15:06:01.045Z",
+  "url": "http://127.0.0.1:8767/week03/",
+  "browser": "153.0.8010.53",
+  "checks": [
+    {
+      "name": "33 pages and cross-origin isolation"
+    },
+    {
+      "name": "1606.07772v1.jsonl D07",
+      "query": "emotional",
+      "top_id": "1606.07772v1-p005-02768",
+      "shown": 12,
+      "elapsed_ms": 85
+    },
+    {
+      "name": "1606.07772v1.jsonl D11",
+      "query": "emotional",
+      "top_id": "1606.07772v1-p005-02768",
+      "shown": 12,
+      "elapsed_ms": 357
+    },
+    {
+      "name": "1710.05832v1.jsonl D07",
+      "query": "neutron",
+      "top_id": "1710.05832v1-p001-00000",
+      "shown": 12,
+      "elapsed_ms": 80
+    },
+    {
+      "name": "1710.05832v1.jsonl D11",
+      "query": "neutron",
+      "top_id": "1710.05832v1-p001-00000",
+      "shown": 12,
+      "elapsed_ms": 559
+    },
+    {
+      "name": "1906.11238v1.jsonl D07",
+      "query": "M87",
+      "top_id": "1906.11238v1-p003-02742",
+      "shown": 12,
+      "elapsed_ms": 83
+    },
+    {
+      "name": "1906.11238v1.jsonl D11",
+      "query": "M87",
+      "top_id": "1906.11238v1-p003-02742",
+      "shown": 12,
+      "elapsed_ms": 558
+    },
+    {
+      "name": "B01-INTRO.jsonl D07",
+      "query": "Socrates",
+      "top_id": "B01-INTRO-00242",
+      "shown": 12,
+      "elapsed_ms": 244
+    },
+    {
+      "name": "B01-INTRO.jsonl D11",
+      "query": "Socrates",
+      "top_id": "B01-INTRO-00184",
+      "shown": 12,
+      "elapsed_ms": 742
+    },
+    {
+      "name": "B01.jsonl D07",
+      "query": "justice",
+      "top_id": "B01-00212",
+      "shown": 12,
+      "elapsed_ms": 116
+    },
+    {
+      "name": "B01.jsonl D11",
+      "query": "justice",
+      "top_id": "B01-00046",
+      "shown": 12,
+      "elapsed_ms": 875
+    },
+    {
+      "name": "B02.jsonl D07",
+      "query": "selection",
+      "top_id": "B02-00004",
+      "shown": 12,
+      "elapsed_ms": 188
+    },
+    {
+      "name": "B02.jsonl D11",
+      "query": "selection",
+      "top_id": "B02-00125",
+      "shown": 12,
+      "elapsed_ms": 953
+    },
+    {
+      "name": "B03.jsonl D07",
+      "query": "Rabbit",
+      "top_id": "B03-00002",
+      "shown": 12,
+      "elapsed_ms": 77
+    },
+    {
+      "name": "B03.jsonl D11",
+      "query": "Rabbit",
+      "top_id": "B03-00002",
+      "shown": 12,
+      "elapsed_ms": 559
+    },
+    {
+      "name": "B04.jsonl D07",
+      "query": "Sherlock",
+      "top_id": "B04-00265",
+      "shown": 12,
+      "elapsed_ms": 116
+    },
+    {
+      "name": "B04.jsonl D11",
+      "query": "Sherlock",
+      "top_id": "B04-00212",
+      "shown": 12,
+      "elapsed_ms": 726
+    },
+    {
+      "name": "P01.jsonl D07",
+      "query": "black hole",
+      "top_id": "P01-p008-01398",
+      "shown": 12,
+      "elapsed_ms": 80
+    },
+    {
+      "name": "P01.jsonl D11",
+      "query": "black hole",
+      "top_id": "P01-p008-01398",
+      "shown": 12,
+      "elapsed_ms": 542
+    },
+    {
+      "name": "acm_3497842.jsonl D07",
+      "query": "archaeology",
+      "top_id": "acm_3497842-p004-02743",
+      "shown": 12,
+      "elapsed_ms": 85
+    },
+    {
+      "name": "acm_3497842.jsonl D11",
+      "query": "archaeology",
+      "top_id": "acm_3497842-p005-00000",
+      "shown": 12,
+      "elapsed_ms": 509
+    },
+    {
+      "name": "plos_0323185.jsonl D07",
+      "query": "radiocarbon",
+      "top_id": "plos_0323185-p013-00000",
+      "shown": 12,
+      "elapsed_ms": 85
+    },
+    {
+      "name": "plos_0323185.jsonl D11",
+      "query": "radiocarbon",
+      "top_id": "plos_0323185-p011-00000",
+      "shown": 12,
+      "elapsed_ms": 510
+    },
+    {
+      "name": "11 text imports: original bytes, character offsets, page/chapter locators and result identities"
+    },
+    {
+      "name": "Text-only import explains missing vectors instead of claiming semantic retrieval"
+    },
+    {
+      "name": "1606.07772v1.vectors.json D08",
+      "query": "emotional",
+      "top_id": "1606.07772v1-p006-04061",
+      "shown": 12,
+      "elapsed_ms": 752
+    },
+    {
+      "name": "1710.05832v1.vectors.json D08",
+      "query": "neutron",
+      "top_id": "1710.05832v1-p001-00000",
+      "shown": 12,
+      "elapsed_ms": 83
+    },
+    {
+      "name": "1906.11238v1.vectors.json D08",
+      "query": "M87",
+      "top_id": "1906.11238v1-p014-06830",
+      "shown": 12,
+      "elapsed_ms": 82
+    },
+    {
+      "name": "B01-INTRO.vectors.json D08",
+      "query": "Socrates",
+      "top_id": "B01-INTRO-00397",
+      "shown": 12,
+      "elapsed_ms": 85
+    },
+    {
+      "name": "B01.vectors.json D08",
+      "query": "justice",
+      "top_id": "B01-00054",
+      "shown": 12,
+      "elapsed_ms": 92
+    },
+    {
+      "name": "B02.vectors.json D08",
+      "query": "selection",
+      "top_id": "B02-00297",
+      "shown": 12,
+      "elapsed_ms": 86
+    },
+    {
+      "name": "B03.vectors.json D08",
+      "query": "Rabbit",
+      "top_id": "B03-00020",
+      "shown": 12,
+      "elapsed_ms": 76
+    },
+    {
+      "name": "B04.vectors.json D08",
+      "query": "Sherlock",
+      "top_id": "B04-00239",
+      "shown": 12,
+      "elapsed_ms": 86
+    },
+    {
+      "name": "P01.vectors.json D08",
+      "query": "black hole",
+      "top_id": "P01-p003-04098",
+      "shown": 12,
+      "elapsed_ms": 82
+    },
+    {
+      "name": "acm_3497842.vectors.json D08",
+      "query": "archaeology",
+      "top_id": "acm_3497842-p014-04051",
+      "shown": 12,
+      "elapsed_ms": 78
+    },
+    {
+      "name": "plos_0323185.vectors.json D08",
+      "query": "radiocarbon",
+      "top_id": "plos_0323185-p005-04165",
+      "shown": 12,
+      "elapsed_ms": 86
+    },
+    {
+      "name": "全部公开语料.vectors.json D07",
+      "query": "Rabbit",
+      "top_id": "B03-00002",
+      "shown": 12,
+      "elapsed_ms": 802
+    },
+    {
+      "name": "全部公开语料.vectors.json D11",
+      "query": "Rabbit",
+      "top_id": "B03-00074",
+      "shown": 12,
+      "elapsed_ms": 2637
+    },
+    {
+      "name": "全部公开语料.vectors.json D08",
+      "query": "a rabbit carrying a watch",
+      "top_id": "B04-00306",
+      "shown": 12,
+      "elapsed_ms": 159
+    },
+    {
+      "name": "全部公开语料.vectors.json D09",
+      "query": "Rabbit watch",
+      "top_id": "B03-00002",
+      "shown": 12,
+      "elapsed_ms": 902
+    },
+    {
+      "name": "全部公开语料.vectors.json D12",
+      "query": "a rabbit carrying a watch",
+      "top_id": "B04-00306",
+      "shown": 12,
+      "elapsed_ms": 725
+    },
+    {
+      "name": "External application corpus scope is explicit"
+    },
+    {
+      "name": "推荐帖.jsonl D07",
+      "query": "刘翔",
+      "top_id": "LEY-GOOD-01181",
+      "shown": 1,
+      "elapsed_ms": 79
+    },
+    {
+      "name": "推荐帖.jsonl D11",
+      "query": "刘翔",
+      "top_id": "LEY-GOOD-01181",
+      "shown": 1,
+      "elapsed_ms": 542
+    },
+    {
+      "name": "推荐帖.vectors.json D08",
+      "query": "刘翔",
+      "top_id": "LEY-GOOD-00609",
+      "shown": 12,
+      "elapsed_ms": 92
+    },
+    {
+      "name": "推荐帖.vectors.json D09",
+      "query": "刘翔",
+      "top_id": "LEY-GOOD-01181",
+      "shown": 12,
+      "elapsed_ms": 76
+    },
+    {
+      "name": "推荐帖.vectors.json D12",
+      "query": "刘翔",
+      "top_id": "LEY-GOOD-00609",
+      "shown": 12,
+      "elapsed_ms": 124
+    },
+    {
+      "name": "已筛选回复.jsonl D07",
+      "query": "助跑",
+      "top_id": "LEY-REPLY-95963717564",
+      "shown": 1,
+      "elapsed_ms": 85
+    },
+    {
+      "name": "已筛选回复.jsonl D11",
+      "query": "助跑",
+      "top_id": "LEY-REPLY-95963717564",
+      "shown": 1,
+      "elapsed_ms": 461
+    },
+    {
+      "name": "已筛选回复.vectors.json D08",
+      "query": "助跑",
+      "top_id": "LEY-REPLY-95970964852",
+      "shown": 3,
+      "elapsed_ms": 79
+    },
+    {
+      "name": "已筛选回复.vectors.json D09",
+      "query": "助跑",
+      "top_id": "LEY-REPLY-95963717564",
+      "shown": 3,
+      "elapsed_ms": 77
+    },
+    {
+      "name": "已筛选回复.vectors.json D12",
+      "query": "助跑",
+      "top_id": "LEY-REPLY-95970964852",
+      "shown": 3,
+      "elapsed_ms": 113
+    },
+    {
+      "name": "242 local forum records: new corpus replaces old indexes, anonymous display, excluded ID absent"
+    },
+    {
+      "name": "RAG context assembly and clickable source review",
+      "context_ids": [
+        "核对 B03-00002",
+        "核对 B03-00074",
+        "核对 B03-00035"
+      ]
+    },
+    {
+      "name": "Actual local model generated answer with valid new-corpus IDs",
+      "model": "qwen3:4b-instruct-2507-q4_K_M",
+      "citation_check": {
+        "cited_ids": [
+          "B03-00002"
+        ],
+        "unknown_ids": [],
+        "missing_ids": false,
+        "scope": "仅检查ID格式与输入匹配，不判定引文是否支持论断"
+      },
+      "answer": "[B03-00002] 中提到“the Rabbit actually _took a watch out of its waistcoat-pocket_”，明确指出兔子从腰coat口袋中取出表。该片段描述了兔子的动作，直接回答了“兔子从哪里取出表”的问题。\n\n其余片段未涉及取表行为或相关细节。  \n缺口：无其他片段提及兔子取表的具体位置或方式。  \n\n答案：兔子从其腰coat口袋中取出表。[B03-00002]"
+    },
+    {
+      "name": "Controlled invalid-citation response is visibly rejected (not a model success)"
+    }
+  ],
+  "errors": [],
+  "failed": [],
+  "generation": {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "citation_check": {
+      "cited_ids": [
+        "B03-00002"
+      ],
+      "unknown_ids": [],
+      "missing_ids": false,
+      "scope": "仅检查ID格式与输入匹配，不判定引文是否支持论断"
+    },
+    "answer": "[B03-00002] 中提到“the Rabbit actually _took a watch out of its waistcoat-pocket_”，明确指出兔子从腰coat口袋中取出表。该片段描述了兔子的动作，直接回答了“兔子从哪里取出表”的问题。\n\n其余片段未涉及取表行为或相关细节。  \n缺口：无其他片段提及兔子取表的具体位置或方式。  \n\n答案：兔子从其腰coat口袋中取出表。[B03-00002]"
+  },
+  "result": "passed"
+}
