@@ -32,7 +32,7 @@ export class ProcessExplainer {
    <circle cx={x} cy={y} r="5" fill="#b05618"/><text x={x+6} y={Math.max(14,y-6)}>文档 d</text>
    <line x1={x} y1={y} x2={ox+a*scale} y2={oy} stroke="#647269" stroke-width="2" stroke-dasharray="5 4"/>
    <text x="12" y="22">夹角 {n(Math.acos(cos)*180/Math.PI,1)}°</text><text x="12" y="44">虚线 = 两端距离</text>
-  </svg><div><div class="ex-formula">点积 q·d = |q| × |d| × cosθ = {n(dot)}</div><div class="ex-formula">余弦 = (q·d) / (|q| |d|) = {n(cos)}</div><div class="ex-formula">L2 = √(|q|² + |d|² − 2q·d) = {n(Math.sqrt(Math.max(0,dist2)))}</div><p>L2² = {n(dist2)}；|q| = {n(a)}，|d| = {n(b)}。{this.sandbox?'只拉长d时，余弦不变，点积和距离都会变。':'本库向量已归一化；cos越大与L2²越小给出同一排序。'}</p><small>{this.sandbox?'可调几何构造：用于分离夹角和长度的影响，不是史料模型的新输出。':`当前${q.length}维向量的长度与夹角构成此平面，未用前两维冒充整体，也不是全库降维图。`}</small></div></div>;
+  </svg><div><div class="ex-formula">点积 q·d = |q| × |d| × cosθ = {n(dot)}</div><div class="ex-formula">余弦 = (q·d) / (|q| |d|) = {n(cos)}</div><div class="ex-formula">L2 = √(|q|² + |d|² − 2q·d) = {n(Math.sqrt(Math.max(0,dist2)))}</div><p>L2² = {n(dist2)}；|q| = {n(a)}，|d| = {n(b)}。{this.sandbox?'只拉长d时，余弦不变；点积还取决于长度（垂直时始终为0），L2看两端相距多远。':'本库向量已归一化；cos越大与L2²越小给出同一排序。'}</p><small>{this.sandbox?'可调几何构造：用于分离夹角和长度的影响，不是史料模型的新输出。':`当前${q.length}维向量的长度与夹角构成此平面，未用前两维冒充整体，也不是全库降维图。`}</small></div></div>;
  }
  private bm25(){
   const s=this.snapshot,r=s.results?.find(x=>x.id===s.doc?.id),p=r?.parts?.find(x=>x.tf>0);
@@ -49,7 +49,7 @@ export class ProcessExplainer {
  }
  private detail(){
   const s=this.snapshot,id=this.demoId;
-  if(['D08','D12'].includes(id))return <div><div class="lab-toolbar"><button class={!this.sandbox?'selected':''} onClick={()=>this.sandbox=false}>当前查询与所选片段</button><button class={this.sandbox?'selected':''} onClick={()=>this.sandbox=true}>可调几何沙盘</button>{this.sandbox&&<><label>夹角 {this.angle}° <input aria-label="几何夹角" type="range" min="0" max="180" value={this.angle} onInput={(e:any)=>this.angle=+e.target.value}/></label><label>文档长度 {this.magnitude}<input aria-label="几何长度" type="range" min="0.2" max="2" step="0.1" value={this.magnitude} onInput={(e:any)=>this.magnitude=+e.target.value}/></label></>}</div>{this.geometry()}{s.output?.exact&&<p class="ex-callout">EdgeVec前5项与精确前5项重合 {s.output.overlap}/5。精确排序为 {s.output.exact.slice(0,5).map(x=>x.id).join(' → ')}。这是本次结果比较，不是内部访问轨迹。</p>}</div>;
+  if(['D08','D12'].includes(id))return <div><div class="lab-toolbar"><button class={!this.sandbox?'selected':''} onClick={()=>this.sandbox=false}>当前查询与所选片段</button><button class={this.sandbox?'selected':''} onClick={()=>this.sandbox=true}>可调几何沙盘</button>{this.sandbox&&<><label>夹角 {this.angle}° <input aria-label="几何夹角" type="range" min="0" max="180" value={this.angle} onInput={(e:any)=>this.angle=+e.target.value}/></label><label>文档向量长度 {this.magnitude}<input aria-label="几何长度" type="range" min="0.2" max="2" step="0.1" value={this.magnitude} onInput={(e:any)=>this.magnitude=+e.target.value}/></label></>}</div>{this.geometry()}{s.output?.exact&&<p class="ex-callout">EdgeVec前5项与精确前5项重合 {s.output.overlap}/5。精确排序为 {s.output.exact.slice(0,5).map(x=>x.id).join(' → ')}。这是本次结果比较，不是内部访问轨迹。</p>}</div>;
   if(id==='D07')return this.bm25();
   if(id==='D03'){
    const len=[...(s.text||'')].length,parts=chunks(s.text||'',s.size,s.overlap);
