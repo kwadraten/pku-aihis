@@ -10,8 +10,8 @@ export type ModelConfig = {
 // Deliberately memory-only: neither browser storage, exports nor URL receives keys.
 let config: ModelConfig = {
   mode: "local",
-  localModel: "qwen3:4b",
-  bridge: "http://127.0.0.1:8767",
+  localModel: "qwen3:4b-instruct-2507-q4_K_M",
+  bridge: typeof location !== "undefined" && ["localhost", "127.0.0.1"].includes(location.hostname) ? location.origin : "http://127.0.0.1:8767",
   baseUrl: "https://api.deepseek.com",
   apiModel: "deepseek-flash",
   apiKey: "",

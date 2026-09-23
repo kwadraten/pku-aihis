@@ -96,7 +96,7 @@ export class ModelConnection {
                     }
                   >
                     {[
-                      "qwen3:4b",
+                      "qwen3:4b-instruct-2507-q4_K_M",
                       "deepseek-r1:8b-0528-qwen3-q4_K_M",
                       "gemma3:4b",
                       "qwen3-vl:4b-instruct-q4_K_M",

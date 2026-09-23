@@ -1,17 +1,26 @@
-# Elasticsearch 本地实践
+# Elasticsearch｜D15
 
-来源：https://github.com/elastic/elasticsearch
+本说明对应 2026-09-23 的实际安装与运行。教师本机的应用数据、源代码、模型与日志位于“第三周（9月24日）/本地应用与服务”及本周既有本地模型目录。点击“启动完整课堂.command”，保持窗口开启；进入 http://127.0.0.1:8767/week03/ 。公开网页只发布课堂片段、脱敏运行结果和截图，不包含密钥、模型权重或完整史料。
+
+“本地重跑”调用真实服务，失败时保留错误；不会用保存结果冒充本轮响应。页面的步骤按钮只切换解释。外部API接入在“模型接入”面板中设置，适用于独立模型实验；各应用使用其自身配置的本地模型。
+
+## 当前部署
 
 常驻服务负责字段分析、倒排索引和查询；网页可以查看请求与结果。
 
-适用范围：需Docker或官方服务安装；两个产品配置分别核验。本次不把请求示例当已运行响应。
+实际运行 Elasticsearch 8.18.0；CJK分析器与D07的教学分词器不同，分数不应逐项强行相等。
+
+实际运行时间：2026-09-23T11:14:18+0800。版本：8.18.0。查询：宗教。
 
 ## 本机服务
 
-使用仅绑定回环地址的教学单节点；生产部署另行配置认证和资源。
+教学单节点已经部署，27条课堂材料已实际写入独立索引。
 
 ```text
-docker run --rm -p 127.0.0.1:9200:9200 -e discovery.type=single-node -e xpack.security.enabled=false -e "ES_JAVA_OPTS=-Xms1g -Xmx1g" docker.elastic.co/elasticsearch/elasticsearch:8.19.0
+版本：8.18.0
+地址：http://127.0.0.1:19200
+索引：pku-week03-classroom
+状态：实际写入与查询已验证
 ```
 
 观察：容器版本与端口；服务未启动时不显示成功。
@@ -29,19 +38,26 @@ POST /_analyze
 
 ## 写入与查询
 
-创建字段模式、写入带页码文档，再刷新可见索引。
+查看实际发送到服务的请求，再比较返回的候选片段。
 
 ```text
-PUT /week03
-{"mappings":{"properties":{"body":{"type":"text"},"source_id":{"type":"keyword"},"pdf_page":{"type":"integer"}}}}
-PUT /week03/_doc/1?refresh=true
-{"body":"此处写入已核对片段","source_id":"JP16","pdf_page":12}
-GET /week03/_search
-{"query":{"match":{"body":"宗教"}},"explain":true}
+{
+  "size": 5,
+  "query": {
+    "match": {
+      "text": "宗教"
+    }
+  },
+  "highlight": {
+    "fields": {
+      "text": {}
+    }
+  }
+}
 ```
 
-观察：占位请求需由实际片段替换。explain解释计分，不证明史料可信。
+观察：返回排名与出处都来自此次服务查询；分数不是史实正确概率。
 
-## 运行与验证口径
+## 原项目
 
-网页步骤展示不是执行日志。仅在页面明确出现带版本和时间的运行结果时记为实跑。服务型工具在本地启动，GitHub Pages只提供前端。真实语料使用同一份带页码记录的JSON；模型及向量配置须兼容。完整OCR保留本机。
+[Elasticsearch 原代码库](https://github.com/elastic/elasticsearch)

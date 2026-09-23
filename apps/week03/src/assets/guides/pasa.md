@@ -1,19 +1,24 @@
-# PaSa 本地实践
+# PaSa｜D25
 
-来源：https://github.com/bytedance/pasa
+本说明对应 2026-09-23 的实际安装与运行。教师本机的应用数据、源代码、模型与日志位于“第三周（9月24日）/本地应用与服务”及本周既有本地模型目录。点击“启动完整课堂.command”，保持窗口开启；进入 http://127.0.0.1:8767/week03/ 。公开网页只发布课堂片段、脱敏运行结果和截图，不包含密钥、模型权重或完整史料。
+
+“本地重跑”调用真实服务，失败时保留错误；不会用保存结果冒充本轮响应。页面的步骤按钮只切换解释。外部API接入在“模型接入”面板中设置，适用于独立模型实验；各应用使用其自身配置的本地模型。
+
+## 当前部署
 
 论文研究工具链。先核对材料可访问性，再观察检索、选择和证据问答。
 
-适用范围：本地代码库运行方案；网页不提供伪造的论文发现或预设智能体成果。
+运行原 PaperAgent 调度代码；两套原版7B专用模型和Serper/arXiv接口未部署。课堂适配用4B模型和史料库；True/False不是原选择器训练得到的概率。无核实的引文边时不伪造扩展。
+
+实际运行时间：2026-09-23T11:22:27+0800。版本：2aaa6a9b1e48d24a2b7e21e8551f863dad9eeb84。查询：井上哲次郎怎样区分宗教、神道和国民道德？。
 
 ## 安装与配置
 
-在独立环境中按原仓库说明固定commit与依赖；配置本机模型及搜索权限。
+运行原 PaperAgent 调度代码；两套原版7B专用模型和Serper/arXiv接口未部署。课堂适配用4B模型和史料库；True/False不是原选择器训练得到的概率。无核实的引文边时不伪造扩展。
 
 ```text
-git clone https://github.com/bytedance/pasa.git
-# 进入目录，保存 git rev-parse HEAD
-# 按锁定版本README创建虚拟环境并安装依赖
+本周文件夹 → 本地应用与服务 → 启动完整课堂.command
+页面可查看保存结果；启动后可点击“本地重跑”。
 ```
 
 观察：原库可能下载模型或要求服务凭据；未执行的步骤保持未执行。
@@ -39,28 +44,10 @@ query → candidate papers → full text → evidence
 
 观察：PaSa论文搜索、PaperQA2证据问答职责不同；原论文评测不能外推历史准确率。
 
-## 运行与验证口径
+## 实跑核查
 
-网页步骤展示不是执行日志。仅在页面明确出现带版本和时间的运行结果时记为实跑。服务型工具在本地启动，GitHub Pages只提供前端。真实语料使用同一份带页码记录的JSON；模型及向量配置须兼容。完整OCR保留本机。
+保存示例原始调度发现3条材料，但本地选择器全部排除；“搜到”与“符合研究问题”是两步。原始数据结构中的 arxiv_id 在此只承载课堂片段ID，不代表真实arXiv论文编号。
 
-## 原库可落实的准备顺序（2026-09-22核对）
+## 原项目
 
-原版需要两个7B模型（Crawler与Selector）、paper_database及Serper搜索权限，宜使用另备的GPU环境，不承诺本机Mac直接运行。
-
-```sh
-git clone https://github.com/bytedance/pasa.git
-cd pasa
-git rev-parse HEAD
-python -m venv .venv
-. .venv/bin/activate
-git clone https://github.com/hyc2026/transformers.git
-pip install -e ./transformers
-pip install -r requirements.txt
-# 按原库链接下载pasa-dataset到data，两个模型到checkpoints
-# utils.py的搜索凭据读取改为本地环境变量；不把密钥提交Git
-python run_paper_agent.py
-```
-
-运行前检查脚本中的数据、模型路径与查询输入。先用原库示例验证工具调用，再尝试课程研究问题；原库的AI论文数据库不是井上/章太炎史料库。把历史语料接入需要另写检索适配器，不能仅改提问文字便宣称完成迁移。网页D25用于展示Crawler搜索/扩展与Selector判定的职责分离；本次未执行这组模型。
-
-依据：[PaSa原仓库本地说明](https://github.com/bytedance/pasa#run-locally)。
+[PaSa 原代码库](https://github.com/bytedance/pasa)

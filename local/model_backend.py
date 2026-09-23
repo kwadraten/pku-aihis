@@ -5,7 +5,7 @@ from urllib.error import HTTPError
 import json, os, time, uuid, re
 
 OLLAMA = os.environ.get('OLLAMA_URL', 'http://127.0.0.1:11434').rstrip('/')
-DEFAULT_MODEL = 'qwen3:4b'
+DEFAULT_MODEL = 'qwen3:4b-instruct-2507-q4_K_M'
 MAX_PARAMETERS = 10_000_000_000
 
 class NoRedirect(HTTPRedirectHandler):
@@ -48,7 +48,9 @@ def model_info(name):
 def models():
     output = []
     for row in request_json(OLLAMA+'/api/tags', timeout=15).get('models', []):
-        try: output.append(model_info(row['name']))
+        try:
+            info=model_info(row['name'])
+            if 'completion' in info['capabilities']: output.append(info)
         except ValueError: continue
     return {'models': output, 'maximum_parameters': MAX_PARAMETERS}
 
@@ -82,13 +84,14 @@ def completion(data):
     start=time.monotonic(); provider=data.get('provider','ollama')
     if provider=='ollama':
         name=data.get('model') or DEFAULT_MODEL;info=model_info(name)
+        if 'completion' not in info['capabilities']:raise ValueError('此模型只提供嵌入，不能用于聊天生成。')
         msgs=ollama_messages(messages)
         if any(m.get('images') for m in msgs) and 'vision' not in info['capabilities']: raise ValueError('请选择支持图像的模型，例如Gemma3 4B。')
         body={'model':name,'messages':msgs,'stream':False,'keep_alive':'10m',
               'options':{'temperature':temperature,'num_predict':tokens,'num_ctx':8192,'seed':42,'top_p':0.95,'top_k':20,'repeat_penalty':1.1}}
         if 'thinking' in info['capabilities']:
-            body['think']=True
-            body['options']['num_predict']=max(8192,tokens)
+            body['think']=bool(data.get('thinking', True))
+            if body['think']:body['options']['num_predict']=max(8192,tokens)
         if data.get('json_mode'): body['format']='json'
         r=request_json(OLLAMA+'/api/chat',body)
         text=r.get('message',{}).get('content','')

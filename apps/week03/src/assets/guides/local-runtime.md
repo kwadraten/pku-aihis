@@ -1,24 +1,24 @@
 # 本地模型、API接入与保存示例
 
-2026-09-23。本次使用四种不超过10B总参数的本机模型：Qwen3 4B、DeepSeek-R1-0528-Qwen3 8B蒸馏版、Gemma3 4B、Qwen3-VL 4B Instruct。它们不是DeepSeek线上服务的同一个模型。精确标签、量化、模型散列与Ollama版本显示在每条实际响应和保存示例中。
+2026-09-23。本次使用不超过10B总参数的本机模型：Qwen3 4B Instruct-2507（实时默认）、原Qwen3 4B Thinking标签、DeepSeek-R1-0528-Qwen3 8B蒸馏版、Gemma3 4B、Qwen3-VL 4B Instruct。它们不是DeepSeek线上服务的同一个模型。精确标签、量化、模型散列与Ollama版本显示在每条实际响应和保存示例中。
 
 ## 教师本机启动
 
-双击本次更新备用包的“启动课堂.command”，或在仓库根目录运行：
+双击本周“本地应用与服务”或新备用包的“启动完整课堂.command”，或在仓库根目录运行：
 
 ```sh
-python3 local/start-classroom.py
+python3 local/start-full-classroom.py
 ```
 
 启动器为课堂使用独立的Ollama端口11435和模型目录；网页及桥接端口8767。打开 http://127.0.0.1:8767/week03/ ，保持启动窗口开启。右上角“模型接入”选择本机模型并“检测本机模型”。Qwen3用于问答和工具循环，Qwen3-VL与Gemma3用于图片对照。一次只加载一个模型，首次切换需要等待。
 
-其他电脑先安装[Ollama](https://ollama.com/download)，启动上述课堂后，在另一个终端运行 `python3 local/setup-models.py`。它下载三组权重，需约11GB空间与网络。教师已下载的权重放在课程材料目录，未放入Git或课堂ZIP；本机私有路径由local-only/machine.json记录，不能上传公开库。
+其他电脑先安装[Ollama](https://ollama.com/download)，启动上述课堂后，在另一个终端运行 `python3 local/setup-models.py`。它下载五种生成模型及0.6B嵌入模型，下载前请按Ollama显示的实际体积预留空间。教师已下载的权重放在课程材料目录，未放入Git或课堂ZIP；本机私有路径由local-only/machine.json记录，不能上传公开库。
 
 ## 页面怎样运行
 
 D13按“检索—确认上下文—构建请求—调用生成”执行；D24由模型选择search/read/finish，程序检查ID、实际执行检索和读取，最多4轮。运行记录保留模型提案、工具结果和最终答案，不把模型内部推理当作工具日志。模型切换、语料切换或重新开始后，旧结果失效。
 
-其他相关页的“模型实跑与示例”提供可编辑问题、当轮实际输入与回答。D30可选择7张原页，用Qwen3-VL或Gemma3生成描述。视觉模型描述保留未校核状态，不替代原OCR与人工描述。PaSa、PaperQA2、deep-research等页明确写明是在单独运行筛选、证据回答、研究规划等模型环节，不冒充整套项目、互联网论文发现或评测框架已运行。
+其他相关页的“模型实跑与示例”提供可编辑问题、当轮实际输入与回答。D30可选择7张原页，用Qwen3-VL或Gemma3生成描述。视觉模型描述保留未校核状态，不替代原OCR与人工描述。工具页上方现已提供真实本地应用或原代码＋课堂适配的重跑；下方独立“模型实跑与示例”仍与应用流程区分。具体实现边界见各页部署说明。
 
 ## 输入API Key
 
@@ -34,7 +34,7 @@ Pages访问本机可能触发浏览器的本地网络许可。允许当前课堂
 
 重算：保持本地服务运行，执行 `node local/generate-examples.mjs qwen3:4b`，DeepSeek、Gemma和Qwen3-VL模型标签同样适用。脚本跳过已有同模型任务；需要重算时先另存旧JSON并移除目标例。模型回复被截断时脚本停止，不将其标为完整示例。浏览器会明确显示长度停止、连接失败和工具校验失败。
 
-Ollama 0.22.1下本次Qwen3标签的模板不按预期关闭推理段，因此运行使用thinking模式，由原生API分离最终答案；为推理模型预留8192个总生成token，课堂默认temperature=0.6、top_p=0.95、top_k=20、repeat_penalty=1.1、seed=42。固定seed不保证跨平台逐字相同。
+默认固定标签 qwen3:4b-instruct-2507-q4_K_M 直接输出答案；原 qwen3:4b 此次实际对应Thinking-2507，旧示例保留原始版本，由原生API分离最终答案；为推理模型预留8192个总生成token，课堂默认temperature=0.6、top_p=0.95、top_k=20、repeat_penalty=1.1、seed=42。固定seed不保证跨平台逐字相同。
 
 ## 数据库
 

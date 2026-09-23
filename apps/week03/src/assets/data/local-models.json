@@ -1,6 +1,20 @@
 {
   "models": [
     {
+      "model": "qwen3:4b-instruct-2507-q4_K_M",
+      "digest": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+      "parameters": 4022468096,
+      "parameter_size": "4.0B",
+      "quantization": "Q4_K_M",
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "runner": "Ollama",
+      "runner_version": "0.22.1",
+      "model_page": "https://ollama.com/library/qwen3:4b-instruct-2507-q4_K_M"
+    },
+    {
       "model": "qwen3-vl:4b-instruct-q4_K_M",
       "digest": "ee4b975b58c17ce268cd19d40db35d5edc64603035d2ffc1fee1968eb0947f7b",
       "parameters": 4437815808,
@@ -60,6 +74,21 @@
     }
   ],
   "maximum_parameters": 10000000000,
-  "verified_at": "2026-09-23T00:43:46.476061+08:00",
-  "scope": "教师本机实际部署；用于课堂的模型总参数不超过10B。"
+  "verified_at": "2026-09-23T11:28:14.954748+08:00",
+  "scope": "教师本机实际部署；用于课堂的模型总参数不超过10B。",
+  "embedding_models": [
+    {
+      "model": "qwen3-embedding:0.6b",
+      "digest": "ac6da0dfba84a81fdbfbaf330198c33cd77c4cdfc53e8bc50eb581914a15621d",
+      "parameters": 595776512,
+      "parameter_size": "595.78M",
+      "quantization": "Q8_0",
+      "capabilities": [
+        "embedding"
+      ],
+      "runner": "Ollama",
+      "runner_version": "0.22.1",
+      "model_page": "https://ollama.com/library/qwen3-embedding:0.6b"
+    }
+  ]
 }

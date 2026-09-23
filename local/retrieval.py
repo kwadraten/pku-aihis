@@ -3,6 +3,12 @@ from pathlib import Path
 import json, time,uuid,importlib.metadata as md,argparse
 ROOT=Path(__file__).resolve().parents[1]
 def run(tool,query='宗教'):
+    if tool in {'anythingllm','elasticsearch','opensearch'}:
+        from applications import run as run_application
+        return run_application(tool,query)
+    if tool in {'deep-research','pasa','paperqa2','evaluation'}:
+        from applications import research_tool
+        return research_tool(tool,query)
     corpus=ROOT/'apps/week03/src/assets/data/corpus.json'
     if not corpus.exists():corpus=ROOT/'site/week03/assets/data/corpus.json'
     c=json.loads(corpus.read_text());docs=c['records'];q=next((x for x in c['queries'] if x['text']==query),None)

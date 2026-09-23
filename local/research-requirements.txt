@@ -1,0 +1,7 @@
+# Separate from the retrieval environment: avoids conflicting Chroma/PaperQA pins.
+# Tested Python 3.12, macOS ARM64. Optional research and sparse-model environment.
+paper-qa==2026.8.12
+ragchecker==0.1.9
+rank-bm25==0.2.2
+torch==2.8.0
+transformers==4.56.2

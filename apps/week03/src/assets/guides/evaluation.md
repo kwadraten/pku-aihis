@@ -1,18 +1,24 @@
-# RAGChecker / DeepResearch Bench 本地实践
+# RAGChecker / DeepResearch Bench｜D27
 
-来源：https://github.com/amazon-science/RAGChecker
+本说明对应 2026-09-23 的实际安装与运行。教师本机的应用数据、源代码、模型与日志位于“第三周（9月24日）/本地应用与服务”及本周既有本地模型目录。点击“启动完整课堂.command”，保持窗口开启；进入 http://127.0.0.1:8767/week03/ 。公开网页只发布课堂片段、脱敏运行结果和截图，不包含密钥、模型权重或完整史料。
+
+“本地重跑”调用真实服务，失败时保留错误；不会用保存结果冒充本轮响应。页面的步骤按钮只切换解释。外部API接入在“模型接入”面板中设置，适用于独立模型实验；各应用使用其自身配置的本地模型。
+
+## 当前部署
 
 前者细分RAG的检索与生成错误；后者评测深度研究系统，不是另一个检索客户端。
 
-适用范围：模型评测需本地配置和评判服务；当前页提供可审计的输入结构和部署入口。
+RAGChecker 0.1.9 原程序接本地4B模型；DeepResearch Bench执行原RACE单题程序。没有运行官方100题榜单或需要外部凭据的FACT联网核验。
+
+实际运行时间：2026-09-23T11:22:15+0800。版本：0.1.9。查询：这段原文怎样判断神道是否为宗教？。
 
 ## 固定输入
 
-保存问题、参照答案、上下文、生成结果与来源。
+RAGChecker 0.1.9 原程序接本地4B模型；DeepResearch Bench执行原RACE单题程序。没有运行官方100题榜单或需要外部凭据的FACT联网核验。
 
 ```text
-query / ground_truth / retrieved_context / response
-每个主张单独回到支持片段。
+本周文件夹 → 本地应用与服务 → 启动完整课堂.command
+页面可查看保存结果；启动后可点击“本地重跑”。
 ```
 
 观察：参照答案也需核验，不以教师论文结论自动充当金标准。
@@ -41,12 +47,10 @@ DeepResearch Bench: https://github.com/Ayanami0730/deep_research_bench
 
 观察：开发集与测试集分开；缺失全文和接口失败纳入记录。
 
-## 运行与验证口径
+## 实跑核查
 
-网页步骤展示不是执行日志。仅在页面明确出现带版本和时间的运行结果时记为实跑。服务型工具在本地启动，GitHub Pages只提供前端。真实语料使用同一份带页码记录的JSON；模型及向量配置须兼容。完整OCR保留本机。
+人为设置“井上哲次郎废除所有神社”作为无根据断言，专用于测试；这不是史料事实。RAGChecker的论断抽取也有措辞误差，要检查中间结果。
 
-## RAGChecker本地启动与数据准备
+## 原项目
 
-在独立环境执行 `pip install ragchecker` 和 `python -m spacy download en_core_web_sm`；复制原库 `examples/checking_inputs.json` 的结构，把本次实际query、response、retrieved_context及人工参考答案写入副本，再运行 `ragchecker-cli --help` 核对extractor/checker模型配置。模型服务尚未配置时不要生成分数。原工具的英文处理组件与中文日文史料之间还需验证，抽样人工核对先于大批自动评测。参见[原库教程](https://github.com/amazon-science/RAGChecker/blob/main/tutorial/ragchecker_tutorial_en.md)。
-
-DeepResearch Bench是报告评测，参见[原代码库](https://github.com/Ayanami0730/deep_research_bench)。原仓库的评审模型与版本会变化，重跑时固定commit、模型及提示；不同评审版本所得分数不能直接混表。课堂先用D10的人工判断池学习指标，再决定是否接入这些外部裁判模型。
+[RAGChecker / DeepResearch Bench 原代码库](https://github.com/amazon-science/RAGChecker)

@@ -63,6 +63,13 @@ export namespace Components {
          */
         "examplesOnly": boolean;
     }
+    interface ProcessExplainer {
+        "demoId": string;
+        /**
+          * @default {}
+         */
+        "snapshot": any;
+    }
 }
 declare global {
     interface HTMLDeckContainerElement extends Components.DeckContainer, HTMLStencilElement {
@@ -107,6 +114,12 @@ declare global {
         prototype: HTMLModelExperimentElement;
         new (): HTMLModelExperimentElement;
     };
+    interface HTMLProcessExplainerElement extends Components.ProcessExplainer, HTMLStencilElement {
+    }
+    var HTMLProcessExplainerElement: {
+        prototype: HTMLProcessExplainerElement;
+        new (): HTMLProcessExplainerElement;
+    };
     interface HTMLElementTagNameMap {
         "deck-container": HTMLDeckContainerElement;
         "deck-presenter": HTMLDeckPresenterElement;
@@ -115,6 +128,7 @@ declare global {
         "lesson-lab": HTMLLessonLabElement;
         "model-connection": HTMLModelConnectionElement;
         "model-experiment": HTMLModelExperimentElement;
+        "process-explainer": HTMLProcessExplainerElement;
     }
 }
 declare namespace LocalJSX {
@@ -175,6 +189,13 @@ declare namespace LocalJSX {
          */
         "examplesOnly"?: boolean;
     }
+    interface ProcessExplainer {
+        "demoId"?: string;
+        /**
+          * @default {}
+         */
+        "snapshot"?: any;
+    }
 
     interface DeckSlideAttributes {
         "slideId": string;
@@ -200,6 +221,10 @@ declare namespace LocalJSX {
         "demoId": string;
         "examplesOnly": boolean;
     }
+    interface ProcessExplainerAttributes {
+        "demoId": string;
+        "snapshot": string;
+    }
 
     interface IntrinsicElements {
         "deck-container": DeckContainer;
@@ -209,6 +234,7 @@ declare namespace LocalJSX {
         "lesson-lab": Omit<LessonLab, keyof LessonLabAttributes> & { [K in keyof LessonLab & keyof LessonLabAttributes]?: LessonLab[K] } & { [K in keyof LessonLab & keyof LessonLabAttributes as `attr:${K}`]?: LessonLabAttributes[K] } & { [K in keyof LessonLab & keyof LessonLabAttributes as `prop:${K}`]?: LessonLab[K] };
         "model-connection": ModelConnection;
         "model-experiment": Omit<ModelExperiment, keyof ModelExperimentAttributes> & { [K in keyof ModelExperiment & keyof ModelExperimentAttributes]?: ModelExperiment[K] } & { [K in keyof ModelExperiment & keyof ModelExperimentAttributes as `attr:${K}`]?: ModelExperimentAttributes[K] } & { [K in keyof ModelExperiment & keyof ModelExperimentAttributes as `prop:${K}`]?: ModelExperiment[K] };
+        "process-explainer": Omit<ProcessExplainer, keyof ProcessExplainerAttributes> & { [K in keyof ProcessExplainer & keyof ProcessExplainerAttributes]?: ProcessExplainer[K] } & { [K in keyof ProcessExplainer & keyof ProcessExplainerAttributes as `attr:${K}`]?: ProcessExplainerAttributes[K] } & { [K in keyof ProcessExplainer & keyof ProcessExplainerAttributes as `prop:${K}`]?: ProcessExplainer[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -222,6 +248,7 @@ declare module "@stencil/core" {
             "lesson-lab": LocalJSX.IntrinsicElements["lesson-lab"] & JSXBase.HTMLAttributes<HTMLLessonLabElement>;
             "model-connection": LocalJSX.IntrinsicElements["model-connection"] & JSXBase.HTMLAttributes<HTMLModelConnectionElement>;
             "model-experiment": LocalJSX.IntrinsicElements["model-experiment"] & JSXBase.HTMLAttributes<HTMLModelExperimentElement>;
+            "process-explainer": LocalJSX.IntrinsicElements["process-explainer"] & JSXBase.HTMLAttributes<HTMLProcessExplainerElement>;
         }
     }
 }

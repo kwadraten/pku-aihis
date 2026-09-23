@@ -5,6 +5,7 @@ let lucivy: any,
   indexVersion = -1,
   edge: any,
   edgeVersion = -1,
+  edgeSettings = '',
   edgeIds = new Map();
 const dyn = (url: string) => import(/* @vite-ignore */ url);
 let fulltextQueue: Promise<any> = Promise.resolve();
@@ -69,11 +70,12 @@ async function fulltextOnce(
     }))
     .filter((r: any) => r.id);
 }
-export async function vectorSearch(q: number[]) {
+export async function vectorSearch(q: number[], options = {m:16,efConstruction:100,efSearch:50}) {
   const version = state.version;
   const docs = state.docs.filter((d) => d.vector?.length === q.length);
   if (!docs.length) throw Error("没有与查询维数兼容的向量；请导入配套向量包。");
-  if (edgeVersion !== version) {
+  const settings = JSON.stringify(options);
+  if (edgeVersion !== version || edgeSettings !== settings) {
     if (edge) edge.free();
     edgeIds.clear();
     const mod = await dyn(
@@ -87,6 +89,10 @@ export async function vectorSearch(q: number[]) {
     });
     const cfg = new mod.EdgeVecConfig(q.length);
     cfg.metric = "l2";
+    cfg.m = options.m;
+    cfg.m0 = options.m * 2;
+    cfg.ef_construction = options.efConstruction;
+    cfg.ef_search = options.efSearch;
     edge = new mod.EdgeVec(cfg);
     docs.forEach((d) => {
       const id = edge.insertWithMetadata(new Float32Array(d.vector), {
@@ -95,6 +101,7 @@ export async function vectorSearch(q: number[]) {
       edgeIds.set(id, d.id);
     });
     edgeVersion = version;
+    edgeSettings = settings;
   }
   if (version !== state.version) throw Error("语料已切换，旧向量查询已取消");
   return edge
