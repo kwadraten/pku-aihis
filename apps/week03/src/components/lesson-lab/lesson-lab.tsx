@@ -93,6 +93,7 @@ export class LessonLab {
   @State() qrels: any = {};
   @State() normalized = "";
   @State() sourceView: "form" | "json" = "form";
+  @State() reviewSource = false;
   @State() chunkView: "chart" | "cards" = "chart";
   @State() tfidfShowAll = false;
   @State() config = "NFKC";
@@ -169,6 +170,7 @@ export class LessonLab {
     this.epoch++;
     this.busy = false;
     this.selected = 0;
+    this.reviewSource = false;
     this.lastSearch = null;
     this.text = state.docs[0]?.text || "";
     this.results = [];
@@ -349,6 +351,12 @@ export class LessonLab {
   private list(hits = this.results) {
     return (
       <div>
+        {hits.length > 0 && hits === this.results && ["D07", "D08", "D09", "D12", "D21"].includes(this.demoId) && (
+          <details class="retrieval-source" open={this.reviewSource} onToggle={(e: any) => { this.reviewSource = e.target.open; }}>
+            <summary>回查所选片段原文与出处：{this.doc()?.id}</summary>
+            {this.source()}
+          </details>
+        )}
         {!hits.length && (
           <p class="lab-note">尚无命中。可修改查询，空结果也保留。</p>
         )}
@@ -358,7 +366,7 @@ export class LessonLab {
             d && (
               <div class="candidate-item"><button
                 class={"result " + (d === this.doc() ? "selected" : "")}
-                onClick={() => this.select(d)}
+                onClick={() => { this.select(d); this.reviewSource = true; }}
               >
                 <strong>
                   {i + 1}. {d.title}
@@ -1464,6 +1472,10 @@ export class LessonLab {
             <input aria-label="替换表达式" value={this.replacement} onInput={(e:any)=>{this.replacement=e.target.value;this.output=null;}} />
           </label>
           <button disabled={this.busy} onClick={()=>this.regex()}>运行匹配与替换</button>
+        </div>
+        <div class="lab-toolbar">
+          <button onClick={()=>this.useRegex((this.regexIndex+1+Math.floor(Math.random()*(regexPresets.length-1)))%regexPresets.length)}>随机换一个范例</button>
+          <button onClick={()=>navigator.clipboard.writeText(this.query).then(()=>this.message='已复制当前表达式').catch(()=>this.message='复制未获浏览器允许；可选中文本框手动复制')}>复制当前表达式</button>
         </div>
         <p class="regex-rule-note">{regexPresets[this.regexIndex].pattern===this.query?regexPresets[this.regexIndex].why:"当前是自定义表达式；图示随规则变化。"} <span class="mode">JavaScript /gu · 浏览器实时</span></p>
         <div class="regex-display-grid">
