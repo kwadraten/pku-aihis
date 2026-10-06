@@ -7,6 +7,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const publish = path.join(root, "core-probe/publish/wwwroot");
 const assets = path.join(root, "src/assets");
 const core = path.join(assets, "core");
+if (!core.startsWith(assets + path.sep) || path.basename(core) !== 'core') throw Error('Unsafe core output path');
 await fs.rm(core, { recursive: true, force: true });
 await fs.cp(publish, core, {
   recursive: true,

@@ -41,7 +41,6 @@ __pycache__/
 # Week04 generated runtimes and private classroom seed stay local.
 /apps/week04/src/assets/core/
 /apps/week04/src/assets/vendor/
-/apps/week04/src/assets/seed/
 /apps/week04/src/lib/migrations.generated.ts
 /apps/week04/core-probe/publish/
 /apps/week04/core-probe/bin/

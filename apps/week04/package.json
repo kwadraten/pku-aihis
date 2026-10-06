@@ -15,10 +15,10 @@
     "loader/"
   ],
   "scripts": {
-    "start": "node scripts/copy-vendor.mjs && node scripts/gen-migrations.mjs && stencil build --dev --watch --serve",
-    "build": "node scripts/assemble-deck.mjs && node scripts/copy-vendor.mjs && node scripts/gen-migrations.mjs && stencil build && node scripts/prepare-source.mjs",
-    "check": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs",
+    "start": "node scripts/prepare-runtime.mjs && node scripts/copy-vendor.mjs && node scripts/gen-migrations.mjs && stencil build --dev --watch --serve",
+    "build": "node scripts/prepare-runtime.mjs && node scripts/assemble-deck.mjs && node scripts/copy-vendor.mjs && node scripts/gen-migrations.mjs && stencil build && node scripts/prepare-source.mjs",
+    "check": "node scripts/gen-migrations.mjs && tsc --noEmit",
+    "test": "node scripts/gen-migrations.mjs && node --test tests/*.test.mjs",
     "prepare:patchouli": "node scripts/import-patchouli.mjs",
     "build:core": "dotnet publish core-probe/CoreProbe.csproj -c Release -o core-probe/publish",
     "prepare:core": "node scripts/prepare-core.mjs",

@@ -22,6 +22,13 @@ jobs:
         working-directory: apps/week03
       - run: pnpm test && pnpm run check && pnpm build
         working-directory: apps/week03
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
+        with:
+          dotnet-version: '10.0.x'
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+        working-directory: apps/week04
+      - run: pnpm test && pnpm run check && pnpm build
+        working-directory: apps/week04
       - run: python3 -m unittest discover -s local/tests
       - run: node scripts/build-site.mjs && node scripts/check-public.mjs
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa

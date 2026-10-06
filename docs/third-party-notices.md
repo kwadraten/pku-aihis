@@ -34,7 +34,7 @@ D06正则结构图参考[LZL工具的RegexVisualizer](https://lzltool.cn/RegexVi
 - Patchouli核心与41条SQL迁移来自5ad3455cf602e05fd84ce2416b17c030ee9a5276，逐文件散列见week04/patchouli-source-manifest.json。按GPL-3.0保留LICENSE、manifest与对应源码；本地构建在assets/licenses/corresponding-source附原核心、浏览器适配和构建说明。没有改写原核心校验器。
 - RapidOCR采用上游v3.9.2分发的PP-OCRv4 ONNX模型；本机下载逐项SHA-256与上游清单核对。模型来自PaddleOCR（Apache-2.0），浏览器几何后处理为本工程轴对齐连通域适配，未声称与原多边形算法完全等价。三份锁定权重进入本地课件与整站构建白名单，不进入Git，本轮未部署。ONNX Runtime Web 1.23.2为MIT。
 - PDF.js 6.4.299为Apache-2.0；同时复制扫描图解码WASM、CMaps和标准字体，保留分项许可证。SQLite WASM包声明Apache-2.0，SQLite引擎为公有领域。其余包版本以pnpm-lock.yaml为准。
-- 按用户最新指令，第四讲仅使用真实桌面数据库的4题录、353页OCR与四份PDF原生子集，筛选与验证见week04/native-subset.md。课堂与整站本地构建均包含这些资源；不加入Git，本轮未部署。来源核验与再分发许可分别记录。
+- 按用户最新指令，第四讲仅使用真实桌面数据库的4题录、353页OCR与四份PDF原生子集，筛选与验证见week04/native-subset.md。课堂与整站构建均包含这些资源；按最新用户指令，这四份预置PDF与原生数据库随分支提交，本轮未部署。来源核验与再分发许可分别记录。
 
 - Patchouli徽标原样取自该项目logo/icon.png，出处与SHA-256见apps/week04/src/assets/branding/manifest.json；与原项目来源及许可记录一同保留。
 - MLA第9版、APA第7版与Chicago第18版CSL来自[citation-style-language/styles](https://github.com/citation-style-language/styles)，《世界历史》CSL来自[Zotero中文样式库](https://zotero-chinese.com/styles/世界历史/)。四个样式文件都保留上游作者、来源与CC BY-SA 3.0声明；实际版本、下载地址与SHA-256见apps/week04/src/assets/csl/manifest.json。

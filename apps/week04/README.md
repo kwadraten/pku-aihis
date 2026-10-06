@@ -8,25 +8,20 @@
 
 ## 本机准备
 
-需要Node24、pnpm11.19.0、.NET SDK10。Patchouli源码作为只读输入；版本与散列见vendor/patchouli/manifest.json和docs/week04/patchouli-source-manifest.json。
+需要Node24、pnpm11.19.0和.NET SDK10。预置原生SQLite、四份PDF及所需Patchouli核心源码随仓库提供；无需本机桌面文献库、WPS目录或另一个Patchouli源码目录。
 
 ```powershell
 cd apps/week04
 pnpm install --frozen-lockfile --ignore-scripts
-node scripts/import-patchouli.mjs /path/to/patchouli
-dotnet restore core-probe/CoreProbe.csproj -p:Configuration=Release --locked-mode
-pnpm build:core
-pnpm prepare:core
-pnpm prepare:ocr
-# 从桌面配置指向的真实数据库与WPS PDF书库抽取原生子集：
-pnpm seed
 pnpm build
 pnpm preview
 ```
 
+构建先校验预置SQLite与PDF的SHA-256，再从固定的原核心源码编译浏览器运行时，并下载、校验固定版本的RapidOCR模型。首次构建需要联网恢复npm/NuGet依赖与OCR权重；之后可复用已校验资源。核心、依赖、模型和构建产物不入Git。更新教师自己的预置材料时才使用`pnpm seed`，普通使用无需运行。
+
 打开 http://127.0.0.1:8774/week04/ 。方向键翻页，课程地图选页，P打开演讲者窗口，B静态模式。中文输入和文本框内的方向键保持编辑操作。
 
-网页只加载一份原生SQLite子集：4题录、4文档、353页、4份PDF。原始UUID、完整OCR修订、索引和schema保留；数据直接读取本地数据库，不经BibLaTeX／Markdown重建。旧试验库与题录降级路径已删除，浏览器旧试验存储会在首次加载新版时替换。缺资源时明确报错。整站组装包含同一数据库、OCR正文与对应PDF；三份哈希固定的ONNX权重同时进入本地整站包，以便扫描PDF处理能够实际运行；不加入Git。D09、D21、D25分别采用独立四层实体图、卡片盒和历史词表实验。
+网页只加载一份原生SQLite子集：4题录、4文档、353页、4份PDF。原始UUID、完整OCR修订、索引和schema保留；数据取自原桌面数据库的已核验子集，不经BibLaTeX／Markdown重建。旧试验库与题录降级路径已删除，浏览器旧试验存储会在首次加载新版时替换。缺资源时明确报错。整站组装包含同一数据库、OCR正文与对应PDF；三份哈希固定的ONNX权重由构建自动下载并进入整站包，以便扫描PDF处理能够实际运行；权重不加入Git。D09、D21、D25分别采用独立四层实体图、卡片盒和历史词表实验。
 
 顶栏「导出SQLite」下载当前库；在桌面Patchouli选「打开数据库」，设置文件搜索根，以BLAKE3重新绑定PDF。网页顶栏「打开SQLite」可回读桌面修改后的同格式数据库，已有PDF按BLAKE3绑定。SQLite不包含PDF字节。D27的ZIP备份包含数据库和PDF，并在独立空库恢复、核验哈希与外键。
 
@@ -56,7 +51,7 @@ node scripts/check-public.mjs
 
 1. 导入PDF：在D06选择新建题录或当前条目，多选文件。默认提取全部页的文字层；重复文件按BLAKE3进入已有题录。扫描空页保留原件。
 2. 识别与核对：D26选附件与页范围，加载RapidOCR模型后运行。默认跳过已有正文，勾选重新处理才提交新修订。取消或失败保留已完成页，重启任务可续做。右侧可以打开原件、核对正文、校对并提交新修订、回查历史、复制引用。
-3. 保存研究：元数据、阅读状态、题录笔记写入原表；集合说明、摘录／判断／核验／下一步、关系、词汇约定和维护记录写入原生条目自定义字段，刷新后保留。研究表单可继续编辑并保留先前记录，支持Markdown导出。
+3. 保存研究：题录、标签、集合和正文修订使用原生SQLite。来源笔记、摘录／判断／核验／下一步、关系与问题索引等使用独立Markdown草稿，保存在浏览器并可下载；这些练习不写入SQLite。
 4. 交换与恢复：D27下载完整ZIP备份或实际打开备份；顶栏SQLite支持桌面整库打开和网页回读；CSL JSON支持题录交换。SQLite不含PDF字节，ZIP携带原件。
 
 书库数据保存在同一来源的IndexedDB，独立Markdown及Turtle草稿保存在localStorage并可单独下载；迁移这些草稿时使用下载文件。

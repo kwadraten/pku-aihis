@@ -1,4 +1,7 @@
-/vendor/patchouli/
+/vendor/patchouli/*
+!/vendor/patchouli/LICENSE
+!/vendor/patchouli/manifest.json
+!/vendor/patchouli/src/
 /core-probe/bin/
 /core-probe/obj/
 /core-probe/publish/
@@ -10,5 +13,13 @@
 /src/assets/core/
 /src/assets/vendor/
 /src/assets/licenses/
-/src/assets/seed/
+/src/assets/seed/*
+!/src/assets/seed/native-library.sqlite
+!/src/assets/seed/native-seed.json
+!/src/assets/seed/pdfs/
+/src/assets/seed/pdfs/*
+!/src/assets/seed/pdfs/4904e41f-f997-d955-3d37-bee74ae36eb3.pdf
+!/src/assets/seed/pdfs/8ddcb33f-9938-a8e3-6061-20c6083e0d88.pdf
+!/src/assets/seed/pdfs/97738248-f7e1-03ad-2695-2c9370da25ba.pdf
+!/src/assets/seed/pdfs/a279c6a0-0495-2dea-8191-80d85a7193d4.pdf
 /src/lib/migrations.generated.ts

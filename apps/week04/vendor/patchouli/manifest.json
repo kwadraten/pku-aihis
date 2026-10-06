@@ -1,0 +1,747 @@
+{
+  "source_commit": "5ad3455cf602e05fd84ce2416b17c030ee9a5276",
+  "source_mode": "tracked files from working tree; hashes identify actual inputs",
+  "selected_files_modified": [],
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "54c58e144eec0b40af16f2fd03e14ca67d6d5cf8f5562f233ef0d5e2f2372bd6"
+    },
+    {
+      "path": "src/Patchouli.Core/AppSchemaVersion.cs",
+      "sha256": "3e2b3f510adbb901c77b9fb670c29c8a0d7416d032e491bfa3236297694ad55a"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/BiblatexCandidateMatcher.cs",
+      "sha256": "0785f39b38fc7ce3144f96272fa72ed619cee0b7c224b4eaaee3763bba0fafa8"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/BiblatexDtos.cs",
+      "sha256": "00595d1e7dad5b681aaf85ed9a1b7864b37437af70dc30f596664940f8710c81"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/BiblatexEntryTypeMap.cs",
+      "sha256": "61fbc7f9c95dd1f2c3e1c813bf283178c09c57690a61fcc6a3675d70810a2bec"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/BiblatexExportMapper.cs",
+      "sha256": "dcb2ea9d3d1bc06cb4209563d09064a8f17d8a04713e4aa8d754bb28411afb5b"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/BiblatexFieldConflictAnalyzer.cs",
+      "sha256": "3723ceb3e14cbafe8f708d2adec289e9c1d1a9904e528681b8b398b67f29035a"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/BiblatexFieldMapper.cs",
+      "sha256": "6d0ddc57d8a0506a4581d1e1593f341bc4adb4fb599d7cf5f6228aa4d691cafa"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/BiblatexMappedItemMerge.cs",
+      "sha256": "eed9d3606a8b6aa915ad54a72378f82529e2d70c653b58322af979189dbea880"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Biblatex/IBiblatexImportService.cs",
+      "sha256": "f3f57b8687651c90ea4eab25bc453b127115803e6518c3f2d706ab1fb6b5a8bd"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/BuiltInIdentifierSchemes.cs",
+      "sha256": "f7bb940479e148b2b62424b5c9525674909c9eae2411465b9057d0a2703e1698"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/Collection.cs",
+      "sha256": "8e4b2dc42ecfb746a018350a1d740ca5b60bff7ec7fd0f60443fb4a8cc68d010"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/CreateItemRequest.cs",
+      "sha256": "0baef228c2137ea1ef8e6bfcfbac9056eeb2fe71550ee9eaec94b79439ebcb98"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/CslItemTypeDisplayNames.cs",
+      "sha256": "7c3aed6d6c19d24d86420a189307aefd75b92b750102192588e101ae59e3d47e"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/CslItemTypeProfile.cs",
+      "sha256": "f417e20502991d6a49b39196d15f02fe4b21bae03d08de757d68f9e918492d72"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/DuplicateItemPair.cs",
+      "sha256": "42e775c5b8650b5f09d3bd73bb711b498d946de43804ccfe9c1fa504d03cd524"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/DuplicateItemReason.cs",
+      "sha256": "d0cab93e2715464b8b74b3029080c6d44111e0d32bf7e4cc3a44bde989cff9df"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ICollectionService.cs",
+      "sha256": "d78dd170dde901be1970af294a2c0939238f3ea4f8d56a912858d3a9fa79216b"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ICslItemTypeProfileService.cs",
+      "sha256": "c8ee199db5d60cf639b2f02ed9e8fdaa279305c9e200e71127e15b040efb0771"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/IDuplicateItemDetectionService.cs",
+      "sha256": "f0a8ec8e5badde8c3e60d41f11f5b7e29b12d3cd5c5054ab4c205b930e6067ac"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/IItemMergeService.cs",
+      "sha256": "dd9c383506b670674adae2b694ba2d81a2f99c65bbafe48a9c89a5c4559a04a7"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/IItemPurgeService.cs",
+      "sha256": "6065d8f01fe23b9e35598ae530424d906c496a9489aa5238f459ef450d493235"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/IItemService.cs",
+      "sha256": "8967446704c9cbd7d796f1de2d6df412a54ad1c89ad19a9662802a36564e1b95"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/IItemTagService.cs",
+      "sha256": "197ffc3eda670231ded557f7b03fbd6a863ddeeb5dc5042c7e5a0436c349cd5e"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/IItemTypeInferenceService.cs",
+      "sha256": "6bd1384336e024fd7a26e983b934dd02970155a7e40a26bcbb4f57e8b3bd868b"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemCreator.cs",
+      "sha256": "ee88564719498197c6dd49dee70f846a59117e65602f7d7b0e23cd799ae43be4"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemCreatorNameParser.cs",
+      "sha256": "bd130cd3aee80f6a83ceace5d60772f1565a82adf49bb1a9ceaa5656156b14b7"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemDate.cs",
+      "sha256": "80e3f2a6b7b16d8b954fbab3d5558d0442d225aebe43f6ba22f3d5d4f300afb8"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemIdentifier.cs",
+      "sha256": "6029180606fc58578d43ffbaa0b2312aa3f6182cae040f83ad6b4005ab2473fe"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemLifecycleInfo.cs",
+      "sha256": "b28904f40caeb26ee441b971e431a615ad56d504a86bd0f519809048c256e655"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemLifecycleState.cs",
+      "sha256": "76de5976ff1773c0a634009b041a23cd9186b4e3da916a25e080cfd234a488d2"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemListPage.cs",
+      "sha256": "a0b6b8a4d477d7838a2d748808cd8dc2ba66756cc843d9a0e26fb8d60bc4e3e7"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemMergeConflictField.cs",
+      "sha256": "75c58127c826785254cc187bf6c2afe2bddeb0dea2630285d9597afcdfe19813"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemMergeMissingField.cs",
+      "sha256": "f7a239a84ac3f2c7db1064c778a60d2d57bd60a905eaee0a8519da7ee0cc2925"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemMergePreview.cs",
+      "sha256": "b5003a3e117210df7dda21bf5d7a3e34060481da200bca9ba7cfea74d281c62b"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemMetadata.cs",
+      "sha256": "1c4e958dd781edb1ebf0b846f03996ac32054e97f342b0534ef07ce647faa69c"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemPurgeDependencyReport.cs",
+      "sha256": "7a7098972e8c95b2a58f476d5177f1249c3b33c42fc408d550949e7697cc4170"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ItemTypeInference.cs",
+      "sha256": "4cc725ebd1f83738b2a33392869a94c7f27dfe01aa0ad3f83b96889845b474be"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/ListItemsRequest.cs",
+      "sha256": "36c69007d56ac60970e68802722d889a8c04252b27461f9133a4c587f3c08b83"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/MergeFieldChoice.cs",
+      "sha256": "6c9cb5ca0f4f46a156726cc5e6f18228bda7c87ddbe8be0b6e3cf4ec31f87e76"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/MetadataLookup/IdentifierNormalizer.cs",
+      "sha256": "75d80f086b5ca35ebc9ab91d4966ee6062a8d0900c107190b02f46a5711d3e99"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/MetadataLookup/MetadataLookupContracts.cs",
+      "sha256": "dfa1ea541b627bd30ab58c9ae20b9d8e14f2764cb12920a74bf6609d1a911edd"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/MetadataLookup/UrlIdentifierExtractor.cs",
+      "sha256": "600a0bfd52a5e2e760f0f28019ba5892d051c70e744b63d9cf29849c47c5c0b8"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/TagNormalizer.cs",
+      "sha256": "7926bdb50ef5568811aa1b51bd997ad3768d02177c64e3ae287fca56333677a1"
+    },
+    {
+      "path": "src/Patchouli.Core/Bibliography/UpdateItemRequest.cs",
+      "sha256": "e3533d222fba1eb4f6a3a948e05ff30357577a40979af1eed58266755eb19e54"
+    },
+    {
+      "path": "src/Patchouli.Core/BuildInfo.cs",
+      "sha256": "6122a833df63822f4bb75751fb05daba07a04c653bcb104e946e1de93abfdd62"
+    },
+    {
+      "path": "src/Patchouli.Core/Cli/ICliPathService.cs",
+      "sha256": "278ab954f3ad33a272ecfbc8dc7104eb2eedf4ad046adcb91b7f528f86f6e342"
+    },
+    {
+      "path": "src/Patchouli.Core/Conflicts/ConflictAction.cs",
+      "sha256": "7ecf2b312c9c7da232232e04e6d9f4170c6c059c657952c65e9bff52175f9695"
+    },
+    {
+      "path": "src/Patchouli.Core/Conflicts/ConflictCode.cs",
+      "sha256": "58fba92d54d55d2fc6ac8c9c3e25c90c43be8fb1fb36bd284f5a6e4d6e9ef1a0"
+    },
+    {
+      "path": "src/Patchouli.Core/Conflicts/ConflictDescriptor.cs",
+      "sha256": "5aa57ebb8472cb11ccad6c7d1a5e3d4bdf7058c0da2f0656eafef6c1c9b4d7af"
+    },
+    {
+      "path": "src/Patchouli.Core/Conflicts/ConflictResolution.cs",
+      "sha256": "a428fd7ba8e6f293d894a9852d5f613f81d1e142feaeef5e917563d50c1e0128"
+    },
+    {
+      "path": "src/Patchouli.Core/Credentials/CredentialModels.cs",
+      "sha256": "b1e179f1adef8fcff2d0a15623925cf2bb4d1d2d810d798ad66ce4fc9bc8acd0"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslCatalogSource.cs",
+      "sha256": "0e6c38e0ccf70120bfd31874f63b507a75f7e8e1ae6eac11e8bca6a66683763f"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslCatalogSourceIds.cs",
+      "sha256": "cd59e742854724b46b8a9a795a85f0e412cb50e887774297b8449a900397fe99"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslCatalogStyle.cs",
+      "sha256": "0f78ddc73cd5b3b7fbaa3ab18dfcdeefedc983914fc012e3c0ac985f06d83826"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslMappedItem.cs",
+      "sha256": "e60db4193039bc6733d3db6977333018297dce3496f5fa21167e6ba7e5b79a36"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslRenderRequest.cs",
+      "sha256": "7593ba3587fc0edded32b087d1cf0444aaee738e4c97b93d2e7ff6d6e89c30ca"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslRenderResult.cs",
+      "sha256": "93513374c5d790c3b5de5ea5094ad121cbed54d94b6f523229ef77ff9091e43f"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslSettings.cs",
+      "sha256": "4f191d5e258e97166ef1253cd9a94aa55653f2e4827da8441e6d5b1187df92cc"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/CslStyle.cs",
+      "sha256": "605c25464701e726eeb437e54591a6ce53e497aaf3679edd7924b52f292a409c"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/ICslItemMapper.cs",
+      "sha256": "19e1a65301dbda9f3a83f2445c0b57cd53079845e30b8b0aaaf3917983867264"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/ICslRenderer.cs",
+      "sha256": "a0e62e7f31aed7553d993e44342d7cbfa8a6ac2365da3664d1724de9795aeb8a"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/ICslStyleCatalog.cs",
+      "sha256": "84cb1e2a1fca56f59ca9185803e9ae340fafc5913e31d2db39b3570d20fa4b30"
+    },
+    {
+      "path": "src/Patchouli.Core/Csl/ICslStyleStore.cs",
+      "sha256": "7529ee44da3c85de1604bb4e9ab389424b40a5b343913612144bacb7d8492481"
+    },
+    {
+      "path": "src/Patchouli.Core/Diagnostics/HostActivityTracker.cs",
+      "sha256": "61261524ab37f60d28bf9f92be78568b05b05a7428b922d7d8da67fe526acec3"
+    },
+    {
+      "path": "src/Patchouli.Core/Diagnostics/IAppLogger.cs",
+      "sha256": "0ee8114a97f9aa1772320931297ae7bd290d8fb24dd5a95cb89a90cea785206a"
+    },
+    {
+      "path": "src/Patchouli.Core/Diagnostics/IHostActivityTracker.cs",
+      "sha256": "71e516d77431667baabc0b8c1cf941977e00686ecb84101e08a1ce7bb855941f"
+    },
+    {
+      "path": "src/Patchouli.Core/Diagnostics/UnexpectedExceptionReporter.cs",
+      "sha256": "b78daeab5091e28295884c502ad070d4c6b17bd3930634c28e08d6926bf8019c"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/DocumentBoxDiagnosticCodes.cs",
+      "sha256": "613975ac40befad3d46c5247839c42c298ffae638659eb61e35882d434f7dfc6"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/DocumentBoxOverlap.cs",
+      "sha256": "3fdca20807682d7a7768e5143f382314d867fda1847d134500646399550a273b"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/DocumentInstance.cs",
+      "sha256": "0dbcb0074ec814ec65f3754afc223ecb491c373ec4b0669a676d4145bfc85e75"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/DocumentInstanceStatus.cs",
+      "sha256": "ff66e7ce7f8b6135cf2805dc6ede10682da7c3f963502d1bc36a95ad13fc4a0f"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/DocumentInstanceType.cs",
+      "sha256": "7d86199fe06e5d746cbca1c6ba5dd94d8276895c9f5e57d79d8a5f19c3f6093d"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/DocumentTreeModels.cs",
+      "sha256": "50038136a36aa9ddfe9c089baf62c4c0884a307be5471aedf88ee5a9cf08870c"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/IDocumentInstanceService.cs",
+      "sha256": "ced4b1cfea3cbf6ce2f5a7ede53349d287b8db641c1f7af134f9bfa3547c3d1f"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/IDocumentTreeService.cs",
+      "sha256": "dacd4575b09c5618f89ee551ff30a6b6f032aea34b286dce37ceef3b47fb346a"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/IOverlapProjectionService.cs",
+      "sha256": "296d2536de19978d2a2e679fbc273ce1f79a11136fe4982668fd3bfe66227ac6"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/IVersionedEvidenceReader.cs",
+      "sha256": "682ed306aa3cfd6b5b3dd707371178dd4302ce30a4b3e34e4064bb27008f2267"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/MarkdownModels.cs",
+      "sha256": "11ea91861b24e0995e26dc2382b05e9855cdb9b6adefaa9083671b34c78efac2"
+    },
+    {
+      "path": "src/Patchouli.Core/Documents/TranslationModels.cs",
+      "sha256": "a06d8ae9a2bf642cd42ae11d4e2a72b14d6caa5325241a49842c7e46d9b82da5"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileAsset.cs",
+      "sha256": "4593a55c0c4623ceafc002637f0548572d501075ecb864ecabade467ceb59640"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileAssetGcCandidate.cs",
+      "sha256": "a2ed3e97f49e9e3e883f7205a785cadea2be6fa506034be8e4dd026c8e7e9e6a"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileAssetGcOptions.cs",
+      "sha256": "1d59b9d5817f152c579edb30c07916ac148e76b315d2e517aa4dc4bc088252d6"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileAssetGcResult.cs",
+      "sha256": "9e758c2276c57b064685cf858998c3fcc51777a1f96d78a519559a039f71d98e"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileAssetStatus.cs",
+      "sha256": "e42dfe319423803cd7ee5b1c46a620110558aeda7090b3c15abedc16c51e2065"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileFingerprint.cs",
+      "sha256": "2cb95412650a6d5539414094acd9cc0ad4c49712e35baa55d5d50994762f4be9"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileLocality.cs",
+      "sha256": "00d03812f2ff4653359a07b779a7bd7c146331cfcaa3b0ffad204795d1a19a9c"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileResolutionCandidate.cs",
+      "sha256": "02179f521ce7f38e9094536576ce5815c26a5afaa2280f6e6e1748a62c475a90"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileResolutionConfidence.cs",
+      "sha256": "558cfc95c080c0c187caf052a6c2b650c3eef4f63fca8dc1edc1f596c9484ab4"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileResolutionRequiredAction.cs",
+      "sha256": "8d9bf1cd7f390ff79b46ed113f5224ce1ff5f1edbb1a50778038e11a42a27c98"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileResolutionResult.cs",
+      "sha256": "4860465ae91ce3553e83b7de692ea748d05f669cc8dc1873a17fb3eeae1a9c67"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/FileSearchRoot.cs",
+      "sha256": "41ce572365f0b5d2e1716e863bead3abc2e4b82eb205d6e0d885771da1b8ce67"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/IFileAssetGcService.cs",
+      "sha256": "45b3dc7ac5300c3bce0e8738c35b487ce0fc76d58f3213c8a38d96eb4a71856a"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/IFileAssetService.cs",
+      "sha256": "fe28a1461a16b2bab8d94dd6b016ac3f76e61f5c58b8e270e0247142cf15d391"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/IFileFingerprintService.cs",
+      "sha256": "93c985faae0b33211251d43cfd93bb644658d8f5490d0c22ceceb0a208405f4c"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/IFileMaterializationService.cs",
+      "sha256": "b6432d0c8bad2a75298e645264906f2be4980752102968bb983547a5b26b2108"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/IFileResolutionService.cs",
+      "sha256": "a68c183a569c68207e41915df7c45e5e5ecf0a472f718df33b7933b41b966727"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/IFileSearchRootAccess.cs",
+      "sha256": "71b355bd235c9dd2f06a459be85bfa0136411d30dcb2a564c3f1846f118cecef"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/ISourceFingerprintValidationService.cs",
+      "sha256": "0a03da7ef7bd819ae6af0fc1e18ccdab8b585bb2743dd2bc3353b436826ebe7f"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/ISourceValidationService.cs",
+      "sha256": "82fb5d4cfd33153da0a01e5d0591df7acce3691c3e459a4da17b1ef788cc0848"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/KnownFileLocation.cs",
+      "sha256": "60f7149ceb9ee28af7f37e135a9ae669b9dc05ace295d42ec7e21297502e2cca"
+    },
+    {
+      "path": "src/Patchouli.Core/Files/ResolveFilePurpose.cs",
+      "sha256": "4b4024b21d2c54fb54b95f24cf008a867e0090126aa8010a947cab21f74410b8"
+    },
+    {
+      "path": "src/Patchouli.Core/Ids/DomainIds.cs",
+      "sha256": "c94679c4856c1b9b8b8e5038c11a8c7211b0f06a9b24be0c53d68c3b6cbfe9bb"
+    },
+    {
+      "path": "src/Patchouli.Core/Import/FirstRunWorkflowModels.cs",
+      "sha256": "594434e9ddd37e15613c4bd09a609c06e8eb798e81907045ef04285f64520f5c"
+    },
+    {
+      "path": "src/Patchouli.Core/Import/IPdfMetadataReader.cs",
+      "sha256": "d52554d53fcf0644d664067777dd73565aa30713263d3e7e82098214551f7c01"
+    },
+    {
+      "path": "src/Patchouli.Core/Import/IPdfPageInfoReader.cs",
+      "sha256": "a7c7753b040b21bdb9fbe8ea4dcd519b320ceaab96aa0048291383f5d1b7d8f7"
+    },
+    {
+      "path": "src/Patchouli.Core/Import/PdfDiscoveryModels.cs",
+      "sha256": "d070835f5db74ef88e24d352e88c3b3e1490c6c68b1168e2db0d13dcdba12f9d"
+    },
+    {
+      "path": "src/Patchouli.Core/Layout/CoordinateBasis.cs",
+      "sha256": "babfc87f6669fa701687659c382c20acff61ba33341e9327e21f309fcfb2c80f"
+    },
+    {
+      "path": "src/Patchouli.Core/Layout/IPageService.cs",
+      "sha256": "10afff6cca3697b8e117fdd2403ea1562a14d70cc21526b110a85ada507a277c"
+    },
+    {
+      "path": "src/Patchouli.Core/Layout/NormalizedBBox.cs",
+      "sha256": "2ca61f0f7b2766eb134c58b1dd4b4f7c98258ec77dcdb8d746462fabc402eb4c"
+    },
+    {
+      "path": "src/Patchouli.Core/Layout/Page.cs",
+      "sha256": "f7aae66de6a12778b5170bfdedab23da7524b9d02852c1a6c4a28cf86e0f7ba9"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/DocumentNavigationRow.cs",
+      "sha256": "60c4ff88ec6fb0eb38c03cc3b3cf8bc232d3f879ecbef9dd171dadba2d2f6449"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/ILibraryIdentityService.cs",
+      "sha256": "2c688a9702d657b817001db6604bf188b47d8ff86166fd98aea9611eb4619066"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/ILibraryItemQueryService.cs",
+      "sha256": "3515758e1974a6538ab3bc7e886db544b8e7b63bed944b0711beaa3435d1037b"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/ILibraryRevisionService.cs",
+      "sha256": "e9a3751741c54a3db9fa4170e897a2de89f865c9372acf2327e59103031775fe"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/ItemSourceTextResolver.cs",
+      "sha256": "e87ef27fd00911b1607e17936dd86970e10081e9c3b6d81eb0a6450888ca1685"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/LibraryItemRow.cs",
+      "sha256": "ac480e8fbac764b74050671866dec166161045353e63999781aa8f7e9b76d25e"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/LibraryMetadata.cs",
+      "sha256": "f73d7dcf256354f1328401f7d351945e23cb655d8646f508d019693e138d4d73"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/LibraryRevision.cs",
+      "sha256": "74830b1d9259108b7c5c3c4a0a88f4bd06e8a829bc8f83e09bfe63b333bebd32"
+    },
+    {
+      "path": "src/Patchouli.Core/Library/PrimaryDocumentOcrIndexState.cs",
+      "sha256": "c134159709bfdbf40f19c1569b46c44fcb9260e4831c75301be36d41735f6601"
+    },
+    {
+      "path": "src/Patchouli.Core/Mcp/IMcpServerSettingsService.cs",
+      "sha256": "8c4e2e1c88d86faf3fae56f350f40c8b19a15b6ea78c0c92a44473f662e9482b"
+    },
+    {
+      "path": "src/Patchouli.Core/Mcp/McpServerSettings.cs",
+      "sha256": "ab9e285679f623a89cbc9b94c296dd97eb1fedada2c7ebef8f599b176e3785c8"
+    },
+    {
+      "path": "src/Patchouli.Core/Mcp/McpToolOverride.cs",
+      "sha256": "1ef303e456f2024e7a89737ac3f1a57a934e0d0f8f365935bbd441b11987b619"
+    },
+    {
+      "path": "src/Patchouli.Core/Operations/BlockingOperation.cs",
+      "sha256": "2e4fb1122efd39032ed46072757e83920a9b203bee70e3e64e872cc9de9b2b7a"
+    },
+    {
+      "path": "src/Patchouli.Core/Operations/BlockingOperationLogEntry.cs",
+      "sha256": "5b24894b35ef31e5c68402a84fb46b245de11eed4a8d3a4b403226ba57f28015"
+    },
+    {
+      "path": "src/Patchouli.Core/Operations/IBlockingOperationService.cs",
+      "sha256": "7b268f28e1c46b3e32a12bda534facb4a4b2dee1e94309d2289caa0f017a5a89"
+    },
+    {
+      "path": "src/Patchouli.Core/Pagination/PageCursor.cs",
+      "sha256": "29273e83696d3de23f7e0356001296f404171f15d5781096c60008e23c31126e"
+    },
+    {
+      "path": "src/Patchouli.Core/Results/AppErrorCodes.cs",
+      "sha256": "4a3f9b177eb0102055b4c6dc11639ccc3a2046f9ab69fb781ef59163e55485e6"
+    },
+    {
+      "path": "src/Patchouli.Core/Results/Result.cs",
+      "sha256": "99e982a7d4d75acecfc14f68d72ee50cdb5c291bb80e6d42598efcb6e079ea29"
+    },
+    {
+      "path": "src/Patchouli.Core/Search/BibliographicItemSearch.cs",
+      "sha256": "e0d840625e096cdb3335aa8b37eb090ce343955cb5b2837b0bb10c4e5bc8f0c2"
+    },
+    {
+      "path": "src/Patchouli.Core/Search/IOpenccConverter.cs",
+      "sha256": "205b25ab7a4f595e87956de9f5c6447fb6b982bbf7c1fb2651e027cb747b37e5"
+    },
+    {
+      "path": "src/Patchouli.Core/Search/ISearchService.cs",
+      "sha256": "e6396e58c63c0a6b613dbfa36aee03ff9229ea10ddfe77e51531468ff87ebf62"
+    },
+    {
+      "path": "src/Patchouli.Core/Search/SearchModels.cs",
+      "sha256": "c555fc3ef7a464bd247abd8a8e80e844a1857975b8ca7f6901f017fda59c4cb8"
+    },
+    {
+      "path": "src/Patchouli.Core/Search/SearchProfileModels.cs",
+      "sha256": "b31d085ddfbf2353bc0b94ee093ea7f9d4e85b8d6f0588cc6660f578831aafcc"
+    },
+    {
+      "path": "src/Patchouli.Core/Settings/SettingsFileWriteCoordinator.cs",
+      "sha256": "92cc45eb640a992d04ec1e74b98f5e658c2023facf0ed514709ca904aeb31dde"
+    },
+    {
+      "path": "src/Patchouli.Core/Settings/SettingsSyncModels.cs",
+      "sha256": "b8806e351e9cb931c470bbf992e949ea089db3a0cc43e04c792f7b73a6ecb229"
+    },
+    {
+      "path": "src/Patchouli.Core/Time/IClock.cs",
+      "sha256": "8f1977b3a1d908288d4ecf30e2803f5b4e6c0507f2c61925e4f9f96cf9830bed"
+    },
+    {
+      "path": "src/Patchouli.Core/Time/SystemClock.cs",
+      "sha256": "a62889907f5b0aca71825c441a5b1a55fbdb112d1df67d1625f2a7ef0927dd1e"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/Csl/FsharpCiteprocProcessor.cs",
+      "sha256": "ad8e9fae0cb0078bfca2033343096527acaca5044924dc45af7584f0e9ae08be"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/Documents/DocumentBoxPayloadSerializer.cs",
+      "sha256": "fb9e0c152932ae89346a0863256a5d30dd47be417c61d2a083d8710b65b43a34"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/Documents/DocumentBoxProjection.cs",
+      "sha256": "b794f538807ed4501b00a3706c1f521354516b8225bbba3b0b4aa800d3675e16"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/Documents/DocumentMarkdownCompiler.cs",
+      "sha256": "3ffec84eab1b9b306f845cac1c676fa8ff3983b013f969aaa0be596ea6ba2510"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/Documents/DocumentTreeValidator.cs",
+      "sha256": "c59b8eb91b285f4aaff237b8074ba8c207e676cb42d020866b0a5c7af573a8e7"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/Documents/MarkdigMarkdownEngine.cs",
+      "sha256": "3ecfdab8ea5407660febc302f1419f8c71721833571733b74d67dbc20d03cfae"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/0001_create_schema_migrations.sql",
+      "sha256": "45ed0003f7d0172ec8a71ed58d77530bb939f4a78d487c9a3d27006d9c904544"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/002_create_library_metadata.sql",
+      "sha256": "6b0aaae8321502aed705bf4e9b64b0f8a68c0513a8f928b4483215cfa0cf9210"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/003_create_bibliographic_core.sql",
+      "sha256": "3bc870a750c061069309a51d763a1a76d5bedba76c0272b84ea438afcee0a1c8"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/004_create_file_resolution.sql",
+      "sha256": "68311cc1424ffe56af0bb29e12cbab6cd133335d818d2567b08c8d555489cd80"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/005_create_pages_and_document_trees.sql",
+      "sha256": "f3973e6254e8b2609f1549fd3333672778d4cc347da877d20daf41a4b0d12036"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/006_create_ocr_lifecycle.sql",
+      "sha256": "e9e552a9f869ca3c4e4cabc591a4d152236473837d1bf378d1a9fd1ee9e53e33"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/007_create_search_units_and_fts.sql",
+      "sha256": "d1a0d2fa443663407588441c48d0db80bec8933ef390d9571b5de9b049b15f79"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/008_create_evidence_refs.sql",
+      "sha256": "43ac0340a2ffadc19e4eede1ceab58cc78186560d2b027fa63286f14946bab95"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/010_expand_item_metadata.sql",
+      "sha256": "5f0c56151fa98ddac89f1b3f62c131fead0d9aa9c9a4a0c2be7d22d8f803a354"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/011_create_search_profiles.sql",
+      "sha256": "409866cfb458e0086d4f7ffa7f58194aabfb7ce5062c5b6350947f689627ee48"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/012_hide_ocr_runs.sql",
+      "sha256": "b6b130c6d07ead1ac5f808632b157ae7b3e3bd6f975e3adfbfcd8472395d5284"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/013_create_structured_item_names_and_dates.sql",
+      "sha256": "58a1a3cb52a123d093c59babf3f22e5d88031b97e43656b0bfe1a638f2a5dfc3"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/016_create_csl_styles.sql",
+      "sha256": "6fcb4e26df4ed14dd38bfb2b36106305db1e27c20f5eb9db9fdd0e3e8450d4a0"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/017_create_item_type_inferences.sql",
+      "sha256": "56ad39a77d475c1d5ac3e66d3c2889cec8964ac18fd236c543165a7e7aa2ea84"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/019_create_blocking_operations.sql",
+      "sha256": "194884130eea0f7ebe7554bf300a5385bb23ffe787fe65f18f813899562c28e1"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/021_create_library_preferences.sql",
+      "sha256": "a2dfde4de2303c34a9b47756a3c94c819a2da6c35f75013a38ae40145c32b008"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/022_normalize_identifier_schemes.sql",
+      "sha256": "3ac657b9cf363682a44dff78bab87b82bca0a2a3cd0b99521dd6c0a8805694ab"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/023_add_file_search_root_authorization.sql",
+      "sha256": "a8c16ab397bbe650eb75e0a7efab681db0ea67363a85e66c78cac480ae8840aa"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/025_create_library_setting_records.sql",
+      "sha256": "56762211aa063cb47fab871ebb58bd5b1aa9a5aa18d4eaae7fd2e71f01356d65"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/026_add_document_box_continuation.sql",
+      "sha256": "8af2d48c8111c7fe4cb4658176a5491da753abee0776a3634e511c505b7bc6b1"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/027_split_file_search_root_bindings.sql",
+      "sha256": "3698b6f4457d84deadd614b72625c109f80b00e051130bf4ce65c5531da13e49"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/028_expand_item_creator_and_date_roles.sql",
+      "sha256": "867740b9de9f4afa4e906d80a82e2f45f4d82d9216da52fc429c520c80d9bdbc"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/029_index_current_visible_document_box_payload.sql",
+      "sha256": "57208104980b8f1825cfb004250efbe1da1159781b86f6f58029265f9b7c87c3"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/030_add_library_revision.sql",
+      "sha256": "d54c8cda3d2b0d7ea1cf39be1c8b40a2bd867f7878cf8f42a729f99977f1fb59"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/031_add_first_screen_indexes.sql",
+      "sha256": "665607862af8f28366e70d0ccd91a6d8c4cc9f535dc66f311df322e7e1ca1116"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/032_item_lifecycle.sql",
+      "sha256": "9552726195510fea59dc2c6223515e0874a9a41920bf9e18c8995b97b1c68af3"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/033_unified_working_revisions.sql",
+      "sha256": "a06aa08647e9b3d40df941f1225189365c098c7c4aaa602131f7eda12ed11b91"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/033b_document_tree_revisions_trigger.sql",
+      "sha256": "42fe9b88303a0a276283c9b6dfa42845f40a82aaf7bc531bcca217a940afc8e0"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/034_drop_evidence_refs.sql",
+      "sha256": "bf49ba1ae25396ba8a8aefc66603150e52553b03b0908a4345564c38e47cfbad"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/035_document_commits.sql",
+      "sha256": "b7c68ba7dbb85a4174dd885687b4a3307a29fc467ae2c86bb761bc348346232a"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/036_rename_ocr_page_results_staging.sql",
+      "sha256": "a5764955bcf2fb0f0eeab677cd84e530b30cb9db3800ff5239064ab98a4fd292"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/037_restore_ocr_page_results_run_created_index.sql",
+      "sha256": "3788da1cbf0bc444d6409c821eee4933c859d02a2bc0bbe27dd2a2b8f49054c7"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/038_retire_unused_tables.sql",
+      "sha256": "b3826cbb85542e122e3e43e04630c92de8a633b4885a0c36f7f0c87f8d067eb5"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/039_search_settings_rewrite_enabled.sql",
+      "sha256": "b79ecbc38ce0fa89774088285ef1c70d8ce22403977bead554ef5249e94d3554"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/040_create_collections.sql",
+      "sha256": "50724a3574528c8643fbf03d803e26fc6e419483adc4e4dd81923c294baab582"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/041_create_page_translations.sql",
+      "sha256": "b03925522c75806e85a9f5a82556e505c02884018b1f9d7ba8d295e1f9891b1e"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/042_index_scoped_reads_and_foreign_keys.sql",
+      "sha256": "36e1dc9a49ebb5be15237272b0fafe24881cedca366987794533adb827b03827"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/043_create_fts_row_map.sql",
+      "sha256": "a62dd62ab314cc7513499f63ac328419a84c887db35d3db13e673daf441ba34e"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/044_project_document_box_file_asset_refs.sql",
+      "sha256": "eb8204d94643306ce738753fc2a790aeae875d7c9ffc769bd173f9158a661757"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/045_project_item_tags.sql",
+      "sha256": "2725cd1f4d135dda8a6b49a6dc669eff7317b9e98ee9445e7d74c41fae21a74b"
+    },
+    {
+      "path": "src/Patchouli.Infrastructure/migrations/046_track_local_maintenance.sql",
+      "sha256": "0a0b4fa937896ad182a2c1388794ceec87201017dfe01e6fa45811b3e3d3bd8a"
+    }
+  ]
+}

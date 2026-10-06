@@ -1,0 +1,240 @@
+using System.Text;
+using Patchouli.Core.Documents;
+using Patchouli.Core.Ids;
+using Patchouli.Core.Results;
+
+namespace Patchouli.Infrastructure.Documents;
+
+public sealed class DocumentMarkdownCompiler : IDocumentMarkdownCompiler
+{
+    private readonly IDocumentTreeService _trees;
+    private readonly IMarkdownEngine _markdown;
+
+    public DocumentMarkdownCompiler(IDocumentTreeService trees, IMarkdownEngine markdown)
+    {
+        _trees = trees;
+        _markdown = markdown;
+    }
+
+    public async Task<Result<CompiledMarkdown>> CompilePageMarkdownAsync(
+        DocumentTreeRevisionId treeRevisionId,
+        bool includeSuppressed = false,
+        CancellationToken cancellationToken = default,
+        bool includeComplexTableHtml = false)
+    {
+        Result<IReadOnlyList<DocumentBox>> boxesResult = await _trees.ListBoxesAsync(
+            treeRevisionId, cancellationToken);
+        if (boxesResult.IsFailure)
+        {
+            return Result<CompiledMarkdown>.Failure(boxesResult.ErrorCode!, boxesResult.ErrorMessage!);
+        }
+
+        return Result<CompiledMarkdown>.Success(DocumentMarkdownRenderer.Render(
+            boxesResult.Value, _markdown, includeSuppressed, includeComplexTableHtml, null));
+    }
+}
+
+/// <summary>
+/// Walks a page's box tree and renders markdown with a source map back to box ids. The renderer
+/// is shared by the document compiler and the translation compiler: callers may supply a
+/// <c>fragmentOverride</c> that substitutes a box's rendered fragment (for example a translated
+/// payload) while boxes returning <c>null</c> fall back to their source rendering.
+/// </summary>
+internal static class DocumentMarkdownRenderer
+{
+    public static CompiledMarkdown Render(
+        IReadOnlyList<DocumentBox> boxes,
+        IMarkdownEngine markdown,
+        bool includeSuppressed,
+        bool includeComplexTableHtml,
+        Func<DocumentBox, string?>? fragmentOverride)
+    {
+        List<MarkdownDiagnostic> diagnostics = new();
+        List<PendingMap> maps = new();
+        StringBuilder output = new();
+
+        DocumentBox[] roots = DocumentBoxProjection.Siblings(boxes, null).ToArray();
+        bool logicalMode = roots.All(box => box.BoxType == DocumentBoxType.LogicalPage) && roots.Length > 0;
+        if (logicalMode)
+        {
+            for (int index = 0; index < roots.Length; index++)
+            {
+                if (index > 0)
+                {
+                    AppendSeparator(output, "---");
+                }
+
+                AppendSubtree(output, maps, diagnostics, boxes, roots[index], includeSuppressed,
+                    includeComplexTableHtml, fragmentOverride);
+            }
+        }
+        else
+        {
+            foreach (DocumentBox box in roots)
+            {
+                AppendSubtree(output, maps, diagnostics, boxes, box, includeSuppressed, includeComplexTableHtml,
+                    fragmentOverride);
+            }
+        }
+
+        string compiledMarkdown = output.ToString().TrimEnd();
+        MarkdownDocumentModel document = markdown.Parse(compiledMarkdown);
+        MarkdownBlock[] documentBlocks = document.Blocks.ToArray();
+        MarkdownSourceMapEntry[] sourceMap = maps.Select(map =>
+        {
+            int firstNode = Array.FindIndex(documentBlocks, block => Intersects(block, map));
+            int nodeCount = firstNode < 0
+                ? 0
+                : documentBlocks.Skip(firstNode).TakeWhile(block => Intersects(block, map)).Count();
+            return new MarkdownSourceMapEntry(
+                map.BoxId,
+                map.Start,
+                map.Length,
+                Math.Max(0, firstNode),
+                nodeCount);
+        }).ToArray();
+        return new CompiledMarkdown(compiledMarkdown, sourceMap, diagnostics, document);
+    }
+
+    public static string? CompileBoxFragment(DocumentBox box, bool includeComplexTableHtml)
+    {
+        return box.Payload switch
+        {
+            TextBoxPayload text when box.BoxType == DocumentBoxType.Title =>
+                $"{new string('#', box.HeadingLevel ?? 1)} {text.Markdown.Trim()}",
+            TextBoxPayload text => text.Markdown,
+            EquationBoxPayload equation => $"$$\n{equation.Latex.Trim()}\n$$",
+            ListBoxPayload list => list.Markdown,
+            TableBoxPayload table => includeComplexTableHtml && table.Markdown.Trim() == "[Table]" &&
+                                     !string.IsNullOrWhiteSpace(table.Html)
+                ? table.Html
+                : table.Markdown,
+            CodeBoxPayload code => CompileCode(code.Code, box.CodeLanguage),
+            MediaBoxPayload media => CompileMedia(box.BoxType, media),
+            null when box.BoxType == DocumentBoxType.LogicalPage => null,
+            _ => null
+        };
+    }
+
+    public static string CompileCode(string code, string? language)
+    {
+        int longestRun = LongestBacktickRun(code);
+        string fence = new('`', Math.Max(3, longestRun + 1));
+        return $"{fence}{language}\n{code.TrimEnd()}\n{fence}";
+    }
+
+    private static void AppendBox(
+        StringBuilder output,
+        List<PendingMap> maps,
+        List<MarkdownDiagnostic> diagnostics,
+        DocumentBox box,
+        bool includeSuppressed,
+        bool includeComplexTableHtml,
+        Func<DocumentBox, string?>? fragmentOverride)
+    {
+        if (box.Suppressed && !includeSuppressed)
+        {
+            return;
+        }
+
+        string? fragment = fragmentOverride?.Invoke(box) ?? CompileBox(box, diagnostics, includeComplexTableHtml);
+        if (string.IsNullOrWhiteSpace(fragment))
+        {
+            return;
+        }
+
+        if (output.Length > 0)
+        {
+            output.Append("\n\n");
+        }
+
+        int start = output.Length;
+        output.Append(fragment.Trim());
+        maps.Add(new PendingMap(box.BoxId, start, output.Length - start));
+    }
+
+    private static void AppendSubtree(
+        StringBuilder output,
+        List<PendingMap> maps,
+        List<MarkdownDiagnostic> diagnostics,
+        IReadOnlyList<DocumentBox> boxes,
+        DocumentBox box,
+        bool includeSuppressed,
+        bool includeComplexTableHtml,
+        Func<DocumentBox, string?>? fragmentOverride)
+    {
+        AppendBox(output, maps, diagnostics, box, includeSuppressed, includeComplexTableHtml, fragmentOverride);
+        foreach (DocumentBox child in DocumentBoxProjection.Siblings(boxes, box.BoxId))
+        {
+            AppendSubtree(output, maps, diagnostics, boxes, child, includeSuppressed, includeComplexTableHtml,
+                fragmentOverride);
+        }
+    }
+
+    private static void AppendSeparator(StringBuilder output, string separator)
+    {
+        if (output.Length > 0)
+        {
+            output.Append("\n\n");
+        }
+
+        output.Append(separator);
+    }
+
+    private static string? CompileBox(
+        DocumentBox box,
+        List<MarkdownDiagnostic> diagnostics,
+        bool includeComplexTableHtml)
+    {
+        string? fragment = CompileBoxFragment(box, includeComplexTableHtml);
+        if (fragment is null && box.Payload is not null && box.BoxType != DocumentBoxType.LogicalPage)
+        {
+            return AddPayloadDiagnostic(box, diagnostics);
+        }
+
+        return fragment;
+    }
+
+    private static string CompileMedia(string boxType, MediaBoxPayload media)
+    {
+        string label = boxType == DocumentBoxType.Chart ? "Chart" : "Image";
+        return string.IsNullOrWhiteSpace(media.Description)
+            ? $"[{label}]"
+            : $"[{label}: {media.Description.Trim()}]";
+    }
+
+    private static string AddPayloadDiagnostic(DocumentBox box, List<MarkdownDiagnostic> diagnostics)
+    {
+        diagnostics.Add(new MarkdownDiagnostic(
+            "invalid_box_payload",
+            "The document box payload could not be compiled for its type.",
+            box.BoxId));
+        return string.Empty;
+    }
+
+    private static int LongestBacktickRun(string value)
+    {
+        int maximum = 0;
+        int current = 0;
+        foreach (char character in value)
+        {
+            if (character == '`')
+            {
+                maximum = Math.Max(maximum, ++current);
+            }
+            else
+            {
+                current = 0;
+            }
+        }
+
+        return maximum;
+    }
+
+    private static bool Intersects(MarkdownBlock block, PendingMap map)
+    {
+        return block.Start < map.Start + map.Length && block.Start + block.Length > map.Start;
+    }
+
+    private sealed record PendingMap(DocumentBoxId BoxId, int Start, int Length);
+}

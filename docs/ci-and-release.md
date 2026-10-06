@@ -28,3 +28,5 @@ GitHub Pages不能设置自定义隔离头；第三周使用限定本周作用�
 故障时先用本地已验证课堂包。在修复分支做最小修复或`git revert`，经过PR检查合入main，再手动发布全站；保留旧标签和历史，不移动主线标签或强推。发布记录注明提交、Actions运行、地址及不能离线使用的功能。
 
 设计依据：[GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow)、[Pages自定义工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)、[部署环境](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments)。
+
+第四讲追加检查：CI与手动发布的构建阶段安装.NET SDK10，并安装、测试、检查和构建week04，再组装全部周次。预置资源按用户最新要求入库，构建不读取教师的本机数据库；OCR权重仍按固定URL和SHA准备。此变更只补齐构建流程，未触发发布。

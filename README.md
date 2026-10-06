@@ -54,3 +54,5 @@ Leymore另经[课堂内容复核](docs/week03/leymore-content-review.md)，仅23
 短期分支 → PR → `build-week03`检查 → Squash合并 → 主线手动发布。发布周次由published-weeks.json维护，组装全站，不能覆盖掉旧周次。助教加入后再根据实际账号配置审阅职责，不预填虚构CODEOWNERS。
 
 本次直观化改造与验收见[2026-09-23更新](docs/week03/visual-update.md)，独立检查见[助教复核](docs/week03/ta-visual-review.md)。
+
+第四讲现随仓库提供四份预置PDF、原生SQLite子集及所需原核心源码；普通克隆不再依赖教师的桌面文献库。安装Node24、pnpm和.NET SDK10后，按[第四讲运行说明](apps/week04/README.md)执行安装、构建与预览，构建会自动准备OCR。
