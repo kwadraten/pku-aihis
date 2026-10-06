@@ -1,0 +1,21 @@
+library-treegrid { display: block; min-width: 0; width: 100%; }
+.library-grid-options { display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding: 0 3px 8px; color: #706779; }
+.library-grid-options details { position: relative; }
+.library-grid-options details > div { position: absolute; right: 0; top: 24px; z-index: 4; width: 175px; border: 1px solid #d4cce0; background: white; padding: 10px; box-shadow: 0 4px 15px #38215315; }
+.library-grid-options label { display: flex; align-items: center; gap: 7px; padding: 4px; }
+.library-grid-options input { width: auto; padding: 0; }
+.library-grid-scroll { overflow: auto; max-width: 100%; }
+.workbench-embedded .library-grid, .library-grid { table-layout: fixed; border-collapse: collapse; font-size: 13px; }
+.library-grid th { position: sticky; top: 0; z-index: 2; background: #f0edf5; font-size: 12px; font-weight: 500; border-bottom: 1px solid #c7bdd5; padding: 0 !important; height: 36px; text-align: left; }
+.library-grid th > button { width: 100%; text-align: left; font-size: 12px; padding: 9px 7px !important; border: 0; background: transparent; white-space: nowrap; }
+.library-column-resize { position: absolute; right: 0; top: 0; height: 100%; width: 6px; cursor: col-resize; touch-action: none; border-right: 1px solid #d8d0e3; }
+.library-grid td { padding: 9px 7px !important; height: 42px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid #eeeaf3; vertical-align: middle; }
+.library-grid tr { cursor: default; outline-offset: -2px; }
+.library-grid tr.on { background: #e1d7f7 !important; }
+.library-grid tr:hover { background: #f4f0fb; }
+.library-title-cell { display: flex; align-items: center; gap: 4px; }
+.library-title-cell .library-expander { border: 0; padding: 0 !important; width: 17px; flex: 0 0 17px; font-size: 13px; background: transparent; }
+.library-title-cell .grid-title, .library-document-row .grid-document-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: transparent; border: 0; font-size: 13px; text-align: left; padding: 0 !important; color: inherit; }
+.library-document-row { background: #fcfaff; color: #777080; }
+.library-document-row [data-column=title] { padding-left: 30px !important; }
+.workbench-embedded .work-table td:first-child { width: auto; }

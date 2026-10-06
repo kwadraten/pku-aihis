@@ -1,0 +1,6 @@
+import {Component,h,State,Prop} from '@stencil/core';
+import {liveLibrary} from '../../lib/live-library';import {resolveUri} from '../shared/uri';
+@Component({tag:'uri-resolver',shadow:false})
+export class UriResolver {@Prop() session?:Record<string,string>;@State() input='';@State() error='';componentWillLoad(){this.input=this.session?.uri||'';}
+private resolve(){const lib=liveLibrary.getLibrary();if(!lib)return;const result=resolveUri(lib,this.input.trim());if(result.error){this.error=result.error;return;}if(result.kind!=='texts'){this.error='请输入全文检索结果中的 texts 证据URI';return;}this.error='';window.dispatchEvent(new CustomEvent('workbench-evidence',{detail:result.uri}));}
+render(){return <section class="uri-entry"><form class="uri-entry-form" onSubmit={event=>{event.preventDefault();this.resolve();}}><input type="text" class="mono" aria-label="证据 URI" placeholder="patchouli://texts/…" value={this.input} onInput={(event:any)=>{this.input=event.target.value;if(this.session)this.session.uri=this.input;this.error='';}}/><button type="submit">解析</button></form><p class="work-hint">输入在全文检索环节复制的URI，按Enter或点击解析，返回对应原页。</p>{this.error&&<p class="uri-entry-error" role="alert">{this.error}</p>}</section>;}}

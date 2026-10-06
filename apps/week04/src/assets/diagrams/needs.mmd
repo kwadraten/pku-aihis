@@ -1,0 +1,23 @@
+flowchart LR
+    subgraph Meta["元需求"]
+        M2["多文化人名与排序消歧"]
+        M3["多维时间与多语言本地化"]
+        M5["精确定位与紧凑排版"]
+    end
+    subgraph Sub["子需求"]
+        S2["跨语言姓名倒置与缩写"]
+        S3["结构化拆分与跨语言拼装"]
+        S5["页码跨度与引用定位"]
+    end
+    subgraph Fields["字段名"]
+        F_FAMILY["family · 姓"]
+        F_GIVEN["given · 名"]
+        F_ISSUED["date-parts · 日期"]
+        F_PAGES["page · 页码范围"]
+    end
+    M2 --> S2 --> F_FAMILY
+    S2 --> F_GIVEN
+    M3 --> S3 --> F_ISSUED
+    M5 --> S5 --> F_PAGES
+    classDef field fill:#f1eaff,stroke:#7958cf,stroke-width:2px;
+    class F_FAMILY,F_GIVEN,F_ISSUED,F_PAGES field;

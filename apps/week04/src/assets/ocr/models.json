@@ -1,0 +1,32 @@
+{
+  "runtime": "onnxruntime-web 1.23.2",
+  "source": "RapidAI/RapidOCR v3.9.2",
+  "dictionary": {
+    "file": "keys.json",
+    "sha256": "38a33dd2f1248709fd769a115956e8b9e8e86b6c9af36d4d9cf0120bdac16311",
+    "source": "character metadata of the pinned rec ONNX model"
+  },
+  "models": [
+    {
+      "kind": "det",
+      "file": "det.onnx",
+      "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/onnx/PP-OCRv4/det/ch_PP-OCRv4_det_mobile.onnx",
+      "sha256": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+      "bytes": 4745517
+    },
+    {
+      "kind": "rec",
+      "file": "rec.onnx",
+      "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/onnx/PP-OCRv4/rec/ch_PP-OCRv4_rec_mobile.onnx",
+      "sha256": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+      "bytes": 10857958
+    },
+    {
+      "kind": "cls",
+      "file": "cls.onnx",
+      "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/onnx/PP-OCRv4/cls/ch_ppocr_mobile_v2.0_cls_mobile.onnx",
+      "sha256": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c",
+      "bytes": 585532
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "mla",
+    "title": "MLA Handbook 9th edition (in-text citations)",
+    "source": "https://github.com/citation-style-language/styles/blob/master/modern-language-association.csl",
+    "download": "https://raw.githubusercontent.com/citation-style-language/styles/master/modern-language-association.csl",
+    "sha256": "e1432698ef28938d044b06bd45ddcc57d6b974cec25f71007075646a11f99484",
+    "license": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "styleClass": "in-text",
+    "retrieved": "2026-10-06T15:07:42.587Z"
+  },
+  {
+    "id": "apa",
+    "title": "APA Style 7th edition",
+    "source": "https://github.com/citation-style-language/styles/blob/master/apa.csl",
+    "download": "https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl",
+    "sha256": "3917def5fc951b104d64216c3373096042368b9704ba269ca83c14ebaba889fc",
+    "license": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "styleClass": "in-text",
+    "retrieved": "2026-10-06T15:07:44.877Z"
+  },
+  {
+    "id": "chicago",
+    "title": "Chicago Manual of Style 18th edition (notes and bibliography)",
+    "source": "https://github.com/citation-style-language/styles/blob/master/chicago-notes-bibliography.csl",
+    "download": "https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-notes-bibliography.csl",
+    "sha256": "4b6be4bceaf8f3c31b49331c9f9e38c977f666d6ab80e19a2ac8482c7511abeb",
+    "license": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "styleClass": "note",
+    "retrieved": "2026-10-06T15:07:48.429Z"
+  },
+  {
+    "id": "world-history",
+    "title": "世界历史",
+    "source": "https://zotero-chinese.com/styles/世界历史/",
+    "download": "https://raw.githubusercontent.com/zotero-chinese/styles/main/src/%E4%B8%96%E7%95%8C%E5%8E%86%E5%8F%B2/%E4%B8%96%E7%95%8C%E5%8E%86%E5%8F%B2.csl",
+    "sha256": "cc918bdefa5290186a0514f42ac7c22951195cc1bf58f9fcb405d450fbf61466",
+    "license": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "styleClass": "note",
+    "retrieved": "2026-10-06T15:07:49.299Z"
+  }
+]

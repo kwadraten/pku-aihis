@@ -1,0 +1,37 @@
+.presenter {
+  max-width: 1200px;
+  margin: auto;
+  padding: 36px;
+}
+.presenter header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #aeb5bc;
+  padding-bottom: 20px;
+}
+.presenter h1 {
+  font-size: 42px;
+  margin: 18px 0 30px;
+}
+.presenter-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+.presenter textarea {
+  width: 100%;
+  min-height: 340px;
+  font-size: 18px;
+  line-height: 1.8;
+}
+.timer {
+  font-size: 70px;
+  font-variant-numeric: tabular-nums;
+}
+.presenter p {
+  line-height: 1.8;
+}
+.presenter h2 {
+  font-size: 20px;
+  margin: 20px 0;
+}

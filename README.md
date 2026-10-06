@@ -46,6 +46,9 @@ Leymore另经[课堂内容复核](docs/week03/leymore-content-review.md)，仅23
 
 ## 助教接续
 
+第四讲为[31页Stencil课件](apps/week04/README.md)，23个案例页通过示意图切换同一套Patchouli工作台，D21以实体卡片盒演示Markdown笔记，所有交互UI复用patchouli-app组件及原图标，PDF与书库共用应用区域，PDF可编辑原生边界框树；征引提供MLA、APA、Chicago和《世界历史》的真实CSL样式，讲解标注按钮和弹出内容已移除，课后可导入自己的PDF持续使用；逐页改进见[工作台复核](docs/week04/workbench-review.md)。包含直接从桌面数据库抽取的唯一原生子集（4题录、353页、4PDF）、RapidOCR修订链、API模型接入与SQLite双向回读；见[原生子集验收](docs/week04/native-subset.md)。本轮只进行本地构建与全站预演，不部署；检查范围见[接续验收](docs/week04/completion.md)。
+实现与受测边界见 [第四讲技术验收](docs/week04/browser-port.md)；PPT skill 已原样复制到项目 `.agents/skills/guizang-ppt-skill`。
+
 [逐页设计](docs/week03/page-map.json) · [开发方案](docs/week03/design.md) · [课程制作skill](.agents/skills/history-demo-courseware/SKILL.md) · [贡献流程](CONTRIBUTING.md) · [发布流程](docs/ci-and-release.md) · [来源许可](docs/third-party-notices.md)
 
 短期分支 → PR → `build-week03`检查 → Squash合并 → 主线手动发布。发布周次由published-weeks.json维护，组装全站，不能覆盖掉旧周次。助教加入后再根据实际账号配置审阅职责，不预填虚构CODEOWNERS。

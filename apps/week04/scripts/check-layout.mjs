@@ -1,0 +1,7 @@
+import {chromium} from 'playwright';import fs from 'node:fs/promises';
+const b=await chromium.launch({channel:'msedge',headless:true}),c=await b.newContext({viewport:{width:1440,height:900}}),p=await c.newPage();
+await p.goto('http://127.0.0.1:8774/week04/');await p.waitForFunction(()=>document.querySelector('.lib-status')?.textContent.includes('书库就绪'),null,{timeout:150000});
+const results=[];
+for(let n=0;n<31;n++){const id='D'+String(n).padStart(2,'0');await p.evaluate(id=>location.hash=id,id);await p.waitForTimeout(100);results.push(await p.locator(`deck-slide[slide-id=${id}]`).evaluate(el=>{const body=el.querySelector('.slide-body');return {id:el.getAttribute('slide-id'),scroll:body.scrollHeight-body.clientHeight,height:body.clientHeight};}));await p.screenshot({path:`artifacts/${id}.png`});}
+await fs.writeFile('artifacts/layout-report.json',JSON.stringify(results,null,2));console.log(JSON.stringify(results));
+const popup=await c.newPage();await popup.goto('http://127.0.0.1:8774/week04/?presenter=1');await popup.getByRole('button',{name:'下一页 →',exact:true}).waitFor();await p.evaluate(()=>location.hash='D04');await popup.waitForFunction(()=>document.querySelector('.eyebrow')?.textContent.includes('D04'));await popup.getByRole('button',{name:'下一页 →',exact:true}).click();await p.waitForFunction(()=>location.hash==='#D05');console.log('Presenter sync D04→D05 passed');await popup.screenshot({path:'artifacts/presenter.png'});await b.close();

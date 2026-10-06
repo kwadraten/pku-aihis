@@ -1,0 +1,34 @@
+[
+  {
+    "language": "de",
+    "googleBooksId": "5iw7AAAAMAAJ",
+    "source": "https://books.google.com/books?id=5iw7AAAAMAAJ",
+    "image": "https://books.google.com/books/content?id=5iw7AAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    "file": "de.jpg",
+    "sha256": "0ed30e031b345269734d2c0a64701c23fb4bbe969b618b8d09e8c504a593657a"
+  },
+  {
+    "language": "nl",
+    "googleBooksId": "j45uQgAACAAJ",
+    "source": "https://books.google.com/books?id=j45uQgAACAAJ",
+    "image": "https://books.google.com/books/content?id=j45uQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    "file": "nl.jpg",
+    "sha256": "6a718dcb18bcd055c213cfba767c636f02b242cccdc845eb6cb84be530511a43"
+  },
+  {
+    "language": "zh",
+    "googleBooksId": "CqscAQAAMAAJ",
+    "source": "https://books.google.com/books?id=CqscAQAAMAAJ",
+    "image": "https://books.google.com/books/content?id=CqscAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    "file": "zh.jpg",
+    "sha256": "0abffa0ba70c612d700a6bb91a85802da0000d1aeb2f191a1a434c7e4995d1ae"
+  },
+  {
+    "language": "en",
+    "googleBooksId": "E4fNkWcvs7oC",
+    "source": "https://books.google.com/books?id=E4fNkWcvs7oC",
+    "image": "https://books.google.com/books/content?id=E4fNkWcvs7oC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    "file": "en.jpg",
+    "sha256": "61ee03fa37a59a2005de489dd3af8d3776302edc3a59943a152dae802d0c1f99"
+  }
+]

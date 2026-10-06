@@ -1,0 +1,158 @@
+vector-inspector {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.inspector-shell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-paper-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-subtle);
+  padding: var(--sp-4);
+  box-sizing: border-box;
+}
+
+.preset-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.preset-label {
+  font-size: 11px;
+  color: var(--color-ink-muted);
+}
+
+.preset-pill {
+  background: var(--color-paper-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-subtle);
+  padding: 3px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--color-ink);
+  transition: all var(--transition-fast);
+}
+
+.preset-pill:hover {
+  background: #e2e8f0;
+  border-color: var(--color-ink);
+}
+
+.vector-controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+
+.vec-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-subtle);
+  padding: var(--sp-3) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.vec-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--sp-2);
+  margin-bottom: var(--sp-1);
+}
+
+.vec-title {
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.dim-control {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dim-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--color-ink-secondary);
+}
+
+.metric-output-card {
+  flex: 1;
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: var(--radius-subtle);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.similarity-headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sim-lbl {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.sim-large-val {
+  font-size: 32px;
+  font-weight: 800;
+  color: #38bdf8;
+  line-height: 1.1;
+}
+
+.sim-large-val small {
+  font-size: 16px;
+  color: #94a3b8;
+}
+
+.angle-val {
+  font-size: 24px;
+  font-weight: 700;
+  color: #34d399;
+}
+
+.sim-gauge-track {
+  height: 12px;
+  background: #1e293b;
+  border-radius: var(--radius-subtle);
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.sim-gauge-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #10b981, #0047ff);
+  transition: width 150ms ease-out;
+}
+
+.math-breakdown {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #94a3b8;
+  border-top: 1px solid #1e293b;
+  padding-top: var(--sp-2);
+}
+
+.math-breakdown strong {
+  color: #f8fafc;
+}

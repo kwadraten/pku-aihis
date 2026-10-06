@@ -1,0 +1,65 @@
+{
+  "name": "pku-aihis-week04",
+  "version": "0.1.0",
+  "description": "第四周：文献管理器与可回查文本",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/types/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/deck/deck.esm.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "scripts": {
+    "start": "node scripts/copy-vendor.mjs && node scripts/gen-migrations.mjs && stencil build --dev --watch --serve",
+    "build": "node scripts/assemble-deck.mjs && node scripts/copy-vendor.mjs && node scripts/gen-migrations.mjs && stencil build && node scripts/prepare-source.mjs",
+    "check": "tsc --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "prepare:patchouli": "node scripts/import-patchouli.mjs",
+    "build:core": "dotnet publish core-probe/CoreProbe.csproj -c Release -o core-probe/publish",
+    "prepare:core": "node scripts/prepare-core.mjs",
+    "gen:migrations": "node scripts/gen-migrations.mjs",
+    "prepare:ocr": "node scripts/prepare-ocr.mjs",
+    "seed": "python scripts/export-native-seed.py",
+    "check:browser": "node scripts/check-workbench.mjs",
+    "preview": "node scripts/serve-static.mjs 8774",
+    "check:native": "node scripts/check-native-roundtrip.mjs",
+    "check:ocr": "node scripts/check-workbench-ocr.mjs",
+    "check:d05": "node scripts/check-d05.mjs",
+    "check:d04": "node scripts/check-d04.mjs",
+    "check:concepts": "node scripts/check-concept-navigation.mjs",
+    "check:no-annotations": "node scripts/check-no-annotations.mjs",
+    "check:d21": "node scripts/check-d21.mjs",
+    "check:shared-app": "node scripts/check-shared-app.mjs",
+    "check:pdf-tree": "node scripts/check-pdf-tree.mjs",
+    "check:compact": "node scripts/check-compact-header.mjs",
+    "check:review": "node scripts/check-review-fixes.mjs",
+    "check:independent": "node scripts/check-independent-examples.mjs",
+    "prepare:examples": "node scripts/prepare-skos.mjs",
+    "check:chat": "node scripts/check-reading-chat.mjs"
+  },
+  "devDependencies": {
+    "@stencil/core": "4.45.0",
+    "pdf-lib": "1.17.1",
+    "playwright": "1.63.0",
+    "typescript": "5.9.3"
+  },
+  "packageManager": "pnpm@11.19.0",
+  "private": true,
+  "dependencies": {
+    "@citation-js/core": "0.9.0",
+    "@citation-js/plugin-bibtex": "0.9.0",
+    "@noble/hashes": "2.4.0",
+    "@sqlite.org/sqlite-wasm": "3.53.4-build2",
+    "fflate": "0.8.3",
+    "onnxruntime-web": "1.23.2",
+    "pdfjs-dist": "6.4.299"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

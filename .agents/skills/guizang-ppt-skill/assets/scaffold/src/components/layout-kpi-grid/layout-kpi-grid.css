@@ -1,0 +1,34 @@
+layout-kpi-grid {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.kpi-grid-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: var(--sp-4);
+  align-items: stretch;
+}
+
+::slotted(.kpi-card) {
+  background: var(--color-paper-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-subtle);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--transition-fast);
+}
+
+::slotted(.kpi-card:hover) {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+::slotted(.kpi-card.accent) {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}

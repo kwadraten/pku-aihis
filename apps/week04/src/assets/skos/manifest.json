@@ -1,0 +1,86 @@
+{
+  "sha256": "99af027099b3f5330f4bb9373d4febb48daa90aa87174271a48d8be2dfa4f0f9",
+  "dependencies": [
+    {
+      "name": "n3",
+      "version": "1.26.0",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/rdfjs/N3.js.git"
+      }
+    },
+    {
+      "name": "d3",
+      "version": "7.9.0",
+      "license": "ISC",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/d3/d3.git"
+      }
+    },
+    {
+      "name": "@codemirror/state",
+      "version": "6.7.6",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "git+https://code.haverbeke.berlin/codemirror/state.git"
+      }
+    },
+    {
+      "name": "@codemirror/view",
+      "version": "6.43.13",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "git+https://code.haverbeke.berlin/codemirror/view.git"
+      }
+    },
+    {
+      "name": "@codemirror/language",
+      "version": "6.12.4",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "git+https://code.haverbeke.berlin/codemirror/language.git"
+      }
+    },
+    {
+      "name": "@codemirror/commands",
+      "version": "6.11.1",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "git+https://code.haverbeke.berlin/codemirror/commands.git"
+      }
+    },
+    {
+      "name": "@codemirror/legacy-modes",
+      "version": "6.5.4",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "git+https://code.haverbeke.berlin/codemirror/legacy-modes.git"
+      }
+    },
+    {
+      "name": "@codemirror/lang-markdown",
+      "version": "6.5.2",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "git+https://code.haverbeke.berlin/codemirror/lang-markdown.git"
+      }
+    },
+    {
+      "name": "marked",
+      "version": "16.4.1",
+      "license": "MIT",
+      "source": {
+        "type": "git",
+        "url": "git://github.com/markedjs/marked.git"
+      }
+    }
+  ]
+}

@@ -21,21 +21,36 @@ for (const week of releases.weeks) {
   await cp(
     path.join(root, "apps", week, "www", "pku-aihis", week),
     path.join(site, week),
-    { recursive: true, filter: (s) => !s.endsWith(".map") },
+    { recursive: true, filter: (s) => !s.endsWith(".map") &&
+      !(week === 'week04' && /[/\\]seed[/\\]/.test(s)) },
   );
+  if (week === 'week04') {
+    const sourceDir=path.join(root,'apps/week04/src/assets/seed');
+    const seed=JSON.parse(await readFile(path.join(sourceDir,'native-seed.json')));
+    for(const relative of ['native-seed.json',seed.database.path,...seed.pdfs.map(p=>p.path)]) {
+      const target=path.join(site,week,'assets/seed',relative);
+      await mkdir(path.dirname(target),{recursive:true});await cp(path.join(sourceDir,relative),target);
+    }
+  }
 }
 await writeFile(
   path.join(site, "index.html"),
   `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>人工智能赋能历史研究与写作</title><style>body{max-width:960px;margin:10vh auto;padding:30px;background:#f4f3ee;color:#20272e;font-family:system-ui}small{letter-spacing:.1em;color:#164ec7}h1{font-weight:500;font-size:42px;line-height:1.4}a{color:#164ec7;font-size:24px}p{line-height:1.9}article{border-top:1px solid #aab5be;padding:28px 0}</style><small>PKU / AI × HISTORY</small><h1>人工智能赋能<br>历史研究与写作</h1><p>材料、检索与证据之间的可观察过程。</p>${releases.weeks.map((w) => `<article><a href="${w}/">${w === "week03" ? "第三周 · 检索与证据" : w} →</a><p>可交互课堂演示 · 原页定位 · 演讲者视图</p></article>`).join("")}<p><a style="font-size:14px" href="https://github.com/lyzhackjp/pku-aihis">源码、使用说明与协作记录 ↗</a></p></html>`,
 );
 const inventory = [];
+const nativeSeed=JSON.parse(await readFile(path.join(site,'week04/assets/seed/native-seed.json')));
+const allowedPDFs=new Set(nativeSeed.pdfs.map(p=>'week04/assets/seed/'+p.path));
+const ocrManifest=JSON.parse(await readFile(path.join(site,'week04/assets/ocr/models.json')));
+const allowedModels=new Set(ocrManifest.models.map(m=>'week04/assets/ocr/'+m.file));
 async function walk(p) {
   for (const e of await readdir(p, { withFileTypes: true })) {
     const f = path.join(p, e.name);
     if (e.isDirectory()) await walk(f);
     else {
       const rel = path.relative(site, f);
-      if (/\.(pdf|docx|typ|onnx|safetensors|zip|env|py)$/i.test(rel))
+      if(/\.(sqlite|db)$/i.test(rel)&&rel.replaceAll('\\','/')!=='week04/assets/seed/'+nativeSeed.database.path)
+        throw Error('Unexpected database '+rel);
+      if (/\.(pdf|docx|typ|onnx|safetensors|zip|env|py)$/i.test(rel) && !allowedPDFs.has(rel.replaceAll("\\","/")) && !allowedModels.has(rel.replaceAll("\\","/")))
         throw Error("Non-public asset " + rel);
       const b = await readFile(f);
       inventory.push({
@@ -52,7 +67,7 @@ await writeFile(
   JSON.stringify({ weeks: releases.weeks, files: inventory }, null, 2),
 );
 console.log(
-  "Public site",
+  "Classroom site",
   inventory.length,
   "files",
   inventory.reduce((s, x) => s + x.bytes, 0),

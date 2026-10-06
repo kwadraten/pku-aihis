@@ -1,0 +1,309 @@
+{
+  "scope": "Synthetic test fixtures only; no slides, no private library, no remote deployment",
+  "development": {
+    "date": "2026-10-05T18:12:46.046Z",
+    "url": "http://127.0.0.1:8768/",
+    "browser": "154.0.4258.53",
+    "viewport": "1440x1000",
+    "checks": [
+      {
+        "name": "Original C# core executes in Blazor WASM",
+        "identity": "Patchouli.Net 0.3.6; schema 2",
+        "valid": "ok",
+        "invalid": "Normalized bbox must fit within the page."
+      },
+      {
+        "name": "Original Patchouli SQL migrations execute in SQLite WASM",
+        "count": 41
+      },
+      {
+        "name": "Original Fsharp.Citeproc C# backend renders two CSL styles in WASM",
+        "first": "Smith, Jane. Knowledge Organization. Test Press, 2026.",
+        "second": "“Knowledge Organization” / Jane Smith — Test Press (2026)."
+      },
+      {
+        "name": "Image-only PDF imported atomically; no fake extracted text",
+        "textLayerItems": 0
+      },
+      {
+        "name": "Real browser OCR of scanned Chinese/English PDF; FTS5 + CJK substring",
+        "elapsed_ms": 1528,
+        "text": "历史研究需要保存原文和版本",
+        "english": "ARCHIVE EVIDENCE 2026",
+        "runs": [
+          {
+            "state": "completed",
+            "engine_id": "tesseract-wasm"
+          }
+        ]
+      },
+      {
+        "name": "Full-document OCR preserves blank page with explicit placeholder",
+        "text": "Blank page (OCR returned no content).",
+        "successes": 2
+      },
+      {
+        "name": "Original C# DocumentMarkdownRenderer/Markdig compiles OCR page",
+        "characters": 96
+      },
+      {
+        "name": "Original database trigger refuses committed box overwrites"
+      },
+      {
+        "name": "Manual edit creates new revision; pinned evidence resolves original OCR text",
+        "uri": "patchouli://texts/6a7d0d31-3f60-4421-9f0b-52bd2cf0dacd/page-1.md?rev=820e547b-43f9-400e-a3e4-53ddc6e1b7ca&box=1504589b-ba2d-4645-87b0-fa5228f34d1b"
+      },
+      {
+        "name": "Revert appends revision without rewriting history"
+      },
+      {
+        "name": "Cancelled OCR keeps committed history unchanged and persists cancelled run"
+      },
+      {
+        "name": "Collections, case-sensitive tags/merge, trash/restore and item merge preserve document identity",
+        "count": 2,
+        "tags": [
+          "archive"
+        ],
+        "remains": 1,
+        "trash": 1,
+        "fulltextTrash": 0,
+        "restored": 1,
+        "documents": 1,
+        "oldEvidence": "ARCHIVE EVIDENCE 2026"
+      },
+      {
+        "name": "Failed database mutation rolls back without residue",
+        "before": 1,
+        "after": 1,
+        "integrity": "ok",
+        "fk": 0
+      },
+      {
+        "name": "IndexedDB survives full reload; downloaded SQLite and complete backup"
+      },
+      {
+        "name": "Complete ZIP restore validates hashes and restores PDF + pinned evidence"
+      },
+      {
+        "name": "SQLite-only restore preserves texts/history and explicitly lacks original PDF"
+      },
+      {
+        "name": "Malformed restore rejected without replacing live library"
+      },
+      {
+        "name": "BibLaTeX browser adapter + CSL round-trip writes native creator/date tables",
+        "csl": {
+          "citation-key": "smith2026",
+          "id": "3726038c-ea95-4c20-89fe-ff169f78471b",
+          "type": "book",
+          "title": "Knowledge Organization",
+          "keyword": "Alpha, beta",
+          "publisher": "Test Press",
+          "author": [
+            {
+              "family": "Smith",
+              "given": "Jane"
+            }
+          ],
+          "issued": {
+            "date-parts": [
+              [
+                2026
+              ]
+            ],
+            "circa": false
+          }
+        },
+        "bib": "@book{smith2026,\n\tauthor = {Smith, Jane},\n\tdate = {2026},\n\tkeywords = {Alpha, beta},\n\tpublisher = {Test Press},\n\ttitle = {Knowledge {Organization}},\n}\n\n",
+        "reparsedTitle": "Knowledge Organization",
+        "nativeCreators": 1,
+        "nativeDates": 1
+      },
+      {
+        "name": "PDF text layer extraction independently verified; explicitly non-OCR"
+      },
+      {
+        "name": "Duplicate source PDF rejected by BLAKE3 without extra rows"
+      },
+      {
+        "name": "Second writer tab blocked by Web Locks"
+      },
+      {
+        "name": "No remote backend or model network requests; resources served locally"
+      }
+    ],
+    "errors": [],
+    "remote_requests": []
+  },
+  "static": {
+    "date": "2026-10-05T18:22:51.047Z",
+    "url": "http://127.0.0.1:8770/week04/",
+    "browser": "154.0.4258.53",
+    "viewport": "1440x1000",
+    "checks": [
+      {
+        "name": "Original C# core executes in Blazor WASM",
+        "identity": "Patchouli.Net 0.3.6; schema 2",
+        "valid": "ok",
+        "invalid": "Normalized bbox must fit within the page."
+      },
+      {
+        "name": "Original Patchouli SQL migrations execute in SQLite WASM",
+        "count": 41
+      },
+      {
+        "name": "Original Fsharp.Citeproc C# backend renders two CSL styles in WASM",
+        "first": "Smith, Jane. Knowledge Organization. Test Press, 2026.",
+        "second": "“Knowledge Organization” / Jane Smith — Test Press (2026)."
+      },
+      {
+        "name": "Image-only PDF imported atomically; no fake extracted text",
+        "textLayerItems": 0
+      },
+      {
+        "name": "Real browser OCR of scanned Chinese/English PDF; FTS5 + CJK substring",
+        "elapsed_ms": 1943,
+        "text": "历史研究需要保存原文和版本",
+        "english": "ARCHIVE EVIDENCE 2026",
+        "runs": [
+          {
+            "state": "completed",
+            "engine_id": "tesseract-wasm"
+          }
+        ]
+      },
+      {
+        "name": "Full-document OCR preserves blank page with explicit placeholder",
+        "text": "Blank page (OCR returned no content).",
+        "successes": 2
+      },
+      {
+        "name": "Original C# DocumentMarkdownRenderer/Markdig compiles OCR page",
+        "characters": 96
+      },
+      {
+        "name": "Original database trigger refuses committed box overwrites"
+      },
+      {
+        "name": "Manual edit creates new revision; pinned evidence resolves original OCR text",
+        "uri": "patchouli://texts/ba077b18-a358-45fa-893a-9611799b7c51/page-1.md?rev=0c3925e4-4f22-4b81-9b9a-7b7f5fe9e444&box=dfb41fad-fae9-43a2-98c8-2705d4b4dbc4"
+      },
+      {
+        "name": "Revert appends revision without rewriting history"
+      },
+      {
+        "name": "Cancelled OCR keeps committed history unchanged and persists cancelled run"
+      },
+      {
+        "name": "Collections, case-sensitive tags/merge, trash/restore and item merge preserve document identity",
+        "count": 2,
+        "tags": [
+          "archive"
+        ],
+        "remains": 1,
+        "trash": 1,
+        "fulltextTrash": 0,
+        "restored": 1,
+        "documents": 1,
+        "oldEvidence": "ARCHIVE EVIDENCE 2026"
+      },
+      {
+        "name": "Failed database mutation rolls back without residue",
+        "before": 1,
+        "after": 1,
+        "integrity": "ok",
+        "fk": 0
+      },
+      {
+        "name": "IndexedDB survives full reload; downloaded SQLite and complete backup"
+      },
+      {
+        "name": "Complete ZIP restore validates hashes and restores PDF + pinned evidence"
+      },
+      {
+        "name": "SQLite-only restore preserves texts/history and explicitly lacks original PDF"
+      },
+      {
+        "name": "Malformed restore rejected without replacing live library"
+      },
+      {
+        "name": "BibLaTeX browser adapter + CSL round-trip writes native creator/date tables",
+        "csl": {
+          "citation-key": "smith2026",
+          "id": "b39c1d28-1435-47de-8128-14085e40bbdc",
+          "type": "book",
+          "title": "Knowledge Organization",
+          "keyword": "Alpha, beta",
+          "publisher": "Test Press",
+          "author": [
+            {
+              "family": "Smith",
+              "given": "Jane"
+            }
+          ],
+          "issued": {
+            "date-parts": [
+              [
+                2026
+              ]
+            ],
+            "circa": false
+          }
+        },
+        "bib": "@book{smith2026,\n\tauthor = {Smith, Jane},\n\tdate = {2026},\n\tkeywords = {Alpha, beta},\n\tpublisher = {Test Press},\n\ttitle = {Knowledge {Organization}},\n}\n\n",
+        "reparsedTitle": "Knowledge Organization",
+        "nativeCreators": 1,
+        "nativeDates": 1
+      },
+      {
+        "name": "PDF text layer extraction independently verified; explicitly non-OCR"
+      },
+      {
+        "name": "Duplicate source PDF rejected by BLAKE3 without extra rows"
+      },
+      {
+        "name": "Second writer tab blocked by Web Locks"
+      },
+      {
+        "name": "No remote backend or model network requests; resources served locally"
+      }
+    ],
+    "errors": [],
+    "remote_requests": []
+  },
+  "native": {
+    "mode": "native Microsoft.Data.Sqlite + unmodified Patchouli validator/compiler",
+    "integrity": "ok",
+    "foreign_keys": "ok",
+    "schema": 2,
+    "migrations": 41,
+    "items": 2,
+    "revisions": [
+      {
+        "revision": "0c3925e4-4f22-4b81-9b9a-7b7f5fe9e444",
+        "current": false,
+        "boxes": 4,
+        "markdown": "ARCHIVE EVIDENCE 2026\n\nThe library preserves sources and revisions.\n\n历史研究需要保存原文和版本\n\n知识组织服务于未来的阅读"
+      },
+      {
+        "revision": "9c22e3ed-3e83-461d-846c-5651682e7370",
+        "current": true,
+        "boxes": 1,
+        "markdown": "Blank page (OCR returned no content)."
+      },
+      {
+        "revision": "91f2e15e-51fb-4dc3-803e-f76d75457f7d",
+        "current": false,
+        "boxes": 4,
+        "markdown": "Corrected archive witness.\n\nThe library preserves sources and revisions.\n\n历史研究需要保存原文和版本\n\n知识组织服务于未来的阅读"
+      },
+      {
+        "revision": "22465f5e-6586-4fbf-b96d-56d4ed37819d",
+        "current": true,
+        "boxes": 4,
+        "markdown": "ARCHIVE EVIDENCE 2026\n\nThe library preserves sources and revisions.\n\n历史研究需要保存原文和版本\n\n知识组织服务于未来的阅读"
+      }
+    ]
+  }
+}

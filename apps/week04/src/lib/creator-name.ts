@@ -1,0 +1,6 @@
+export interface CreatorName {literal?:string;family?:string;given?:string;particles?:string;suffix?:string;['non-dropping-particle']?:string;['dropping-particle']?:string;}
+export const decodeName=(value:string='')=>value.replace(/\\u([0-9a-f]{4})/gi,(_,hex)=>String.fromCharCode(parseInt(hex,16))).trim();
+const cjk=/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u;
+export function displayCreator(name:CreatorName={}){const literal=decodeName(name.literal||'');if(literal)return literal;const family=decodeName(name.family||''),given=decodeName(name.given||''),particle=decodeName(name.particles||name['non-dropping-particle']||''),drop=decodeName(name['dropping-particle']||''),suffix=decodeName(name.suffix||'');return cjk.test(family+given+particle)?[drop,particle,family,given,suffix].filter(Boolean).join(''):[[particle,family].filter(Boolean).join(' '),given,drop,suffix].filter(Boolean).join(' ');}
+export function isCjkCreator(name:CreatorName){return cjk.test(displayCreator(name));}
+export function editableCreator<T extends CreatorName>(name:T):T{const family=decodeName(name.family||''),given=decodeName(name.given||''),particle=decodeName(name.particles||'');if(!given&&cjk.test(family)&&cjk.test(particle))return {...name,family:particle,given:family,particles:''};return {...name,family,given};}

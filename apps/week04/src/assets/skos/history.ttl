@@ -1,0 +1,46 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ex: <http://example.org/thesaurus/history/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+# 1. 词表边界 / Conceptenschema
+ex:ModernChinaThemes a skos:ConceptScheme ;
+    skos:prefLabel "近代中国史主题词表"@zh ,
+                   "Modern Chinese History Themes"@en ,
+                   "Thema's uit de moderne Chinese geschiedenis"@nl ;
+    skos:hasTopConcept ex:ModernChineseHistory .
+
+# 2. 顶层入口 / Topconcept
+ex:ModernChineseHistory a skos:Concept ;
+    skos:topConceptOf ex:ModernChinaThemes ;
+    skos:inScheme ex:ModernChinaThemes ;
+    skos:prefLabel "中国近代史"@zh , "Modern Chinese history"@en ,
+                   "Moderne Chinese geschiedenis"@nl ;
+    skos:definition "以近代中国为研究范围，组织史料和研究主题。"@zh ;
+    skos:narrower ex:LateQingHistory .
+
+# 3. 更窄的研究范围 / Enger onderzoeksgebied
+ex:LateQingHistory a skos:Concept ;
+    skos:inScheme ex:ModernChinaThemes ;
+    skos:prefLabel "晚清史"@zh , "Late Qing history"@en ,
+                   "Geschiedenis van de late Qing"@nl ;
+    skos:broader ex:ModernChineseHistory ;
+    skos:narrower ex:TaipingMovement , ex:XiangArmy .
+
+# 4. 概念身份稳定，用语另行记录 / Begrip en benaming
+ex:TaipingMovement a skos:Concept ;
+    skos:inScheme ex:ModernChinaThemes ;
+    skos:prefLabel "太平天国运动"@zh , "Taiping movement"@en ,
+                   "Taipingbeweging"@nl ;
+    skos:altLabel "太平天国"@zh , "洪杨之乱"@zh , "粤匪"@zh ;
+    skos:definition "汇集太平天国相关史料与研究的主题入口。"@zh ;
+    skos:scopeNote "异称用于汇集检索；史料中的原有用词及其立场语境一并保留。"@zh ;
+    skos:broader ex:LateQingHistory ;
+    skos:related ex:XiangArmy .
+
+# 5. 横向关联保存比较入口 / Verwante onderzoeksthema's
+ex:XiangArmy a skos:Concept ;
+    skos:inScheme ex:ModernChinaThemes ;
+    skos:prefLabel "湘军"@zh , "Xiang Army"@en , "Xiang-leger"@nl ;
+    skos:scopeNote "用于并列检索与比较相关组织、行动和材料来源。"@zh ;
+    skos:broader ex:LateQingHistory ;
+    skos:related ex:TaipingMovement .

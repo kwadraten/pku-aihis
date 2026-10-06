@@ -1,0 +1,40 @@
+graph LR
+    classDef work fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
+    classDef expr fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
+    classDef mani fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+    classDef item fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
+    subgraph WorkGroup ["作品 / Werk"]
+        W["<b>《资本论》本体</b><br/><i>Das Kapital: Kritik der politischen Oekonomie</i><br/>(Karl Marx, 1867-)"]:::work
+    end
+    subgraph ExpressionGroup ["表达 / Expressies"]
+        E_DE["德语原版表达<br/><i>Duitse oorspronkelijke tekst</i><br/>(Marx / Engels red.)"]:::expr
+        E_NL["荷兰语译本表达<br/><i>Nederlandse vertaling</i><br/>(Vert. Lipschits / Driessen)"]:::expr
+        E_ZH["汉语译本表达<br/><i>Chinese vertaling</i><br/>(中共中央编译局译本)"]:::expr
+        E_EN["英语译本表达<br/><i>Engelse vertaling</i><br/>(Vert. Ben Fowkes)"]:::expr
+    end
+    subgraph ManifestationGroup ["载体表现 / Manifestaties"]
+        M_DE["汉堡: Otto Meissner, 1894<br/><i>3. Band, 448 blz.</i>"]:::mani
+        M_NL["Amsterdam: Boom, 2010<br/><i>ISBN: 9789085068396</i>"]:::mani
+        M_ZH["北京: 人民出版社, 1975<br/><i>三卷全套单行本</i>"]:::mani
+        M_EN["London: Penguin Classics, 1990<br/><i>ISBN: 9780140445688</i>"]:::mani
+    end
+    subgraph ItemGroup ["单件 / Exemplaren (Google Books 扫描实例)"]
+        I_DE["巴伐利亚州立图书馆藏本<br/><i>Bayerische Staatsbibliothek</i><br/>(Google ID: C39VAAAAcAAJ, 2013年数字化扫描本)"]:::item
+        I_NL["阿姆斯特丹大学图书馆藏本<br/><i>UvA Bibliotheek</i><br/>(包含读者划线与馆藏条码)"]:::item
+        I_ZH["某高校历史系资料室藏本<br/><i>Universitaire collectie</i><br/>(盖有馆藏章与索书号标签)"]:::item
+        I_EN["密歇根大学图书馆藏本<br/><i>Univ. of Michigan Library</i><br/>(Google 扫描带有藏书票与借还章)"]:::item
+    end
+    W --> E_DE
+    W --> E_NL
+    W --> E_ZH
+    W --> E_EN
+    E_DE --> M_DE
+    E_NL --> M_NL
+    E_ZH --> M_ZH
+    E_EN --> M_EN
+    M_DE --> I_DE
+    M_NL --> I_NL
+    M_ZH --> I_ZH
+    M_EN --> I_EN
+
+%% Google Books covers: I_DE=assets/covers/de.jpg, I_NL=assets/covers/nl.jpg, I_ZH=assets/covers/zh.jpg, I_EN=assets/covers/en.jpg

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "needs",
+    "renderer": "Mermaid 11.13.0",
+    "source": "needs.mmd",
+    "svg": "needs.svg",
+    "sourceSha256": "c90b3c66225fee3422d817aea2255cea697696728f64ff76ff088d09310f45db",
+    "svgSha256": "190d84ea7c82b46abec3167e11b46dded21b53d1c96a03547f3dea99df6ca5a8"
+  },
+  {
+    "name": "capital",
+    "renderer": "Mermaid 11.13.0",
+    "source": "capital.mmd",
+    "svg": "capital.svg",
+    "sourceSha256": "dad36a188ab25cb3996e70568271ee5b48d9e9fabac9291e5ea96fe8dab2ccc4",
+    "svgSha256": "711b21ece522ad996d6dec1dc67cdc539e435493cb9b582f389eddc04ca930ac"
+  }
+]

@@ -1,0 +1,14 @@
+/vendor/patchouli/
+/core-probe/bin/
+/core-probe/obj/
+/core-probe/publish/
+/native-probe/bin/
+/native-probe/obj/
+/artifacts/
+/www/
+/dist/
+/src/assets/core/
+/src/assets/vendor/
+/src/assets/licenses/
+/src/assets/seed/
+/src/lib/migrations.generated.ts

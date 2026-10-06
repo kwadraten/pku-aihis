@@ -42,7 +42,7 @@ assert(
   ),
 );
 for (const row of manifest.files) {
-  if (/\.(json|html|md)$/.test(row.path)) {
+  if (/\.(json|html|md|mjs|ts|tsx)$/.test(row.path)) {
     const s = await fs.readFile(path.join(site, row.path), "utf8");
     assert(!s.includes("/Users/"), `private path in ${row.path}`);
   }
@@ -99,3 +99,27 @@ for (const e of examples.examples) {
 console.log(
   "Actual local model examples, <=10B parameters, seven image descriptions and trace provenance checked",
 );
+const manifest4=JSON.parse(await fs.readFile(path.join(site,'release-manifest.json')));
+if (manifest4.weeks?.includes('week04')) {
+  const html4=await fs.readFile(path.join(site,'week04/index.html'),'utf8');
+  const map4=JSON.parse(await fs.readFile(path.join(root,'docs/week04/page-map.json'),'utf8'));
+  const ids4=[...html4.matchAll(/slide-id="([^"]+)"/g)].map(m=>m[1]);
+  assert.deepEqual(ids4,map4.map(p=>p.id));
+  assert.equal(ids4.length,31);
+  for(const name of ['patchouli-LICENSE.txt','patchouli-manifest.json','SOURCE.txt','corresponding-source/core-probe/Program.cs'])
+    assert((await fs.readFile(path.join(site,'week04/assets/licenses',name))).length>0);
+  const seed4=JSON.parse(await fs.readFile(path.join(site,'week04/assets/seed/native-seed.json')));
+  assert.equal(seed4.rows.items,4);assert.equal(seed4.rows.pages,353);assert.equal(seed4.pdfs.length,4);
+  const {createHash}=await import('node:crypto');
+  for(const e of [seed4.database,...seed4.pdfs]) {
+    const bytes=await fs.readFile(path.join(site,'week04/assets/seed',e.path));
+    assert.equal(bytes.length,e.bytes);assert.equal(createHash('sha256').update(bytes).digest('hex'),e.sha256);
+  }
+  const ocr=JSON.parse(await fs.readFile(path.join(site,'week04/assets/ocr/models.json')));
+  assert.deepEqual(manifest4.files.map(f=>f.path.replaceAll('\\','/')).filter(p=>/\.onnx$/i.test(p)).sort(),ocr.models.map(m=>'week04/assets/ocr/'+m.file).sort());
+  for(const model of ocr.models)assert.equal(createHash('sha256').update(await fs.readFile(path.join(site,'week04/assets/ocr',model.file))).digest('hex'),model.sha256);
+  const seedPaths=['native-seed.json',seed4.database.path,...seed4.pdfs.map(p=>p.path)].map(p=>'week04/assets/seed/'+p).sort();
+  assert.deepEqual(manifest4.files.map(f=>f.path.replaceAll('\\','/')).filter(p=>p.startsWith('week04/assets/seed/')).sort(),seedPaths);
+  assert.deepEqual(manifest4.files.map(f=>f.path.replaceAll('\\','/')).filter(p=>/\.pdf$/i.test(p)).sort(),seed4.pdfs.map(p=>'week04/assets/seed/'+p.path).sort());
+  console.log('Week04: native SQLite, 353 pages and four verified PDFs');
+}

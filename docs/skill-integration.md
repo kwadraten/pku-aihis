@@ -1,5 +1,13 @@
 # Skill 装载与后续使用
 
+## 2026-10-06 项目内副本
+
+按用户提供的新位置，从 `D:/code/presentation-pku-aihis/.agents/skills/guizang-ppt-skill`
+复制到本仓库 [.agents/skills/guizang-ppt-skill](../.agents/skills/guizang-ppt-skill/SKILL.md)。
+72 个源文件逐项 SHA-256 相同；依赖、构建缓存等 4 个路径被排除。
+实际来源、时间、逐项散列见副本内 `INSTALLATION_MANIFEST.json`。没有修改原 skill、运行课件初始化器或生成幻灯片。
+以后以项目内此副本作为第四讲制作入口；下面的用户级安装说明保留为历史记录。
+
 ## 已装载的助教 skill
 
 名称：`guizang-ppt-skill`。源文件：助教提供的同名 ZIP，散列见 [基线记录](repository-baseline.md)。

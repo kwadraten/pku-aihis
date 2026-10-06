@@ -1,0 +1,44 @@
+.pdf-reader canvas{display:block;max-width:100%;height:auto;margin:10px auto;background:#eee}.reader-uri{overflow-wrap:anywhere;font-size:11px}.reader-text{white-space:pre-wrap;font-size:14px;max-height:280px;overflow:auto;border-top:1px solid #e5e5ed;padding:12px 0}
+.reader-canvas {position:relative;width:100%;line-height:0;touch-action:none;}
+.reader-canvas canvas {margin:0!important;width:100%;height:auto;}
+.pdf-box-overlay {position:absolute;inset:0;pointer-events:none;}
+.pdf-reader .pdf-bbox {position:absolute;border:1px solid #8762c8;background:#ad91dc0d;min-width:0;padding:0!important;border-radius:0;pointer-events:auto;touch-action:none;}
+.pdf-bbox.is-container {border:2px dashed #6799b5;background:transparent;pointer-events:none;}
+.pdf-bbox.is-selected {border:2px solid #d58525;background:#ffd97d20;z-index:2;pointer-events:auto;}
+.pdf-bbox.is-suppressed {border-color:#b89494;opacity:.65;border-style:dotted;}
+.pdf-bbox > span {position:absolute;left:0;top:0;padding:2px 3px;font:10px/1 Arial;background:#e8ddf7;color:#574572;}
+.pdf-box-resize {position:absolute;right:-4px;bottom:-4px;width:9px;height:9px;background:#d58525;cursor:se-resize;}
+.pdf-drawing {pointer-events:none!important;background:#ffd97d25!important;border:2px solid #d58525!important;}
+.pdf-reader .reader-inspector > header {display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.reader-inspector > header nav {display:flex;gap:2px;}
+.reader-inspector .is-active {background:#e8ddf7;color:#6b46a4;border-color:#b09acc;}
+.pdf-tree-tools {display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:8px 0;}
+.pdf-edit-actions {display:flex;gap:6px;}
+.pdf-tree-tools label {font-size:12px;display:flex;gap:4px;align-items:center;}
+.pdf-tree-tools input[type=checkbox],.pdf-box-fields input[type=checkbox] {width:auto;}
+.pdf-tree-operations {display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.pdf-tree-operations button {font-size:11px!important;padding:4px 6px!important;}
+.pdf-box-tree {border:1px solid #d9cdeb;max-height:190px;overflow:auto;font-size:12px;}
+.pdf-tree-row {display:flex;align-items:center;gap:5px;padding:7px 8px;border-bottom:1px solid #eee7f6;cursor:pointer;line-height:1.5;}
+.pdf-tree-row.is-selected {background:#e8ddf7;color:#684695;}
+.pdf-tree-row.is-suppressed {opacity:.6;}
+.pdf-tree-row > span {flex-shrink:0;}
+.pdf-tree-row small {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-size:10px;}
+.pdf-tree-row button {border:0;background:none;padding:0!important;font-size:12px!important;}
+.pdf-box-fields {display:grid;gap:8px;margin-top:12px;font-size:12px;}
+.pdf-box-fields > code {font-size:10px;overflow-wrap:anywhere;color:#8d7a9e;}
+.pdf-box-fields label {display:grid;gap:5px;}
+.pdf-box-fields input,.pdf-box-fields select,.pdf-box-fields textarea {font-size:12px!important;padding:5px!important;width:100%;}
+.pdf-box-fields textarea {min-height:130px;line-height:1.7;}
+.pdf-box-coordinates {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;}
+.pdf-split-tools {display:flex;gap:7px;align-items:center;}
+.pdf-split-tools input {max-width:75px;}
+.pdf-tree-error {font-size:12px;line-height:1.6;color:#a64432;margin-top:10px;white-space:pre-wrap;}
+
+.pdf-box-overlay.is-evidence-view .pdf-bbox:not(.is-evidence){display:none;}
+.pdf-reader .pdf-bbox.is-evidence {background:#fff06a5c;border:2px solid #e1b833;}
+.pdf-evidence-text {background:#fff06a80;color:inherit;}
+.pdf-evidence-tooltip {position:fixed;z-index:80;width:355px;background:#fffef3;color:#3a3443;border:1px solid #dbc987;box-shadow:0 4px 18px #24152924;padding:12px;pointer-events:none;font-size:12px;line-height:1.6;overflow-wrap:anywhere;}
+.pdf-evidence-tooltip ol {margin:7px 0 0;padding-left:18px;}
+
+.pdf-reader .reader-inspector>header {position:sticky;top:0;background:white;z-index:3;}

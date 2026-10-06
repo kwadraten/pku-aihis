@@ -1,0 +1,82 @@
+@import './variables.css';
+
+/* Reset & Presentation Shell */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* High-Density Courseware Utility Classes */
+.mono {
+  font-family: var(--font-mono);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  border-radius: var(--radius-subtle);
+  background: var(--color-paper-muted);
+  color: var(--color-ink-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.badge-accent {
+  background: rgba(0, 71, 255, 0.08);
+  color: var(--color-accent-ikb);
+  border-color: rgba(0, 71, 255, 0.25);
+}
+
+.badge-success {
+  background: rgba(5, 150, 105, 0.08);
+  color: var(--color-accent-emerald);
+  border-color: rgba(5, 150, 105, 0.25);
+}
+
+.kicker {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  margin-bottom: var(--sp-2);
+}
+
+/* Hairline Grid & Dots for Technical Feel */
+.grid-dots {
+  background-image: radial-gradient(var(--color-border-subtle) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Code display */
+pre, code {
+  font-family: var(--font-mono);
+}
+
+pre {
+  background: var(--color-paper-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-subtle);
+  padding: var(--sp-4);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: auto;
+}

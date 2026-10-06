@@ -1,0 +1,25 @@
+metadata-split { display: block; flex: 1; min-height: 0; height: 100%; }
+.mds-concept-navigation { display: flex; flex-direction: column; height: 100%; min-height: 0; padding: 10px 2px 4px; }
+.mds-concept-navigation h2 { font-size: 23px; font-weight: 500; color: #4b4268; text-align: center; padding: 0 15px 12px; }
+.mds-concept-diagram { position: relative; flex: 1; min-height: 320px; background-image: radial-gradient(#ded5ea 1px, transparent 1px); background-size: 20px 20px; }
+.mds-concept-diagram svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.mds-concept-diagram line { stroke: #b39fcf; stroke-width: 1.3; vector-effect: non-scaling-stroke; }
+.mds-concept-diagram marker path { fill: #a58bc8; }
+.mds-concept-diagram .mds-concept-node { position: absolute; width: 78%; transform: translate(-50%,-50%); border: 1px solid #c4b0e4; border-radius: 2px; background: #fcfaff; padding: 9px 12px; min-height: 64px; display: flex; flex-direction: column; justify-content: center; gap: 5px; color: #4c376b; text-align: center; }
+.mds-concept-node strong { font-size: 19px; font-weight: 500; line-height: 1.25; }
+.mds-concept-node > span { font-size: 12px; color: #7a6b8b; line-height: 1.4; }
+.mds-concept-node.is-active { background: #e3d6fb; border: 2px solid #7958cf; }
+.diagram-branch .mds-concept-node, .diagram-network .mds-concept-node, .diagram-cycle .mds-concept-node { width: 43%; }
+.diagram-branch .mds-concept-node:first-of-type { width: 65%; }
+.diagram-network .mds-concept-node:first-of-type { border-radius: 50%; min-height: 93px; }
+.mds-concept-hint { font-size: 15px; text-align: center; color: #6e5a86; margin: 12px 0; }
+@media (max-height: 820px) {
+.mds-concept-navigation h2 { font-size: 20px; padding-bottom: 7px; }
+.mds-concept-diagram { min-height: 295px; }
+.mds-concept-diagram .mds-concept-node { min-height: 56px; padding: 7px 8px; }
+.mds-concept-node strong { font-size: 17px; }
+.mds-concept-node > span { font-size: 11px; }
+.mds-concept-hint { font-size: 13px; margin: 8px 0; }
+}
+
+concept-map{display:block;height:100%;min-height:0}

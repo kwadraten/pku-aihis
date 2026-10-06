@@ -1,0 +1,61 @@
+/* ==========================================================================
+   High-Density Training Courseware Global Variables & Design Tokens
+   Preserves Swiss Precision & Academic Clarity
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Light Theme (Default) */
+  --color-paper: #f8fafc;
+  --color-paper-card: #ffffff;
+  --color-paper-muted: #f1f5f9;
+  --color-ink: #0f172a;
+  --color-ink-secondary: #334155;
+  --color-ink-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-border-subtle: #cbd5e1;
+
+  /* High-Contrast Technical Accents */
+  --color-accent-ikb: #0047ff;        /* Klein Blue / Core Tech */
+  --color-accent-emerald: #059669;    /* Positive / Output / Match */
+  --color-accent-amber: #d97706;      /* Warning / Dynamic / Temperature */
+  --color-accent-rose: #e11d48;       /* Error / Loss / Delta */
+  --color-accent: var(--color-accent-ikb);
+
+  /* Dark Theme Tokens */
+  --color-dark-paper: #0b0f19;
+  --color-dark-card: #131b2e;
+  --color-dark-muted: #1e293b;
+  --color-dark-ink: #f8fafc;
+  --color-dark-secondary: #cbd5e1;
+  --color-dark-border: #334155;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, 'Fira Code', Menlo, monospace;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+
+  /* Spacing Scale (8pt System) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Radius (Swiss Style prefers sharp corners, 0px or subtle 2-4px) */
+  --radius-sharp: 0px;
+  --radius-subtle: 4px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-elevation: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}

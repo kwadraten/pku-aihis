@@ -37,3 +37,16 @@ __pycache__/
 
 # Generated browser vendor bundle; rebuilt from locked dependencies
 /apps/week03/src/assets/vendor/
+
+# Week04 generated runtimes and private classroom seed stay local.
+/apps/week04/src/assets/core/
+/apps/week04/src/assets/vendor/
+/apps/week04/src/assets/seed/
+/apps/week04/src/lib/migrations.generated.ts
+/apps/week04/core-probe/publish/
+/apps/week04/core-probe/bin/
+/apps/week04/core-probe/obj/
+/apps/week04/native-probe/bin/
+/apps/week04/native-probe/obj/
+/apps/week04/artifacts/
+/apps/week04/src/assets/ocr/ort-*

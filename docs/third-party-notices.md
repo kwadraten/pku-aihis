@@ -27,3 +27,20 @@ D06正则结构图参考[LZL工具的RegexVisualizer](https://lzltool.cn/RegexVi
 - Project Gutenberg #1497、#1228、#11、#1661保留完整原件及PG许可、美国公版与地域说明；不把该标注扩张为全球公版。Jowett导论单独标示。
 - 完整作者、题名、版本、论文DOI、来源网址、处理方法和每文件许可见[sources.json](../data/week03/cross-domain/sources.json)，三种CC许可原文随包保存。不同材料保留各自许可，仓库未为整包重新指定统一许可。
 - 其余10篇论文未核得第三方全文再分发依据；Leymore推荐帖及补抓回复未核得许可，故公开仓库仅保存出处核验元数据，不上传其正文或原始HTML。
+
+
+## 第四讲（2026-10-06）
+
+- Patchouli核心与41条SQL迁移来自5ad3455cf602e05fd84ce2416b17c030ee9a5276，逐文件散列见week04/patchouli-source-manifest.json。按GPL-3.0保留LICENSE、manifest与对应源码；本地构建在assets/licenses/corresponding-source附原核心、浏览器适配和构建说明。没有改写原核心校验器。
+- RapidOCR采用上游v3.9.2分发的PP-OCRv4 ONNX模型；本机下载逐项SHA-256与上游清单核对。模型来自PaddleOCR（Apache-2.0），浏览器几何后处理为本工程轴对齐连通域适配，未声称与原多边形算法完全等价。三份锁定权重进入本地课件与整站构建白名单，不进入Git，本轮未部署。ONNX Runtime Web 1.23.2为MIT。
+- PDF.js 6.4.299为Apache-2.0；同时复制扫描图解码WASM、CMaps和标准字体，保留分项许可证。SQLite WASM包声明Apache-2.0，SQLite引擎为公有领域。其余包版本以pnpm-lock.yaml为准。
+- 按用户最新指令，第四讲仅使用真实桌面数据库的4题录、353页OCR与四份PDF原生子集，筛选与验证见week04/native-subset.md。课堂与整站本地构建均包含这些资源；不加入Git，本轮未部署。来源核验与再分发许可分别记录。
+
+- Patchouli徽标原样取自该项目logo/icon.png，出处与SHA-256见apps/week04/src/assets/branding/manifest.json；与原项目来源及许可记录一同保留。
+- MLA第9版、APA第7版与Chicago第18版CSL来自[citation-style-language/styles](https://github.com/citation-style-language/styles)，《世界历史》CSL来自[Zotero中文样式库](https://zotero-chinese.com/styles/世界历史/)。四个样式文件都保留上游作者、来源与CC BY-SA 3.0声明；实际版本、下载地址与SHA-256见apps/week04/src/assets/csl/manifest.json。
+
+- 第四讲独立编辑器与历史词表实验使用CodeMirror 6（MIT）、N3 1.26.0（MIT）、D3 7.9.0（ISC）和marked 16.4.1（MIT）。所有浏览器工具离线打包，无运行时CDN；各包版本、上游仓库、许可全文与SHA-256见apps/week04/src/assets/skos/manifest.json及LICENSES.txt。Mermaid 11.13.0（MIT）仅用于生成本地SVG，保留.mmd源与散列清单。SKOS语义依据[W3C Reference](https://www.w3.org/TR/skos-reference/)。
+
+- 浏览器索引分析器依据Patchouli.Infrastructure/Search/SearchTextAnalyzer.cs移植，采用同一GPL-3.0来源；对应源码包含src/lib/search-text.ts，原分析器随infrastructure-sources保留。
+
+- D09的四张封面／卷首图来自Google Books对应版本，非生成图片；卷ID、来源页、图片地址与SHA-256见apps/week04/src/assets/covers/manifest.json。教学页面的藏本说明沿用用户提供的图，图片作为对应出版版本的视觉入口。

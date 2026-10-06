@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>高密度技术培训课件 · PKU-AIHIS</title>
+  
+  <link rel="stylesheet" href="/build/deck.css">
+  <script type="module" src="/build/deck.esm.js"></script>
+  <script nomodule src="/build/deck.js"></script>
+</head>
+<body>
+
+  <!-- Presenter Window Mount Check -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('presenter_view') === 'true') {
+      document.body.innerHTML = '<deck-presenter target-minutes="45"></deck-presenter>';
+    }
+  </script>
+
+  <deck-container deck-title="大语言模型核心机理与向量表征 · 深度培训课件">
+
+    <!-- Slide 1: Hero Cover -->
+    <deck-slide
+      slide-id="s01-cover"
+      layout="hero"
+      theme="dark"
+      kicker="PKU-AIHIS · 深度实操研讨"
+      header-title="从史料词元到神经推断：大模型底层全链路实证"
+      notes="开场立论：本课程彻底抛弃传统PPT的长篇文本念稿模式，全程采用浏览器端可实时计算与交互的Web Component组件。每一页都包含可探索的底层状态机、张量检查器与超参数演练场。"
+      duration="3"
+    >
+      <div style="margin-top: 24px; max-width: 960px;">
+        <p style="font-size: 20px; line-height: 1.7; color: #cbd5e1; margin-bottom: 32px;">
+          本课件采用 <strong>Stencil & Web Components</strong> 构建高密度交互课件。拒绝无意义的图文装饰，聚焦于真实运行机制与动态数学模拟。
+        </p>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <span class="badge badge-accent">5层推断链路</span>
+          <span class="badge badge-accent">BPE词元探针</span>
+          <span class="badge badge-accent">Logits/温度动态采样</span>
+          <span class="badge badge-accent">高维语义余弦几何</span>
+          <span class="badge">按 [P] 开启双屏演讲者模式</span>
+          <span class="badge">按 [O] 或 [ESC] 打开全景索引</span>
+        </div>
+      </div>
+    </deck-slide>
+
+    <!-- Slide 2: 5-Layer Request Architecture Stepper -->
+    <deck-slide
+      slide-id="s02-request-path"
+      layout="interactive"
+      theme="light"
+      kicker="系统工程与协议栈"
+      header-title="一次大模型推理请求的五层端到端穿透路径"
+      notes="重点引导学员逐步点击上方管道的1-5层节点。关注每一步的协议状态、数据格式（JSON -> Tensor -> Logits -> SSE Stream）与算力消耗分布。"
+      duration="8"
+    >
+      <interactive-stepper></interactive-stepper>
+    </deck-slide>
+
+    <!-- Slide 3: Tokenizer Interactive Playground -->
+    <deck-slide
+      slide-id="s03-tokenizer"
+      layout="split"
+      theme="light"
+      kicker="离散符号映射"
+      header-title="分词机制（Tokenizer）：从原始汉字到词表张量"
+      notes="演示重点：让学生在右侧演练场输入不同时代的古汉语与现代文（如章太炎文献与现代计算机文献）。观察同一个字在单字、成词以及不同上下文切分时的Token ID变化与词表压缩比率。"
+      duration="10"
+    >
+      <layout-split ratio="1-2">
+        <div slot="left" style="display: flex; flex-direction: column; gap: 16px;">
+          <h3 style="font-size: 18px; color: var(--color-ink);">分词的核心数学约束</h3>
+          <ul style="padding-left: 20px; font-size: 15px; line-height: 1.8; color: var(--color-ink-secondary);">
+            <li><strong>词表上限 $V$</strong>：现代大模型（如 Qwen2.5、LLaMA 3）词表通常在 128k ~ 152k 之间。</li>
+            <li><strong>BPE（字节对编码）</strong>：贪心合并高频相邻字节对，平衡稀疏生僻字与高频词组。</li>
+            <li><strong>汉字多字节惩罚</strong>：UTF-8 下每个汉字占用 3 字节，劣质分词器会导致中文字元极度膨胀。</li>
+          </ul>
+
+          <div style="background: var(--color-paper-muted); padding: 16px; border-radius: 4px; border: 1px solid var(--color-border); margin-top: auto;">
+            <div class="mono" style="font-size: 12px; color: var(--color-ink-muted); margin-bottom: 4px;">课堂思考题</div>
+            <p style="font-size: 13px; margin: 0; color: var(--color-ink);">
+              在晚清文言与专名混合时，BPE分词如何影响语义表征的局部连续性？
+            </p>
+          </div>
+        </div>
+
+        <div slot="right">
+          <tokenizer-playground></tokenizer-playground>
+        </div>
+      </layout-split>
+    </deck-slide>
+
+    <!-- Slide 4: Parameter & Softmax Temperature -->
+    <deck-slide
+      slide-id="s04-temperature-sampling"
+      layout="split"
+      theme="light"
+      kicker="随机推断与采样空间"
+      header-title="温度（Temperature）与核采样（Top-P）：概率流塑形"
+      notes="实操演示：拖动右侧温度滑块。当 T=0.1 时，展示确定性收敛（贪心选择）；当 T=1.2 时，展示长尾词汇的概率跃升。结合历史文献生成实验，分析幻觉产生机制。"
+      duration="10"
+    >
+      <layout-split ratio="1-2">
+        <div slot="left" style="display: flex; flex-direction: column; gap: 16px;">
+          <h3 style="font-size: 18px; color: var(--color-ink);">Softmax 缩放数学原理</h3>
+          <p style="font-size: 14px; line-height: 1.6; color: var(--color-ink-secondary);">
+            语言模型最后一层输出原始分数 (Logits) $z_i$，通过带温度参数 $T$ 的归一化指数函数映射为概率：
+          </p>
+          
+          <pre style="font-size: 13px;">P(w_i) = exp(z_i / T) / Σ_j exp(z_j / T)</pre>
+
+          <ul style="padding-left: 20px; font-size: 14px; line-height: 1.8; color: var(--color-ink-secondary);">
+            <li><strong>$T \to 0$</strong>：极值差距被无限放大，退化为确定性 Argmax。</li>
+            <li><strong>$T = 1.0$</strong>：模型预训练状态下的原始真实概率分布。</li>
+            <li><strong>$T \gg 1.0$</strong>：分布趋于平坦均匀分布，随机性与幻觉急剧上升。</li>
+            <li><strong>Top-P (Nucleus)</strong>：保留累积概率达阈值 $p$ 的最小词元集，斩断低频噪音长尾。</li>
+          </ul>
+        </div>
+
+        <div slot="right">
+          <parameter-slider></parameter-slider>
+        </div>
+      </layout-split>
+    </deck-slide>
+
+    <!-- Slide 5: High-Dimensional Semantic Vector Inspector -->
+    <deck-slide
+      slide-id="s05-vector-geometry"
+      layout="split"
+      theme="light"
+      kicker="几何表征空间"
+      header-title="嵌入向量（Embedding）与余弦几何距离度量"
+      notes="讲解语义向量代数：高维空间中的夹角余弦反映概念间的同构性与语义关联。利用交互探针，切换近义思想家与正交领域概念，让学生直观建立几何直觉。"
+      duration="8"
+    >
+      <layout-split ratio="1-2">
+        <div slot="left" style="display: flex; flex-direction: column; gap: 16px;">
+          <h3 style="font-size: 18px; color: var(--color-ink);">高维空间距离与方向</h3>
+          <p style="font-size: 14px; line-height: 1.6; color: var(--color-ink-secondary);">
+            词元和句子通过嵌入层投射为稠密向量 $\mathbf{A}, \mathbf{B} \in \mathbb{R}^d$。衡量其语义亲疏通常不使用欧氏距离，而使用<strong>余弦相似度</strong>：
+          </p>
+
+          <pre style="font-size: 13px;">cos(θ) = (A · B) / (||A||_2 · ||B||_2)</pre>
+
+          <ul style="padding-left: 20px; font-size: 14px; line-height: 1.8; color: var(--color-ink-secondary);">
+            <li><strong>夹角 $\theta \to 0^\circ$（余弦 $\to 1.0$）</strong>：语义方向高度一致。</li>
+            <li><strong>夹角 $\theta \to 90^\circ$（余弦 $\to 0.0$）</strong>：完全正交无关。</li>
+            <li><strong>语义算术</strong>：$\vec{v}_{\text{章太炎}} - \vec{v}_{\text{古文经学}} + \vec{v}_{\text{维新}} \approx \vec{v}_{\text{康有为}}$。</li>
+          </ul>
+        </div>
+
+        <div slot="right">
+          <vector-inspector></vector-inspector>
+        </div>
+      </layout-split>
+    </deck-slide>
+
+    <!-- Slide 6: Multi-card KPI Benchmark -->
+    <deck-slide
+      slide-id="s06-benchmark-specs"
+      layout="grid"
+      theme="dark"
+      kicker="推断工程基准指标"
+      header-title="算力、显存带宽与吞吐量核心指标矩阵"
+      notes="总结工程落地的硬件瓶颈：LLM 生成受限于显存带宽（Memory Bandwidth Bound）而非纯算力。指导学生看懂 TTFT、TPS 与 KV Cache 占用率。"
+      duration="6"
+    >
+      <layout-kpi-grid columns="3">
+        <div class="kpi-card accent">
+          <div class="mono" style="font-size: 12px; color: #3b82f6;">TTFT (首字生成延迟)</div>
+          <div class="mono" style="font-size: 42px; font-weight: 800; color: #1e40af; margin: 12px 0;">180 ms</div>
+          <p style="font-size: 13px; color: #475569; margin: 0;">
+            Prompt Prefill 阶段完成矩阵乘法与 KV Cache 初始化，算力计算密集型 (Compute-bound)。
+          </p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="mono" style="font-size: 12px; color: #94a3b8;">Decode TPS (单流生成速率)</div>
+          <div class="mono" style="font-size: 42px; font-weight: 800; color: #f8fafc; margin: 12px 0;">48.5 tok/s</div>
+          <p style="font-size: 13px; color: #94a3b8; margin: 0;">
+            自回归逐词生成阶段受限于 HBM 显存访存带宽 (Memory-bandwidth bound)。
+          </p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="mono" style="font-size: 12px; color: #10b981;">KV Cache 显存占用 / 32k 窗口</div>
+          <div class="mono" style="font-size: 42px; font-weight: 800; color: #34d399; margin: 12px 0;">3.8 GB</div>
+          <p style="font-size: 13px; color: #94a3b8; margin: 0;">
+            采用 GQA (Grouped Query Attention 8 组) 优化后的单并发缓存量，极大提升并发容纳率。
+          </p>
+        </div>
+      </layout-kpi-grid>
+    </deck-slide>
+
+  </deck-container>
+
+</body>
+</html>
